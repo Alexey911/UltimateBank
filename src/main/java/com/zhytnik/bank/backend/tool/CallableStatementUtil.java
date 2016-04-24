@@ -1,4 +1,4 @@
-package com.zhytnik.bank.tool;
+package com.zhytnik.bank.backend.tool;
 
 import com.zhytnik.bank.backend.domain.IEntity;
 import oracle.jdbc.OracleTypes;
@@ -13,11 +13,11 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.zhytnik.bank.tool.AggregateUtil.fill;
-import static com.zhytnik.bank.tool.CallUtil.getFunctionCall;
-import static com.zhytnik.bank.tool.CallUtil.getProcedureCall;
-import static com.zhytnik.bank.tool.ReflectionUtil.*;
-import static com.zhytnik.bank.tool.ScriptUtil.ARRAY_OF_ALL;
+import static com.zhytnik.bank.backend.tool.AggregateUtil.fill;
+import static com.zhytnik.bank.backend.tool.CallUtil.getFunctionCall;
+import static com.zhytnik.bank.backend.tool.CallUtil.getProcedureCall;
+import static com.zhytnik.bank.backend.tool.ReflectionUtil.*;
+import static com.zhytnik.bank.backend.tool.ScriptUtil.ARRAY_OF_ALL;
 
 public class CallableStatementUtil {
 

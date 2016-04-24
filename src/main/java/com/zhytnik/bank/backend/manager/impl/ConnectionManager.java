@@ -3,6 +3,7 @@ package com.zhytnik.bank.backend.manager.impl;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -21,11 +22,22 @@ public class ConnectionManager {
     }
 
     public Connection getConnection() {
-
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void close(Connection c) {
+        try {
+            c.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
     }
 }

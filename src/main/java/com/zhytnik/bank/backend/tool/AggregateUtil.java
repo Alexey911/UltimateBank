@@ -1,4 +1,4 @@
-package com.zhytnik.bank.tool;
+package com.zhytnik.bank.backend.tool;
 
 import com.zhytnik.bank.backend.domain.IEntity;
 import oracle.sql.STRUCT;
@@ -8,8 +8,8 @@ import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.SQLException;
 
-import static com.zhytnik.bank.tool.CallableStatementUtil.*;
-import static com.zhytnik.bank.tool.ReflectionUtil.*;
+import static com.zhytnik.bank.backend.tool.CallableStatementUtil.*;
+import static com.zhytnik.bank.backend.tool.ReflectionUtil.*;
 
 public class AggregateUtil {
 

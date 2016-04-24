@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.Random;
 import java.util.UUID;
 
-import static com.zhytnik.bank.tool.ReflectionUtil.*;
+import static com.zhytnik.bank.backend.tool.ReflectionUtil.*;
 
 public class EntityFiller {
 

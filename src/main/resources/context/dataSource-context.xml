@@ -20,4 +20,10 @@
           p:poolPreparedStatements="true"
           p:maxOpenPreparedStatements="10"
           p:initialSize="5"/>
+
+    <bean name="scriptManager" class="com.zhytnik.bank.backend.manager.impl.ScriptManager"
+          p:ddcPath="db/ddc/"
+          p:ddlPath="db/ddl/"
+          p:ddmPath="db/ddm/"
+          p:dropCreate="${db.dropCreate}"/>
 </beans>

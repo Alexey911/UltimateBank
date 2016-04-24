@@ -1,6 +1,6 @@
 import com.zhytnik.bank.backend.domain.IEntity;
 import com.zhytnik.bank.backend.manager.IEntityManager;
-import com.zhytnik.bank.tool.ReflectionUtil;
+import com.zhytnik.bank.backend.tool.ReflectionUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

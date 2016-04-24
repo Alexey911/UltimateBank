@@ -1,4 +1,4 @@
-package com.zhytnik.bank.tool;
+package com.zhytnik.bank.backend.tool;
 
 import static java.lang.String.format;
 

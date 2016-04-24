@@ -1,12 +1,12 @@
-package com.zhytnik.bank.tool;
+package com.zhytnik.bank.backend.tool;
 
 import com.zhytnik.bank.backend.domain.IEntity;
 
 import java.lang.reflect.Field;
 import java.sql.CallableStatement;
 
-import static com.zhytnik.bank.tool.CallableStatementUtil.*;
-import static com.zhytnik.bank.tool.ReflectionUtil.*;
+import static com.zhytnik.bank.backend.tool.CallableStatementUtil.*;
+import static com.zhytnik.bank.backend.tool.ReflectionUtil.*;
 
 public class PrepareUtil {
 

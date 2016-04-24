@@ -8,13 +8,13 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.util.Set;
 
-import static com.zhytnik.bank.tool.AggregateUtil.fill;
-import static com.zhytnik.bank.tool.CallableStatementUtil.*;
-import static com.zhytnik.bank.tool.PrepareUtil.State.*;
-import static com.zhytnik.bank.tool.PrepareUtil.prepare;
-import static com.zhytnik.bank.tool.ReflectionUtil.getFields;
-import static com.zhytnik.bank.tool.ReflectionUtil.instantiate;
-import static com.zhytnik.bank.tool.ScriptUtil.*;
+import static com.zhytnik.bank.backend.tool.AggregateUtil.fill;
+import static com.zhytnik.bank.backend.tool.CallableStatementUtil.*;
+import static com.zhytnik.bank.backend.tool.PrepareUtil.State.*;
+import static com.zhytnik.bank.backend.tool.PrepareUtil.prepare;
+import static com.zhytnik.bank.backend.tool.ReflectionUtil.getFields;
+import static com.zhytnik.bank.backend.tool.ReflectionUtil.instantiate;
+import static com.zhytnik.bank.backend.tool.ScriptUtil.*;
 import static java.lang.String.format;
 
 public abstract class EntityManager<T extends IEntity> implements IEntityManager<T> {
