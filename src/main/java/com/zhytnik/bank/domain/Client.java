@@ -1,5 +1,6 @@
 package com.zhytnik.bank.domain;
 
+import com.zhytnik.bank.backend.domain.Depends;
 import com.zhytnik.bank.backend.domain.Entity;
 
 public class Client extends Entity {
@@ -8,6 +9,9 @@ public class Client extends Entity {
     private String surname;
     private String address;
     private String password;
+
+    @Depends
+    private Department department;
 
     public String getName() {
         return name;
@@ -39,5 +43,13 @@ public class Client extends Entity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }

@@ -1,4 +1,4 @@
-package com.zhytnik.bank.backend.tool;
+package com.zhytnik.bank.backend.tool.script;
 
 public class ScriptUtil {
 

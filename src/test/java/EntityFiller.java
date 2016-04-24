@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import static com.zhytnik.bank.backend.tool.ReflectionUtil.*;
 
-public class EntityFiller {
+class EntityFiller {
 
     private static Random random = new Random();
 

@@ -6,46 +6,62 @@ import org.apache.log4j.Logger;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.util.List;
 import java.util.Set;
 
-import static com.zhytnik.bank.backend.tool.AggregateUtil.fill;
-import static com.zhytnik.bank.backend.tool.CallableStatementUtil.*;
-import static com.zhytnik.bank.backend.tool.PrepareUtil.State.*;
-import static com.zhytnik.bank.backend.tool.PrepareUtil.prepare;
 import static com.zhytnik.bank.backend.tool.ReflectionUtil.getFields;
 import static com.zhytnik.bank.backend.tool.ReflectionUtil.instantiate;
-import static com.zhytnik.bank.backend.tool.ScriptUtil.*;
+import static com.zhytnik.bank.backend.tool.RelationUtil.getChildRelationGraph;
+import static com.zhytnik.bank.backend.tool.script.ScriptUtil.*;
+import static com.zhytnik.bank.backend.tool.statement.AggregateUtil.fill;
+import static com.zhytnik.bank.backend.tool.statement.CallableStatementUtil.*;
+import static com.zhytnik.bank.backend.tool.statement.PrepareUtil.State.*;
+import static com.zhytnik.bank.backend.tool.statement.PrepareUtil.prepare;
 import static java.lang.String.format;
+import static java.util.Collections.reverse;
 
-public abstract class EntityManager<T extends IEntity> implements IEntityManager<T> {
+public class EntityManager<T extends IEntity> implements IEntityManager<T> {
+
+    private static Connection connection;
+    private static ManagerContainer container;
+
+    static {
+        connection = new ConnectionManager().getConnection();
+        container = new ManagerContainer();
+    }
 
     private Class<T> clazz;
-    private Connection connection;
     private Logger logger;
 
     public EntityManager(Class<T> clazz) {
         this.clazz = clazz;
-        connection = new ConnectionManager().getConnection();
         logger = Logger.getLogger(this.getClass());
+        container.save(clazz, this);
     }
 
     public T load(Integer id) {
         logger.debug(format("Loading %s[id=%d]", clazz.getSimpleName(), id));
 
         final T entity = instantiate(clazz, id);
+        initial(entity);
+        return entity;
+    }
 
+    private void initial(T entity) {
         final CallableStatement s = buildStatement(LOAD_PROCEDURE_NAME, false, getFieldsCount());
         prepare(s, LOAD, entity);
 
         execute(s);
         fill(entity, s);
+        fillRelations(entity);
         close(s);
-        return entity;
     }
 
     @Override
     public Integer save(T entity) {
         logger.debug(format("Saving %s", clazz.getSimpleName()));
+
+        saveRelations(entity);
 
         final CallableStatement s = buildStatement(SAVE_PROCEDURE_NAME, false, getFieldsCount());
         prepare(s, CREATE, entity);
@@ -57,6 +73,15 @@ public abstract class EntityManager<T extends IEntity> implements IEntityManager
         return id;
     }
 
+    private void saveRelations(T entity) {
+        final List<IEntity> relations = getChildRelationGraph(entity);
+        reverse(relations);
+
+        for (IEntity child : relations) {
+            container.get(child.getClass()).save(child);
+        }
+    }
+
     public Set<T> loadAll() {
         logger.debug(format("Loading All %s", clazz.getSimpleName()));
 
@@ -65,8 +90,20 @@ public abstract class EntityManager<T extends IEntity> implements IEntityManager
 
         execute(s);
         final Set<T> entities = extractEntities(s, clazz);
+        fillRelations(entities);
+
         close(s);
         return entities;
+    }
+
+    private void fillRelations(Set<T> entities) {
+        entities.forEach(this::fillRelations);
+    }
+
+    private void fillRelations(T entity) {
+        for (IEntity child : getChildRelationGraph(entity)) {
+            container.get(child.getClass()).initial(child);
+        }
     }
 
     public void update(T entity) {

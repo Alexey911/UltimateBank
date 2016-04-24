@@ -1,10 +1,11 @@
-package com.zhytnik.bank.backend.tool;
+package com.zhytnik.bank.backend.tool.statement;
 
 import com.zhytnik.bank.backend.domain.IEntity;
 import oracle.jdbc.OracleTypes;
 import oracle.sql.ARRAY;
 import oracle.sql.STRUCT;
 
+import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,11 +14,11 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.zhytnik.bank.backend.tool.AggregateUtil.fill;
-import static com.zhytnik.bank.backend.tool.CallUtil.getFunctionCall;
-import static com.zhytnik.bank.backend.tool.CallUtil.getProcedureCall;
 import static com.zhytnik.bank.backend.tool.ReflectionUtil.*;
-import static com.zhytnik.bank.backend.tool.ScriptUtil.ARRAY_OF_ALL;
+import static com.zhytnik.bank.backend.tool.script.CallUtil.getFunctionCall;
+import static com.zhytnik.bank.backend.tool.script.CallUtil.getProcedureCall;
+import static com.zhytnik.bank.backend.tool.script.ScriptUtil.ARRAY_OF_ALL;
+import static com.zhytnik.bank.backend.tool.statement.AggregateUtil.fill;
 
 public class CallableStatementUtil {
 
@@ -94,6 +95,16 @@ public class CallableStatementUtil {
         return val;
     }
 
+    public static BigDecimal loadBigDecimal(CallableStatement stmt, int index) {
+        BigDecimal val;
+        try {
+            val = stmt.getBigDecimal(index);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return val;
+    }
+
     public static Date loadDate(CallableStatement stmt, int index) {
         Date val;
         try {
@@ -124,8 +135,11 @@ public class CallableStatementUtil {
                 stmt.registerOutParameter(index, OracleTypes.DATE);
             } else if (isDouble(paramClass)) {
                 stmt.registerOutParameter(index, OracleTypes.DOUBLE);
+            } else if (isEntity(paramClass)) {
+                stmt.registerOutParameter(index, OracleTypes.INTEGER);
             } else {
                 throw new RuntimeException("Unknown Type");
+
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -155,7 +169,11 @@ public class CallableStatementUtil {
 
     public static void putInteger(CallableStatement stmt, int index, Object intVal) {
         try {
-            stmt.setInt(index, (Integer) intVal);
+            if (intVal == null) {
+                stmt.setNull(index, Types.INTEGER);
+            } else {
+                stmt.setObject(index, (Integer) intVal);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

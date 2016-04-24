@@ -1,12 +1,13 @@
-package com.zhytnik.bank.backend.tool;
+package com.zhytnik.bank.backend.tool.statement;
 
+import com.zhytnik.bank.backend.domain.Depends;
 import com.zhytnik.bank.backend.domain.IEntity;
 
 import java.lang.reflect.Field;
 import java.sql.CallableStatement;
 
-import static com.zhytnik.bank.backend.tool.CallableStatementUtil.*;
 import static com.zhytnik.bank.backend.tool.ReflectionUtil.*;
+import static com.zhytnik.bank.backend.tool.statement.CallableStatementUtil.*;
 
 public class PrepareUtil {
 
@@ -58,11 +59,22 @@ public class PrepareUtil {
                 putDate(s, index, getFieldValue(entity, field));
             } else if (isDouble(typeClass)) {
                 putDecimal(s, index, getFieldValue(entity, field));
+            } else if (hasDependent(field)) {
+                putForeignKey(s, entity, index, field);
             } else {
                 throw new RuntimeException();
             }
             index++;
         }
+    }
+
+    private static boolean hasDependent(Field field) {
+        return hasAnnotation(field, Depends.class);
+    }
+
+    private static <T extends IEntity> void putForeignKey(CallableStatement s, T entity, int index, Field field) {
+        final IEntity dependEntity = (IEntity) getFieldValue(entity, field);
+        putInteger(s, index, dependEntity.getId());
     }
 
     private static <T extends IEntity> void prepareUpdateStatement(CallableStatement s, T entity) {
@@ -79,6 +91,8 @@ public class PrepareUtil {
                 putDate(s, index, getFieldValue(entity, field));
             } else if (isDouble(typeClass)) {
                 putDecimal(s, index, getFieldValue(entity, field));
+            } else if (isEntity(typeClass)) {
+                putForeignKey(s, entity, index, field);
             } else {
                 throw new RuntimeException();
             }

@@ -2,6 +2,7 @@ package com.zhytnik.bank.backend.tool;
 
 import com.zhytnik.bank.backend.domain.IEntity;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,13 +27,48 @@ public class ReflectionUtil {
     }
 
     public static <T extends IEntity> T instantiate(Class<T> clazz, Integer id) {
+        return (T) notSecuredInstantiate(clazz, id);
+    }
+
+    private static Object notSecuredInstantiate(Class<?> clazz) {
+        return notSecuredInstantiate(clazz, null);
+    }
+
+    private static Object notSecuredInstantiate(Class<?> clazz, Integer id) {
         try {
-            final T entity = clazz.newInstance();
+            final IEntity entity = (IEntity) clazz.newInstance();
             entity.setId(id);
+            initialInnerEntities(entity);
             return entity;
         } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static void initialInnerEntities(IEntity entity) {
+        for (Field field : getFields(entity.getClass())) {
+            if (isEntityField(field)) {
+                final Object initialVal = notSecuredInstantiate(field.getType());
+                setFieldValue(entity, field.getName(), initialVal);
+            }
+        }
+    }
+
+    public static boolean hasAnnotation(Field field, Class annotation) {
+        for (Annotation a : field.getAnnotations()) {
+            if (a.annotationType().equals(annotation)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isEntity(Class type){
+        return IEntity.class.isAssignableFrom(type);
+    }
+
+    private static boolean isEntityField(Field field) {
+        return IEntity.class.isAssignableFrom(field.getType());
     }
 
     public static void setFieldValue(Object object, String field, Object value) {
@@ -89,6 +125,14 @@ public class ReflectionUtil {
 
     private static boolean isBasicClass(Class clazz) {
         return clazz == null || clazz.equals(Object.class);
+    }
+
+    public static boolean isFieldEmpty(Object object, Field field) {
+        return getFieldValue(object, field) == null;
+    }
+
+    public static boolean isNotEmptyField(Object entity, Field field) {
+        return isEntity(field.getType()) && !isFieldEmpty(entity, field);
     }
 
     public static Object getFieldValue(Object object, Field field) {

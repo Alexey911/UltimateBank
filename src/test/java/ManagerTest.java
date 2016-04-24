@@ -14,13 +14,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class ManagerTest<T extends IEntity> {
 
-    private IEntityManager<T> manager;
+    protected IEntityManager<T> manager;
 
     protected abstract IEntityManager<T> getEntityManager();
 
     @Before
     public void setUp() {
         manager = getEntityManager();
+        manager.clear();
     }
 
     @After
