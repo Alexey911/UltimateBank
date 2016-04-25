@@ -10,9 +10,9 @@ import java.util.List;
 import static com.google.common.collect.Iterators.getOnlyElement;
 import static com.zhytnik.bank.backend.tool.ReflectionUtil.*;
 
-public class RelationUtil {
+public class EntityRelationUtil {
 
-    private RelationUtil() {
+    private EntityRelationUtil() {
     }
 
     public static <T extends IEntity> List<IEntity> getChildRelationGraph(T entity) {
@@ -31,7 +31,7 @@ public class RelationUtil {
     }
 
     private static void tryFindSingleEntity(List<IEntity> graph, Object entity, Field field) {
-        if (isNotEmptyField(entity, field)) {
+        if (isNotEmptyEntityField(entity, field)) {
             final Object childEntity = getFieldValue(entity, field);
             graph.add((IEntity) childEntity);
             graph.addAll(getChildRelationGraph(childEntity));
@@ -39,7 +39,7 @@ public class RelationUtil {
     }
 
     private static void tryFindEntitiesCollection(Object entity, List<IEntity> graph, Field field) {
-        if (isEntityCollection(entity, field)) {
+        if (isEntityCollection(field, entity)) {
             final Collection<IEntity> childEntities = (Collection<IEntity>) getFieldValue(entity, field);
             for (IEntity childEntity : childEntities) {
                 graph.add(childEntity);
@@ -48,7 +48,7 @@ public class RelationUtil {
         }
     }
 
-    private static boolean isEntityCollection(Object entity, Field field) {
+    private static boolean isEntityCollection(Field field, Object entity) {
         boolean isEntityCollection = false;
 
         final Object value = getFieldValue(entity, field);

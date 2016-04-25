@@ -1,12 +1,9 @@
 import com.zhytnik.bank.backend.domain.IEntity;
 import com.zhytnik.bank.backend.manager.IEntityManager;
-import com.zhytnik.bank.backend.tool.ReflectionUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import static com.google.common.collect.Iterables.getOnlyElement;
@@ -29,7 +26,7 @@ public abstract class ManagerTest<T extends IEntity> {
         manager.clear();
     }
 
-    @Test
+    @Test(timeout = 150L)
     public void shouldSave() {
         final T entity = instantiate();
         final int countBefore = manager.getCount();
@@ -37,11 +34,10 @@ public abstract class ManagerTest<T extends IEntity> {
 
         assertThat(manager.getCount()).isEqualTo(countBefore + 1);
         final T persistEntity = manager.load(id);
-        assertThat(persistEntity).isEqualToIgnoringGivenFields(entity, "id");
-        assertThat(persistEntity.getId()).isEqualTo(id);
+        assertThat(persistEntity).isEqualToComparingFieldByField(entity);
     }
 
-    @Test
+    @Test(timeout = 150L)
     public void shouldLoad() {
         final T existEntity = instantiate();
         manager.save(existEntity);
@@ -50,7 +46,7 @@ public abstract class ManagerTest<T extends IEntity> {
         assertThat(loadedEntity).isEqualToComparingFieldByField(existEntity);
     }
 
-    @Test
+    @Test(timeout = 150L)
     public void shouldLoadAll() {
         final T existEntity = instantiate();
         manager.save(existEntity);
@@ -61,13 +57,13 @@ public abstract class ManagerTest<T extends IEntity> {
         assertThat(getOnlyElement(entities)).isEqualToComparingFieldByField(existEntity);
     }
 
-    @Test
+    @Test(timeout = 150L)
     public void shouldGetCount() {
         manager.save(instantiate());
         assertThat(manager.getCount()).isEqualTo(1);
     }
 
-    @Test
+    @Test(timeout = 150L)
     public void shouldClear() {
         manager.save(instantiate());
         assertThat(manager.getCount()).isEqualTo(1);
@@ -76,14 +72,12 @@ public abstract class ManagerTest<T extends IEntity> {
         assertThat(manager.getCount()).isEqualTo(0);
     }
 
-    @Test
+    @Test(timeout = 150L)
     public void shouldUpdate() {
         final T entity = instantiate();
         manager.save(entity);
 
-        for (Entry<String, Object> update : getUpdatedFieldValues().entrySet()) {
-            ReflectionUtil.setFieldValue(entity, update.getKey(), update.getValue());
-        }
+        updateEntity(entity);
 
         manager.update(entity);
 
@@ -91,7 +85,7 @@ public abstract class ManagerTest<T extends IEntity> {
         assertThat(loadedEntity).isEqualToComparingFieldByField(entity);
     }
 
-    protected abstract Map<String, Object> getUpdatedFieldValues();
+    protected abstract void updateEntity(T entity);
 
     private T instantiate() {
         return EntityFiller.create(manager.getEntityClass());

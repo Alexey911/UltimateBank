@@ -17,9 +17,9 @@ public class ReflectionUtil {
 
     private static final String SETTER = "set";
     private static final String GETTER = "get";
+    private static final String ID_FIELD = "id";
 
     private ReflectionUtil() {
-
     }
 
     public static <T extends IEntity> T instantiate(Class<T> clazz) {
@@ -46,8 +46,8 @@ public class ReflectionUtil {
     }
 
     private static void initialInnerEntities(IEntity entity) {
-        for (Field field : getFields(entity.getClass())) {
-            if (isEntityField(field)) {
+        for (Field field : getFields(entity)) {
+            if (isEntity(field.getType())) {
                 final Object initialVal = notSecuredInstantiate(field.getType());
                 setFieldValue(entity, field.getName(), initialVal);
             }
@@ -67,14 +67,14 @@ public class ReflectionUtil {
         return IEntity.class.isAssignableFrom(type);
     }
 
-    private static boolean isEntityField(Field field) {
-        return IEntity.class.isAssignableFrom(field.getType());
+    public static void setFieldValue(Object target, Field field, Object value) {
+        setFieldValue(target, field.getName(), value);
     }
 
-    public static void setFieldValue(Object object, String field, Object value) {
-        final Method setter = findFieldSetter(object.getClass(), field);
+    public static void setFieldValue(Object target, String field, Object value) {
+        final Method setter = findFieldSetter(target.getClass(), field);
         try {
-            setter.invoke(object, value);
+            setter.invoke(target, value);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
@@ -93,14 +93,6 @@ public class ReflectionUtil {
         return method;
     }
 
-    private static String getSetterName(String field) {
-        return SETTER + toUpperCase(field.charAt(0)) + field.substring(1);
-    }
-
-    private static String getGetterName(String field) {
-        return GETTER + toUpperCase(field.charAt(0)) + field.substring(1);
-    }
-
     private static Class getFieldType(Class clazz, String name) {
         final List<Field> fields = getFields(clazz);
         for (Field field : fields) {
@@ -111,6 +103,18 @@ public class ReflectionUtil {
         return null;
     }
 
+    private static String getSetterName(String field) {
+        return SETTER + toUpperCase(field.charAt(0)) + field.substring(1);
+    }
+
+    private static String getGetterName(String field) {
+        return GETTER + toUpperCase(field.charAt(0)) + field.substring(1);
+    }
+
+    public static <T extends IEntity> List<Field> getFields(T entity) {
+        return getFields(entity.getClass());
+    }
+
     public static List<Field> getFields(Class clazz) {
         final List<Field> fields = new ArrayList<>();
 
@@ -118,7 +122,6 @@ public class ReflectionUtil {
         if (!isBasicClass(superClass)) {
             fields.addAll(getFields(superClass));
         }
-
         fields.addAll(asList(clazz.getDeclaredFields()));
         return fields;
     }
@@ -127,24 +130,20 @@ public class ReflectionUtil {
         return clazz == null || clazz.equals(Object.class);
     }
 
-    public static boolean isFieldEmpty(Object object, Field field) {
-        return getFieldValue(object, field) == null;
+    public static boolean isNotEmptyEntityField(Object object, Field field) {
+        return isEntity(field.getType()) && getFieldValue(object, field) != null;
     }
 
-    public static boolean isNotEmptyField(Object entity, Field field) {
-        return isEntity(field.getType()) && !isFieldEmpty(entity, field);
+    public static Object getFieldValue(Object target, Field field) {
+        return getFieldValue(target, field.getName());
     }
 
-    public static Object getFieldValue(Object object, Field field) {
-        return getFieldValue(object, field.getName());
-    }
-
-    public static Object getFieldValue(Object object, String field) {
-        final Method method = findMethodByName(object.getClass(), getGetterName(field));
+    public static Object getFieldValue(Object target, String field) {
+        final Method method = findMethodByName(target.getClass(), getGetterName(field));
 
         Object value;
         try {
-            value = method.invoke(object);
+            value = method.invoke(target);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
@@ -163,7 +162,7 @@ public class ReflectionUtil {
 
     public static boolean isIdField(Field field) {
         final String name = field.getName();
-        return name.equals("id");
+        return name.equals(ID_FIELD);
     }
 
     public static boolean isDouble(Class clazz) {

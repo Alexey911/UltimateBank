@@ -15,9 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.zhytnik.bank.backend.tool.ReflectionUtil.*;
-import static com.zhytnik.bank.backend.tool.script.CallUtil.getFunctionCall;
-import static com.zhytnik.bank.backend.tool.script.CallUtil.getProcedureCall;
-import static com.zhytnik.bank.backend.tool.script.ScriptUtil.ARRAY_OF_ALL;
+import static com.zhytnik.bank.backend.tool.ScriptUtil.*;
 import static com.zhytnik.bank.backend.tool.statement.AggregateUtil.fill;
 
 public class CallableStatementUtil {
@@ -52,7 +50,7 @@ public class CallableStatementUtil {
         try {
             s.close();
         } catch (SQLException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
@@ -75,81 +73,80 @@ public class CallableStatementUtil {
         return (Object[]) desc.getArray();
     }
 
-    public static String loadString(CallableStatement stmt, int index) {
+    public static String loadString(CallableStatement s, int index) {
         String val;
         try {
-            val = stmt.getString(index);
+            val = s.getString(index);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return val;
     }
 
-    public static Integer loadInteger(CallableStatement stmt, int index) {
+    public static Integer loadInteger(CallableStatement s, int index) {
         int val;
         try {
-            val = stmt.getInt(index);
+            val = s.getInt(index);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return val;
     }
 
-    public static BigDecimal loadBigDecimal(CallableStatement stmt, int index) {
+    public static BigDecimal loadBigDecimal(CallableStatement s, int index) {
         BigDecimal val;
         try {
-            val = stmt.getBigDecimal(index);
+            val = s.getBigDecimal(index);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return val;
     }
 
-    public static Date loadDate(CallableStatement stmt, int index) {
+    public static Date loadDate(CallableStatement s, int index) {
         Date val;
         try {
-            val = stmt.getDate(index);
+            val = s.getDate(index);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return val;
     }
 
-    public static Double loadDecimal(CallableStatement stmt, int index) {
+    public static Double loadDecimal(CallableStatement s, int index) {
         Double val;
         try {
-            val = stmt.getDouble(index);
+            val = s.getDouble(index);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return val;
     }
 
-    public static void registerParameter(CallableStatement stmt, int index, Class paramClass) {
+    public static void registerParameter(CallableStatement s, int index, Class param) {
         try {
-            if (isString(paramClass)) {
-                stmt.registerOutParameter(index, OracleTypes.VARCHAR);
-            } else if (isInteger(paramClass)) {
-                stmt.registerOutParameter(index, OracleTypes.INTEGER);
-            } else if (isDate(paramClass)) {
-                stmt.registerOutParameter(index, OracleTypes.DATE);
-            } else if (isDouble(paramClass)) {
-                stmt.registerOutParameter(index, OracleTypes.DOUBLE);
-            } else if (isEntity(paramClass)) {
-                stmt.registerOutParameter(index, OracleTypes.INTEGER);
+            if (isString(param)) {
+                s.registerOutParameter(index, OracleTypes.VARCHAR);
+            } else if (isInteger(param)) {
+                s.registerOutParameter(index, OracleTypes.INTEGER);
+            } else if (isDate(param)) {
+                s.registerOutParameter(index, OracleTypes.DATE);
+            } else if (isDouble(param)) {
+                s.registerOutParameter(index, OracleTypes.DOUBLE);
+            } else if (isEntity(param)) {
+                s.registerOutParameter(index, OracleTypes.INTEGER);
             } else {
                 throw new RuntimeException("Unknown Type");
-
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static <T extends IEntity> void registerCollection(CallableStatement stmt,
+    public static <T extends IEntity> void registerCollection(CallableStatement s,
                                                               int index, Class<T> entityClass) {
         try {
-            stmt.registerOutParameter(index, Types.ARRAY, getCollection(entityClass));
+            s.registerOutParameter(index, Types.ARRAY, getCollection(entityClass));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -159,38 +156,46 @@ public class CallableStatementUtil {
         return paramClass.getSimpleName().toUpperCase() + ARRAY_OF_ALL;
     }
 
-    public static void putString(CallableStatement stmt, int index, Object strVal) {
+    public static void putString(CallableStatement s, int index, Object strVal) {
         try {
-            stmt.setString(index, (String) strVal);
+            s.setString(index, (String) strVal);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void putInteger(CallableStatement stmt, int index, Object intVal) {
+    public static void putInteger(CallableStatement s, int index, Object intVal) {
         try {
             if (intVal == null) {
-                stmt.setNull(index, Types.INTEGER);
+                s.setNull(index, Types.INTEGER);
             } else {
-                stmt.setObject(index, (Integer) intVal);
+                s.setInt(index, (Integer) intVal);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void putDate(CallableStatement stmt, int index, Object dateVal) {
-        final java.sql.Date sqlDate = new java.sql.Date(((Date) dateVal).getTime());
+    public static void putDate(CallableStatement s, int index, Object dateVal) {
         try {
-            stmt.setDate(index, sqlDate);
+            if (dateVal == null) {
+                s.setNull(index, Types.DATE);
+            } else {
+                final java.sql.Date sqlDate = new java.sql.Date(((Date) dateVal).getTime());
+                s.setDate(index, sqlDate);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void putDecimal(CallableStatement stmt, int index, Object decimalVal) {
+    public static void putDecimal(CallableStatement s, int index, Object decimalVal) {
         try {
-            stmt.setDouble(index, (Double) decimalVal);
+            if (decimalVal == null) {
+                s.setNull(index, Types.DOUBLE);
+            } else {
+                s.setDouble(index, (Double) decimalVal);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

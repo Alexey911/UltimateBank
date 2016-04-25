@@ -2,10 +2,6 @@ import com.zhytnik.bank.backend.manager.IEntityManager;
 import com.zhytnik.bank.backend.manager.impl.EntityManager;
 import com.zhytnik.bank.domain.Department;
 
-import java.util.Map;
-
-import static java.util.Collections.singletonMap;
-
 public class DepartmentManagerTest extends ManagerTest<Department> {
 
     @Override
@@ -14,7 +10,7 @@ public class DepartmentManagerTest extends ManagerTest<Department> {
     }
 
     @Override
-    protected Map<String, Object> getUpdatedFieldValues() {
-        return singletonMap("number", 5);
+    protected void updateEntity(Department d) {
+        d.setNumber(5);
     }
 }

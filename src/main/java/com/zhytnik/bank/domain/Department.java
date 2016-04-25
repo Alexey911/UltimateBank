@@ -2,6 +2,8 @@ package com.zhytnik.bank.domain;
 
 import com.zhytnik.bank.backend.domain.Entity;
 
+import static com.google.common.base.Objects.equal;
+
 public class Department extends Entity {
 
     private Integer number;
@@ -21,5 +23,13 @@ public class Department extends Entity {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        final Department o = (Department) obj;
+        return equal(number, o.number) && equal(address, o.address);
     }
 }

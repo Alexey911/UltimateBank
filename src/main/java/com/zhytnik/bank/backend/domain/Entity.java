@@ -22,6 +22,6 @@ public class Entity implements IEntity {
 
     @Override
     public String toString() {
-        return format("Entity of %s[id=\"%d\"]", getClass(), getId());
+        return format("Entity of %s[id=%d]", getClass(), getId());
     }
 }

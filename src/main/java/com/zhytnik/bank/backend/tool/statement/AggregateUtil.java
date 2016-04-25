@@ -20,23 +20,22 @@ public class AggregateUtil {
     public static <T extends IEntity> void fill(T entity, CallableStatement s) {
         int index = 2;
 
-        for (Field field : getFields(entity.getClass())) {
+        for (Field field : getFields(entity)) {
             if (isIdField(field)) continue;
 
-            final Class typeClass = field.getType();
-            final String attr = field.getName();
+            final Class type = field.getType();
 
-            if (isString(typeClass)) {
-                setFieldValue(entity, attr, loadString(s, index));
-            } else if (isInteger(typeClass)) {
-                setFieldValue(entity, attr, loadInteger(s, index));
-            } else if (isDate(typeClass)) {
-                setFieldValue(entity, attr, loadDate(s, index));
-            } else if (isDouble(typeClass)) {
-                setFieldValue(entity, attr, loadDecimal(s, index));
-            } else if (isEntity(typeClass)) {
+            if (isString(type)) {
+                setFieldValue(entity, field, loadString(s, index));
+            } else if (isInteger(type)) {
+                setFieldValue(entity, field, loadInteger(s, index));
+            } else if (isDate(type)) {
+                setFieldValue(entity, field, loadDate(s, index));
+            } else if (isDouble(type)) {
+                setFieldValue(entity, field, loadDecimal(s, index));
+            } else if (isEntity(type)) {
                 final IEntity entityField = (IEntity) getFieldValue(entity, field);
-                entityField.setId(loadBigDecimal(s, index).intValue());
+                entityField.setId(getInteger(loadBigDecimal(s, index)));
             } else {
                 throw new RuntimeException();
             }
@@ -49,20 +48,19 @@ public class AggregateUtil {
         try {
             Object[] attrs = struct.getAttributes();
 
-            for (Field field : getFields(entity.getClass())) {
+            for (Field field : getFields(entity)) {
 
-                final Class typeClass = field.getType();
-                final String attr = field.getName();
+                final Class type = field.getType();
                 final Object value = attrs[index];
 
-                if (isString(typeClass)) {
-                    setFieldValue(entity, attr, value);
-                } else if (isInteger(typeClass)) {
-                    setFieldValue(entity, attr, getInteger(value));
-                } else if (isDate(typeClass)) {
-                    setFieldValue(entity, attr, value);
-                } else if (isDouble(typeClass)) {
-                    setFieldValue(entity, attr, value);
+                if (isString(type)) {
+                    setFieldValue(entity, field, value);
+                } else if (isInteger(type)) {
+                    setFieldValue(entity, field, getInteger(value));
+                } else if (isDate(type)) {
+                    setFieldValue(entity, field, value);
+                } else if (isDouble(type)) {
+                    setFieldValue(entity, field, value);
                 } else if (hasAnnotation(field, Depends.class)) {
                     final IEntity entityField = (IEntity) getFieldValue(entity, field);
                     entityField.setId(getInteger(value));
@@ -77,7 +75,8 @@ public class AggregateUtil {
         return entity;
     }
 
-    private static int getInteger(Object obj) {
+    private static Integer getInteger(Object obj) {
+        if (obj == null) return 0;
         final BigDecimal decimal = (BigDecimal) obj;
         return decimal.intValue();
     }

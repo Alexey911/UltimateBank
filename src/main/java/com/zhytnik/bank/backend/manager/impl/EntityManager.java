@@ -9,10 +9,10 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Set;
 
+import static com.zhytnik.bank.backend.tool.EntityRelationUtil.getChildRelationGraph;
 import static com.zhytnik.bank.backend.tool.ReflectionUtil.getFields;
 import static com.zhytnik.bank.backend.tool.ReflectionUtil.instantiate;
-import static com.zhytnik.bank.backend.tool.RelationUtil.getChildRelationGraph;
-import static com.zhytnik.bank.backend.tool.script.ScriptUtil.*;
+import static com.zhytnik.bank.backend.tool.ScriptUtil.*;
 import static com.zhytnik.bank.backend.tool.statement.AggregateUtil.fill;
 import static com.zhytnik.bank.backend.tool.statement.CallableStatementUtil.*;
 import static com.zhytnik.bank.backend.tool.statement.PrepareUtil.State.*;
@@ -43,17 +43,18 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         logger.debug(format("Loading %s[id=%d]", clazz.getSimpleName(), id));
 
         final T entity = instantiate(clazz, id);
-        initial(entity);
+        load(entity);
         return entity;
     }
 
-    private void initial(T entity) {
+    private void load(T entity) {
         final CallableStatement s = buildStatement(LOAD_PROCEDURE_NAME, false, getFieldsCount());
         prepare(s, LOAD, entity);
-
         execute(s);
+
         fill(entity, s);
         fillRelations(entity);
+
         close(s);
     }
 
@@ -65,10 +66,11 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
 
         final CallableStatement s = buildStatement(SAVE_PROCEDURE_NAME, false, getFieldsCount());
         prepare(s, CREATE, entity);
-
         execute(s);
+
         final int id = loadInteger(s, 1);
         entity.setId(id);
+
         close(s);
         return id;
     }
@@ -87,8 +89,8 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
 
         final CallableStatement s = buildStatement(LOAD_ALL_FUNCTION_NAME, true, 0);
         registerCollection(s, 1, clazz);
-
         execute(s);
+
         final Set<T> entities = extractEntities(s, clazz);
         fillRelations(entities);
 
@@ -102,7 +104,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
 
     private void fillRelations(T entity) {
         for (IEntity child : getChildRelationGraph(entity)) {
-            container.get(child.getClass()).initial(child);
+            container.get(child.getClass()).load(child);
         }
     }
 
@@ -112,6 +114,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         final CallableStatement s = buildStatement(UPDATE_PROCEDURE_NAME, false, getFieldsCount());
         prepare(s, UPDATE, entity);
         execute(s);
+
         close(s);
     }
 
@@ -120,9 +123,10 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
 
         final CallableStatement s = buildStatement(COUNT_FUNCTION_NAME, true, 0);
         registerParameter(s, 1, Integer.class);
-
         execute(s);
+
         final int count = loadInteger(s, 1);
+
         close(s);
         return count;
     }
@@ -137,6 +141,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         final CallableStatement s = buildStatement(REMOVE_PROCEDURE_NAME, false, 1);
         putInteger(s, 1, id);
         execute(s);
+
         close(s);
     }
 
