@@ -87,7 +87,7 @@ public abstract class ManagerTest<T extends IEntity> {
 
     protected abstract void updateEntity(T entity);
 
-    private T instantiate() {
+    protected T instantiate() {
         return EntityFiller.create(manager.getEntityClass());
     }
 }

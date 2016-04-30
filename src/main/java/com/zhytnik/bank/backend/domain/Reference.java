@@ -9,6 +9,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target(FIELD)
 public @interface Reference {
-    Class<? extends IEntity> entity();
-    Class<? extends IEntity>[] ignore() default {};
+    Class<? extends IEntity> type();
 }

@@ -3,8 +3,6 @@ package com.zhytnik.bank.domain;
 import com.zhytnik.bank.backend.domain.Depends;
 import com.zhytnik.bank.backend.domain.Entity;
 
-import static com.google.common.base.Objects.equal;
-
 public class Client extends Entity {
 
     private String name;
@@ -53,14 +51,5 @@ public class Client extends Entity {
 
     public void setDepartment(Department department) {
         this.department = department;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        final Client o = (Client) obj;
-        return equal(name, o.name) && equal(surname, o.surname) &&
-                equal(address, o.address) && equal(password, o.password);
     }
 }

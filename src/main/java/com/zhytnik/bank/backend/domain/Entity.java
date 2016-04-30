@@ -7,7 +7,6 @@ public class Entity implements IEntity {
     private Integer id;
 
     public Entity() {
-
     }
 
     @Override
@@ -23,5 +22,13 @@ public class Entity implements IEntity {
     @Override
     public String toString() {
         return format("Entity of %s[id=%d]", getClass(), getId());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (!(o instanceof IEntity)) return false;
+        final IEntity entity = (IEntity) o;
+        return id.equals(entity.getId());
     }
 }

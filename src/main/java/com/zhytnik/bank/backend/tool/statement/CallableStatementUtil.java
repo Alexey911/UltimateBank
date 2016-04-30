@@ -1,6 +1,7 @@
 package com.zhytnik.bank.backend.tool.statement;
 
 import com.zhytnik.bank.backend.domain.IEntity;
+import com.zhytnik.bank.backend.exception.NotFoundException;
 import oracle.jdbc.OracleTypes;
 import oracle.sql.ARRAY;
 import oracle.sql.STRUCT;
@@ -38,11 +39,15 @@ public class CallableStatementUtil {
         return s;
     }
 
-    public static void execute(CallableStatement s) {
+    public static void execute(CallableStatement s) throws NotFoundException{
         try {
             s.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            if (e.getMessage().startsWith("ORA-01403: no data found")) {
+                throw new NotFoundException();
+            } else {
+                throw new RuntimeException(e);
+            }
         }
     }
 

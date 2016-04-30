@@ -4,11 +4,13 @@ import com.zhytnik.bank.backend.domain.IEntity;
 import com.zhytnik.bank.backend.manager.IEntityManager;
 import org.apache.log4j.Logger;
 
+import java.lang.reflect.Field;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Set;
 
+import static com.zhytnik.bank.backend.manager.impl.ManagerContainer.getManager;
 import static com.zhytnik.bank.backend.tool.EntityRelationUtil.getChildRelationGraph;
 import static com.zhytnik.bank.backend.tool.ReflectionUtil.*;
 import static com.zhytnik.bank.backend.tool.ScriptUtil.*;
@@ -22,11 +24,9 @@ import static java.util.Collections.reverse;
 public class EntityManager<T extends IEntity> implements IEntityManager<T> {
 
     private static Connection connection;
-    private static ManagerContainer container;
 
     static {
         connection = new ConnectionManager().getConnection();
-        container = new ManagerContainer();
     }
 
     private Class<T> clazz;
@@ -35,26 +35,35 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
     public EntityManager(Class<T> clazz) {
         this.clazz = clazz;
         logger = Logger.getLogger(this.getClass());
-        container.save(clazz, this);
+        ManagerContainer.save(clazz, this);
     }
 
     public T load(Integer id) {
         logger.debug(format("Loading %s[id=%d]", clazz.getSimpleName(), id));
 
         final T entity = instantiate(clazz, id);
-        load(entity);
+        load(entity, true);
         return entity;
     }
 
-    private void load(T entity) {
+    private void load(T entity, boolean fullLoad) {
         final CallableStatement s = buildStatement(LOAD_PROCEDURE_NAME, false, getFieldsCount());
         prepare(s, LOAD, entity);
         execute(s);
 
         fill(entity, s);
-        fillRelations(entity);
+        fillDependencies(entity);
+        if (fullLoad) fillReferences(entity);
 
         close(s);
+    }
+
+    private void fillReferences(T entity) {
+        for (Field field : getReferenceFields(clazz)) {
+            final EntityManager<IEntity> manager = getManager(getFieldReferenceType(field));
+            final Set<IEntity> references = manager.loadByFieldValue(getEntityName(entity) + ".id", entity.getId());
+            fillCollection(field, entity, references);
+        }
     }
 
     @Override
@@ -75,11 +84,11 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
     }
 
     private void saveRelations(T entity) {
-        final List<IEntity> relations = getChildRelationGraph(entity);
+        final List<? extends IEntity> relations = getChildRelationGraph(entity);
         reverse(relations);
 
         for (IEntity child : relations) {
-            container.get(child.getClass()).save(child);
+            getManager(child.getClass()).save(child);
         }
     }
 
@@ -91,19 +100,19 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         execute(s);
 
         final Set<T> entities = extractEntities(s, clazz);
-        fillRelations(entities);
+        fillDependencies(entities);
 
         close(s);
         return entities;
     }
 
-    private void fillRelations(Set<T> entities) {
-        entities.forEach(this::fillRelations);
+    private void fillDependencies(Set<T> entities) {
+        entities.forEach(this::fillDependencies);
     }
 
-    private void fillRelations(T entity) {
+    private void fillDependencies(T entity) {
         for (IEntity child : getChildRelationGraph(entity)) {
-            container.get(child.getClass()).load(child);
+            getManager(child.getClass()).load(child, false);
         }
     }
 
@@ -142,6 +151,11 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         execute(s);
 
         close(s);
+    }
+
+    @Override
+    public Set<T> loadByFieldValue(String field, Object value) {
+        return filterByField(loadAll(), field, value);
     }
 
     @Override

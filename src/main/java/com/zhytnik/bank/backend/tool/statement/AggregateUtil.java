@@ -1,6 +1,5 @@
 package com.zhytnik.bank.backend.tool.statement;
 
-import com.zhytnik.bank.backend.domain.Depends;
 import com.zhytnik.bank.backend.domain.IEntity;
 import oracle.sql.STRUCT;
 
@@ -11,6 +10,7 @@ import java.sql.SQLException;
 
 import static com.zhytnik.bank.backend.tool.ReflectionUtil.*;
 import static com.zhytnik.bank.backend.tool.statement.CallableStatementUtil.*;
+import static java.lang.String.format;
 
 public class AggregateUtil {
 
@@ -21,7 +21,7 @@ public class AggregateUtil {
         int index = 2;
 
         for (Field field : getFields(entity)) {
-            if (isIdField(field)) continue;
+            if (isIdField(field) || isReferenceField(field)) continue;
 
             final Class type = field.getType();
 
@@ -37,7 +37,7 @@ public class AggregateUtil {
                 final IEntity entityField = (IEntity) getFieldValue(entity, field);
                 entityField.setId(getInteger(loadBigDecimal(s, index)));
             } else {
-                throw new RuntimeException();
+                throw new RuntimeException(format("There is no rule for field %s", field.getName()));
             }
             index++;
         }
@@ -49,6 +49,7 @@ public class AggregateUtil {
             Object[] attrs = struct.getAttributes();
 
             for (Field field : getFields(entity)) {
+                if (isReferenceField(field)) continue;
 
                 final Class type = field.getType();
                 final Object value = attrs[index];
@@ -61,7 +62,7 @@ public class AggregateUtil {
                     setFieldValue(entity, field, value);
                 } else if (isDouble(type)) {
                     setFieldValue(entity, field, value);
-                } else if (hasAnnotation(field, Depends.class)) {
+                } else if (isDependenceField(field)) {
                     final IEntity entityField = (IEntity) getFieldValue(entity, field);
                     entityField.setId(getInteger(value));
                 } else {

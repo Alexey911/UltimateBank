@@ -21,6 +21,7 @@ class EntityFiller {
         final Object object = instantiate(clazz);
 
         for (Field field : getFields(clazz)) {
+            if (isCollectionField(field)) continue;
             Object value = getValueForField(field);
             setFieldValue(object, field, value);
         }

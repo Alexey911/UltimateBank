@@ -5,7 +5,6 @@ import com.zhytnik.bank.backend.domain.Reference;
 
 import java.util.Set;
 
-import static com.google.common.base.Objects.equal;
 import static com.google.common.collect.Sets.newHashSet;
 
 public class Department extends Entity {
@@ -13,10 +12,8 @@ public class Department extends Entity {
     private Integer number;
     private String address;
 
-/*
-    @Reference(entity = Client.class)
+    @Reference(type = Client.class)
     private Set<Client> clients = newHashSet();
-*/
 
     public Integer getNumber() {
         return number;
@@ -34,19 +31,11 @@ public class Department extends Entity {
         this.address = address;
     }
 
-/*    public Set<Client> getClients() {
+    public Set<Client> getClients() {
         return clients;
     }
 
     public void setClients(Set<Client> clients) {
         this.clients = clients;
-    }*/
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        final Department o = (Department) obj;
-        return equal(number, o.number) && equal(address, o.address);
     }
 }

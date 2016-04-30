@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.google.common.collect.Iterators.getOnlyElement;
 import static com.zhytnik.bank.backend.tool.ReflectionUtil.*;
 
 public class EntityRelationUtil {
@@ -31,7 +30,7 @@ public class EntityRelationUtil {
     }
 
     private static void tryFindSingleEntity(List<IEntity> graph, Object target, Field field) {
-        if (isNotEmptyEntityField(target, field)) {
+        if (isNotEmptyEntityField(field, target)) {
             final Object child = getFieldValue(target, field);
             graph.add((IEntity) child);
             graph.addAll(getChildRelationGraph(child));
@@ -39,28 +38,12 @@ public class EntityRelationUtil {
     }
 
     private static void tryFindEntitiesCollection(Object target, List<IEntity> graph, Field field) {
-        if (isEntityCollection(field, target)) {
+        if (isEntityCollection(field, target) && !isFieldReferenceCollection(field, target)) {
             final Collection<IEntity> childEntities = (Collection<IEntity>) getFieldValue(target, field);
             for (IEntity childEntity : childEntities) {
                 graph.add(childEntity);
                 graph.addAll(getChildRelationGraph(childEntity));
             }
         }
-    }
-
-    private static boolean isEntityCollection(Field field, Object target) {
-        boolean isEntityCollection = false;
-
-        final Object value = getFieldValue(target, field);
-        if (value instanceof Collection<?>) {
-            final Collection<?> collection = (Collection<?>) value;
-            if (!collection.isEmpty()) {
-                final Object element = getOnlyElement(collection.iterator());
-                if (element instanceof IEntity) {
-                    isEntityCollection = true;
-                }
-            }
-        }
-        return isEntityCollection;
     }
 }

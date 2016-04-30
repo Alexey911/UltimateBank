@@ -1,6 +1,5 @@
 package com.zhytnik.bank.backend.tool.statement;
 
-import com.zhytnik.bank.backend.domain.Depends;
 import com.zhytnik.bank.backend.domain.IEntity;
 
 import java.lang.reflect.Field;
@@ -38,7 +37,7 @@ public class PrepareUtil {
         putInteger(s, index++, entity.getId());
 
         for (Field field : getFields(entity)) {
-            if (isIdField(field)) continue;
+            if (isIdField(field) || isReferenceField(field)) continue;
             registerParameter(s, index++, field.getType());
         }
     }
@@ -48,7 +47,7 @@ public class PrepareUtil {
         registerParameter(s, index++, Integer.class);
 
         for (Field field : getFields(entity)) {
-            if (isIdField(field)) continue;
+            if (isIdField(field) || isReferenceField(field)) continue;
 
             final Class typeClass = field.getType();
 
@@ -60,17 +59,13 @@ public class PrepareUtil {
                 putDate(s, index, getFieldValue(entity, field));
             } else if (isDouble(typeClass)) {
                 putDecimal(s, index, getFieldValue(entity, field));
-            } else if (hasDependent(field)) {
+            } else if (isDependenceField(field)) {
                 putForeignKey(s, entity, index, field);
             } else {
                 throw new RuntimeException(format("Unknown Entity Field %s", field.getName()));
             }
             index++;
         }
-    }
-
-    private static boolean hasDependent(Field field) {
-        return hasAnnotation(field, Depends.class);
     }
 
     private static <T extends IEntity> void putForeignKey(CallableStatement s, T entity, int index, Field field) {
@@ -82,17 +77,19 @@ public class PrepareUtil {
         int index = 1;
 
         for (Field field : getFields(entity)) {
-            final Class typeClass = field.getType();
+            if (isReferenceField(field)) continue;
 
-            if (isString(typeClass)) {
+            final Class type = field.getType();
+
+            if (isString(type)) {
                 putString(s, index, getFieldValue(entity, field));
-            } else if (isInteger(typeClass)) {
+            } else if (isInteger(type)) {
                 putInteger(s, index, getFieldValue(entity, field));
-            } else if (isDate(typeClass)) {
+            } else if (isDate(type)) {
                 putDate(s, index, getFieldValue(entity, field));
-            } else if (isDouble(typeClass)) {
+            } else if (isDouble(type)) {
                 putDecimal(s, index, getFieldValue(entity, field));
-            } else if (hasDependent(field)) {
+            } else if (isDependenceField(field)) {
                 putForeignKey(s, entity, index, field);
             } else {
                 throw new RuntimeException(format("Unknown Entity Field %s", field.getName()));
