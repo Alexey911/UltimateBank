@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.zhytnik.bank.backend.tool.EntityRelationUtil.getChildRelationGraph;
-import static com.zhytnik.bank.backend.tool.ReflectionUtil.getFields;
-import static com.zhytnik.bank.backend.tool.ReflectionUtil.instantiate;
+import static com.zhytnik.bank.backend.tool.ReflectionUtil.*;
 import static com.zhytnik.bank.backend.tool.ScriptUtil.*;
 import static com.zhytnik.bank.backend.tool.statement.AggregateUtil.fill;
 import static com.zhytnik.bank.backend.tool.statement.CallableStatementUtil.*;
@@ -156,7 +155,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
     }
 
     private int getFieldsCount() {
-        return getFields(clazz).size();
+        return getSimpleFields(clazz).size();
     }
 
     private CallableStatement buildStatement(String callName, boolean isFunction, int argsCount) {

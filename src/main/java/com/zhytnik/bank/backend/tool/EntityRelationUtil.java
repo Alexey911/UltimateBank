@@ -19,28 +19,28 @@ public class EntityRelationUtil {
         return getChildRelationGraph((Object) entity);
     }
 
-    private static List<IEntity> getChildRelationGraph(Object entity) {
+    private static List<IEntity> getChildRelationGraph(Object target) {
         final List<IEntity> graph = new ArrayList<>();
-        final List<Field> fields = getFields(entity.getClass());
+        final List<Field> fields = getFields(target.getClass());
 
         for (Field field : fields) {
-            tryFindSingleEntity(graph, entity, field);
-            tryFindEntitiesCollection(entity, graph, field);
+            tryFindSingleEntity(graph, target, field);
+            tryFindEntitiesCollection(target, graph, field);
         }
         return graph;
     }
 
-    private static void tryFindSingleEntity(List<IEntity> graph, Object entity, Field field) {
-        if (isNotEmptyEntityField(entity, field)) {
-            final Object childEntity = getFieldValue(entity, field);
-            graph.add((IEntity) childEntity);
-            graph.addAll(getChildRelationGraph(childEntity));
+    private static void tryFindSingleEntity(List<IEntity> graph, Object target, Field field) {
+        if (isNotEmptyEntityField(target, field)) {
+            final Object child = getFieldValue(target, field);
+            graph.add((IEntity) child);
+            graph.addAll(getChildRelationGraph(child));
         }
     }
 
-    private static void tryFindEntitiesCollection(Object entity, List<IEntity> graph, Field field) {
-        if (isEntityCollection(field, entity)) {
-            final Collection<IEntity> childEntities = (Collection<IEntity>) getFieldValue(entity, field);
+    private static void tryFindEntitiesCollection(Object target, List<IEntity> graph, Field field) {
+        if (isEntityCollection(field, target)) {
+            final Collection<IEntity> childEntities = (Collection<IEntity>) getFieldValue(target, field);
             for (IEntity childEntity : childEntities) {
                 graph.add(childEntity);
                 graph.addAll(getChildRelationGraph(childEntity));
@@ -48,10 +48,10 @@ public class EntityRelationUtil {
         }
     }
 
-    private static boolean isEntityCollection(Field field, Object entity) {
+    private static boolean isEntityCollection(Field field, Object target) {
         boolean isEntityCollection = false;
 
-        final Object value = getFieldValue(entity, field);
+        final Object value = getFieldValue(target, field);
         if (value instanceof Collection<?>) {
             final Collection<?> collection = (Collection<?>) value;
             if (!collection.isEmpty()) {

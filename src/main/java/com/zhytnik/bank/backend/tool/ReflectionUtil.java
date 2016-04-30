@@ -1,6 +1,7 @@
 package com.zhytnik.bank.backend.tool;
 
 import com.zhytnik.bank.backend.domain.IEntity;
+import com.zhytnik.bank.backend.domain.Reference;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -9,6 +10,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.Character.toUpperCase;
 import static java.util.Arrays.asList;
@@ -113,6 +115,16 @@ public class ReflectionUtil {
 
     public static <T extends IEntity> List<Field> getFields(T entity) {
         return getFields(entity.getClass());
+    }
+
+    public static List<Field> getSimpleFields(Class clazz) {
+        return getFields(clazz).stream().filter(field -> !hasAnnotation(field, Reference.class)).
+                collect(Collectors.toList());
+    }
+
+    public static List<Field> getReferenceFields(Class clazz) {
+        return getFields(clazz).stream().filter(field -> hasAnnotation(field, Reference.class)).
+                collect(Collectors.toList());
     }
 
     public static List<Field> getFields(Class clazz) {
