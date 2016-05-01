@@ -6,17 +6,17 @@ import com.zhytnik.bank.domain.card.BillCard;
 
 public class Bill extends Entity {
 
+    private Double balance;
+    private Boolean isActive;
+
+    @ManyToOne
+    private Currency currency;
+
     @ManyToOne
     private Client client;
 
     @ManyToOne
     private BillCard card;
-
-    @ManyToOne
-    private Currency currency;
-
-    private Double balance;
-    private Boolean isActive;
 
     public Client getClient() {
         return client;
