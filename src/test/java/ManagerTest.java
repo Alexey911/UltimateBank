@@ -19,6 +19,10 @@ public abstract class ManagerTest<T extends IEntity> {
     public void setUp() {
         manager = getEntityManager();
         manager.clear();
+        prepareDependencies();
+    }
+
+    protected void prepareDependencies(){
     }
 
     @After

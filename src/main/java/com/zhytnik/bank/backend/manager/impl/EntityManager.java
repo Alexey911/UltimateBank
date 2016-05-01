@@ -46,7 +46,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         return entity;
     }
 
-    private void load(T entity, boolean fullLoad) {
+    protected void load(T entity, boolean fullLoad) {
         final CallableStatement s = buildStatement(LOAD_PROCEDURE_NAME, false, getFieldsCount());
         prepare(s, LOAD, entity);
         execute(s);
@@ -58,7 +58,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         close(s);
     }
 
-    private void fillReferences(T entity) {
+    protected void fillReferences(T entity) {
         for (Field field : getReferenceFields(clazz)) {
             final EntityManager<IEntity> manager = getManager(getFieldReferenceType(field));
             final Set<IEntity> references = manager.findByFieldValue(getEntityName(entity) + ".id", entity.getId());
@@ -69,8 +69,11 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
     @Override
     public Integer save(T entity) {
         logger.debug(format("Saving %s", clazz.getSimpleName()));
+        return save(entity, true);
+    }
 
-        saveRelations(entity);
+    public Integer save(T entity, boolean fullSave) {
+        if (fullSave) saveDependencies(entity);
 
         final CallableStatement s = buildStatement(SAVE_PROCEDURE_NAME, false, getFieldsCount());
         prepare(s, CREATE, entity);
@@ -83,7 +86,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         return id;
     }
 
-    private void saveRelations(T entity) {
+    private void saveDependencies(T entity) {
         final List<? extends IEntity> relations = getChildRelationGraph(entity);
         reverse(relations);
 
@@ -92,7 +95,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
             if (child.isSaved()) {
                 m.update(entity);
             } else {
-                m.save(child);
+                m.save(child, false);
             }
         }
     }

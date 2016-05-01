@@ -1,7 +1,9 @@
 INSERT INTO DEPARTMENT (id,
                         "number",
-                        address)
+                        address,
+                        found)
 VALUES (1,
         777,
-        'address')
+        'address',
+        1)
 /

@@ -7,35 +7,41 @@ NOMAXVALUE
 CREATE TABLE DEPARTMENT (
   id       INT,
   "number" INT,
-  address  VARCHAR2(100)
+  address  VARCHAR2(100),
+  found    INT
 )
 /
 
 CREATE OR REPLACE PROCEDURE SAVE_DEPARTMENT(c_id OUT  INT,
                                             c_number  INT,
-                                            c_address VARCHAR2)
+                                            c_address VARCHAR2,
+                                            c_found   INT)
 AS
   BEGIN
     c_id := DEPARTMENT_ID_GENERATOR.nextval;
     INSERT INTO DEPARTMENT (id,
                             "number",
-                            address) VALUES (c_id,
-                                             c_number,
-                                             c_address);
+                            address,
+                            found) VALUES (c_id,
+                                           c_number,
+                                           c_address, c_found);
   END;
 /
 
 CREATE OR REPLACE PROCEDURE LOAD_DEPARTMENT(c_id          INT,
                                             c_number  OUT INT,
-                                            c_address OUT VARCHAR2)
+                                            c_address OUT VARCHAR2,
+                                            c_found   OUT INTEGER)
 AS
   BEGIN
     SELECT
       "number",
-      address
+      address,
+      found
     INTO
       c_number,
-      c_address
+      c_address,
+      c_found
     FROM DEPARTMENT
     WHERE id = c_id;
   END;
@@ -43,14 +49,16 @@ AS
 
 CREATE OR REPLACE PROCEDURE UPDATE_DEPARTMENT(c_id      INT,
                                               c_number  INT,
-                                              c_address VARCHAR2)
+                                              c_address VARCHAR2,
+                                              c_found   INT)
 AS
   BEGIN
     UPDATE DEPARTMENT
     SET
       "number" = c_number,
-      address  = c_address
-    WHERE id = c_id;
+      address  = c_address,
+      found    = c_found
+    WHERE ID = c_id;
   END;
 /
 
@@ -79,7 +87,8 @@ AS
 
 CREATE OR REPLACE TYPE DEPARTMENT_TYPE AS OBJECT (id       INT,
                                                   "number" INT,
-                                                  address  VARCHAR2(100))
+                                                  address  VARCHAR2(100),
+                                                  found    INT)
 /
 CREATE OR REPLACE TYPE DEPARTMENT_ARRAY AS TABLE OF DEPARTMENT_TYPE
 /
@@ -94,7 +103,7 @@ IS
     FOR r IN (SELECT *
               FROM DEPARTMENT) LOOP
       departments.extend;
-      c := DEPARTMENT_TYPE(r.id, r."number", r.address);
+      c := DEPARTMENT_TYPE(r.id, r."number", r.address, r.found);
       departments(departments.count) := c;
     END LOOP;
     RETURN departments;
