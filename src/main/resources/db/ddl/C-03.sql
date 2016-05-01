@@ -18,7 +18,10 @@ CREATE OR REPLACE PROCEDURE SAVE_DEPARTMENT(c_id OUT  INT,
                                             c_found   INT)
 AS
   BEGIN
-    c_id := DEPARTMENT_ID_GENERATOR.nextval;
+    IF (c_id IS NULL)
+    THEN
+      c_id := DEPARTMENT_ID_GENERATOR.nextval;
+    END IF;
     INSERT INTO DEPARTMENT (id,
                             "number",
                             address,
@@ -107,5 +110,13 @@ IS
       departments(departments.count) := c;
     END LOOP;
     RETURN departments;
+  END;
+/
+
+
+CREATE OR REPLACE PROCEDURE CLEAR_DEPARTMENT
+AS
+  BEGIN
+    DELETE DEPARTMENT;
   END;
 /

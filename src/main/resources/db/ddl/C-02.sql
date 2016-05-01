@@ -19,7 +19,10 @@ CREATE OR REPLACE PROCEDURE SAVE_FOUND(c_id OUT   INT,
                                        c_currency INTEGER)
 AS
   BEGIN
-    c_id := FOUND_ID_GENERATOR.nextval;
+    IF (c_id IS NULL)
+    THEN
+      c_id := FOUND_ID_GENERATOR.nextval;
+    END IF;
     INSERT INTO FOUND (id,
                        code,
                        balance,
@@ -110,5 +113,13 @@ IS
       founds(founds.count) := f;
     END LOOP;
     RETURN founds;
+  END;
+/
+
+
+CREATE OR REPLACE PROCEDURE CLEAR_FOUND
+AS
+  BEGIN
+    DELETE FOUND;
   END;
 /

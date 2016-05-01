@@ -11,6 +11,7 @@ public class ScriptUtil {
     public static final String REMOVE_PROCEDURE_NAME = "REMOVE_";
     public static final String LOAD_ALL_FUNCTION_NAME = "LOAD_ALL_";
     public static final String ARRAY_OF_ALL = "_ARRAY";
+    public static final String CLEAR_PROCEDURE_NAME = "CLEAR_";
 
     private ScriptUtil() {
     }

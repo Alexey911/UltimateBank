@@ -21,7 +21,7 @@ public class AggregateUtil {
         int index = 2;
 
         for (Field field : getFields(entity)) {
-            if (isIdField(field) || isReferenceField(field)) continue;
+            if (isIdField(field) || isOneToManyField(field)) continue;
 
             final Class type = field.getType();
 
@@ -51,7 +51,7 @@ public class AggregateUtil {
             Object[] attrs = struct.getAttributes();
 
             for (Field field : getFields(entity)) {
-                if (isReferenceField(field)) continue;
+                if (isOneToManyField(field)) continue;
 
                 final Class type = field.getType();
                 final Object value = attrs[index];
@@ -66,7 +66,7 @@ public class AggregateUtil {
                     setFieldValue(entity, field, getDouble(value));
                 } else if (isBoolean(type)) {
                     setFieldValue(entity, field, value);
-                } else if (isDependenceField(field)) {
+                } else if (isManyToOneField(field) || isOneToOneField(field)) {
                     final IEntity entityField = (IEntity) getFieldValue(entity, field);
                     entityField.setId(getInteger(value));
                 } else {

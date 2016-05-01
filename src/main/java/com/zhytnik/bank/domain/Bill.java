@@ -1,7 +1,8 @@
 package com.zhytnik.bank.domain;
 
-import com.zhytnik.bank.backend.types.relation.ManyToOne;
 import com.zhytnik.bank.backend.types.Entity;
+import com.zhytnik.bank.backend.types.relation.ManyToOne;
+import com.zhytnik.bank.backend.types.relation.OneToOne;
 import com.zhytnik.bank.domain.card.BillCard;
 
 public class Bill extends Entity {
@@ -15,7 +16,7 @@ public class Bill extends Entity {
     @ManyToOne
     private Client client;
 
-    @ManyToOne
+    @OneToOne
     private BillCard card;
 
     public Client getClient() {

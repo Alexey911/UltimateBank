@@ -1,11 +1,11 @@
 package com.zhytnik.bank.domain.card;
 
-import com.zhytnik.bank.backend.types.relation.OneToMany;
+import com.zhytnik.bank.backend.types.relation.OneToOne;
 import com.zhytnik.bank.domain.Bill;
 
 public class BillCard extends Card {
 
-    @OneToMany(type = Bill.class, single = true)
+    @OneToOne
     private Bill bill;
 
     public Bill getBill() {

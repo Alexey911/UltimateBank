@@ -1,11 +1,11 @@
 package com.zhytnik.bank.domain.card;
 
-import com.zhytnik.bank.backend.types.relation.OneToMany;
+import com.zhytnik.bank.backend.types.relation.OneToOne;
 import com.zhytnik.bank.domain.Credit;
 
 public class CreditCard extends Card {
 
-    @OneToMany(type = Credit.class, single = true)
+    @OneToOne
     private Credit credit;
 
     public Credit getCredit() {

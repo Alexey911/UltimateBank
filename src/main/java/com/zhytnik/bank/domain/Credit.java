@@ -1,29 +1,29 @@
 package com.zhytnik.bank.domain;
 
-import com.zhytnik.bank.backend.types.relation.ManyToOne;
 import com.zhytnik.bank.backend.types.Entity;
+import com.zhytnik.bank.backend.types.relation.ManyToOne;
+import com.zhytnik.bank.backend.types.relation.OneToOne;
 import com.zhytnik.bank.domain.card.CreditCard;
 
 import java.util.Date;
 
 public class Credit extends Entity {
 
-    @ManyToOne
-    private Client client;
-
-    @ManyToOne
-    private CreditCard creditCard;
-
-    @ManyToOne
-    private Currency currency;
-
     private Double amount;
     private Date validFor;
     private Double margin;
     private Integer fee;
     private Boolean isActive;
-
     private Double penalty;
+
+    @OneToOne
+    private CreditCard creditCard;
+
+    @ManyToOne
+    private Currency currency;
+
+    @ManyToOne
+    private Client client;
 
     public Client getClient() {
         return client;

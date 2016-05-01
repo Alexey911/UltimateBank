@@ -25,7 +25,10 @@ CREATE OR REPLACE PROCEDURE SAVE_BANKER(c_id OUT     INT,
                                         c_department INT)
 AS
   BEGIN
-    c_id := BANKER_ID_GENERATOR.nextval;
+    IF (c_id IS NULL)
+    THEN
+      c_id := BANKER_ID_GENERATOR.nextval;
+    END IF;
     INSERT INTO BANKER (id,
                         name,
                         surname,
@@ -140,5 +143,13 @@ IS
       bankers(bankers.count) := b;
     END LOOP;
     RETURN bankers;
+  END;
+/
+
+
+CREATE OR REPLACE PROCEDURE CLEAR_BANKER
+AS
+  BEGIN
+    DELETE BANKER;
   END;
 /

@@ -19,6 +19,7 @@
           p:url="${db.url}"
           p:poolPreparedStatements="true"
           p:maxOpenPreparedStatements="10"
+          p:defaultAutoCommit="true"
           p:initialSize="5"/>
 
     <bean name="scriptManager" class="com.zhytnik.bank.backend.manager.impl.ScriptManager"

@@ -22,7 +22,10 @@ CREATE OR REPLACE PROCEDURE SAVE_DEPOSIT(c_id OUT       INT,
                                          c_currency     INT)
 AS
   BEGIN
-    c_id := DEPOSIT_ID_GENERATOR.nextval;
+    IF (c_id IS NULL)
+    THEN
+      c_id := DEPOSIT_ID_GENERATOR.nextval;
+    END IF;
     INSERT INTO DEPOSIT (id,
                          sum,
                          percent,
@@ -129,5 +132,13 @@ IS
       deposits(deposits.count) := d;
     END LOOP;
     RETURN deposits;
+  END;
+/
+
+
+CREATE OR REPLACE PROCEDURE CLEAR_DEPOSIT
+AS
+  BEGIN
+    DELETE DEPOSIT;
   END;
 /

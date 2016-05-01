@@ -18,6 +18,7 @@ public class ConnectionManager {
         ds.setUrl("jdbc:oracle:thin:@//localhost:1521/XE");
         ds.setUsername("admin");
         ds.setPassword("password");
+        ds.setDefaultAutoCommit(true);
         return ds;
     }
 

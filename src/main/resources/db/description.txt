@@ -1,0 +1,11 @@
+Scripts owners:
+ 01 - Currency
+ 02 - Found
+ 03 - Department
+ 04 - Banker
+ 05 - Client
+ 06 - Deposit
+ 07 - Bill
+ 08 - BillCard
+ 09 - Credit
+ 10 - CreditCard

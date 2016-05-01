@@ -1,6 +1,7 @@
 import com.zhytnik.bank.backend.types.IEntity;
 
 import java.lang.reflect.Field;
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
@@ -54,6 +55,10 @@ class EntityFiller {
             return random.nextDouble();
         } else if (isString(type)) {
             return UUID.randomUUID().toString();
+        } else if (isDate(type)) {
+            return new Date(random.nextLong());
+        } else if (isBoolean(type)) {
+            return random.nextBoolean();
         }
         return createAndFill(type);
     }

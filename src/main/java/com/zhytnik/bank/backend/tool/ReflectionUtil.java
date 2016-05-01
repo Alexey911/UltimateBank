@@ -3,6 +3,7 @@ package com.zhytnik.bank.backend.tool;
 import com.zhytnik.bank.backend.types.relation.ManyToOne;
 import com.zhytnik.bank.backend.types.IEntity;
 import com.zhytnik.bank.backend.types.relation.OneToMany;
+import com.zhytnik.bank.backend.types.relation.OneToOne;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -83,11 +84,11 @@ public class ReflectionUtil {
     }
 
     public static List<Field> getSimpleFields(Class clazz) {
-        return getFields(clazz).stream().filter(field -> !isReferenceField(field)).collect(Collectors.toList());
+        return getFields(clazz).stream().filter(field -> !isOneToManyField(field)).collect(Collectors.toList());
     }
 
     public static List<Field> getReferenceFields(Class clazz) {
-        return getFields(clazz).stream().filter(ReflectionUtil::isReferenceField).collect(Collectors.toList());
+        return getFields(clazz).stream().filter(ReflectionUtil::isOneToManyField).collect(Collectors.toList());
     }
 
     public static List<Field> getFields(Class clazz) {
@@ -132,7 +133,7 @@ public class ReflectionUtil {
     }
 
     public static boolean isFieldReferenceCollection(Field field, Object target) {
-        return isEntityCollection(field, target) && isReferenceField(field);
+        return isEntityCollection(field, target) && isOneToManyField(field);
     }
 
     public static Class<? extends IEntity> getFieldReferenceType(Field field) {
@@ -156,12 +157,16 @@ public class ReflectionUtil {
         return name.equals(ID_FIELD);
     }
 
-    public static boolean isReferenceField(Field field) {
+    public static boolean isOneToManyField(Field field) {
         return hasAnnotation(field, OneToMany.class);
     }
 
-    public static boolean isDependenceField(Field field) {
+    public static boolean isManyToOneField(Field field) {
         return hasAnnotation(field, ManyToOne.class);
+    }
+
+    public static boolean isOneToOneField(Field field) {
+        return hasAnnotation(field, OneToOne.class);
     }
 
     public static boolean isCollectionField(Field field) {

@@ -37,17 +37,17 @@ public class PrepareUtil {
         putInteger(s, index++, entity.getId());
 
         for (Field field : getFields(entity)) {
-            if (isIdField(field) || isReferenceField(field)) continue;
+            if (isIdField(field) || isOneToManyField(field)) continue;
             registerParameter(s, index++, field.getType());
         }
     }
 
     private static <T extends IEntity> void prepareSaveStatement(CallableStatement s, T entity) {
         int index = 1;
-        registerParameter(s, index++, Integer.class);
+        registerParameter(s, index, Integer.class);
 
         for (Field field : getFields(entity)) {
-            if (isIdField(field) || isReferenceField(field)) continue;
+            if (isOneToManyField(field)) continue;
 
             final Class type = field.getType();
             final Object value = getFieldValue(entity, field);
@@ -60,9 +60,9 @@ public class PrepareUtil {
                 putDate(s, index, value);
             } else if (isDouble(type)) {
                 putDouble(s, index, value);
-            } else if (isBoolean(type)){
+            } else if (isBoolean(type)) {
                 putBoolean(s, index, value);
-            } else if (isDependenceField(field)) {
+            } else if (isManyToOneField(field) || isOneToOneField(field)) {
                 putForeignKey(s, entity, index, field);
             } else {
                 throw new RuntimeException(format("Unknown Entity Field %s", field.getName()));
@@ -81,7 +81,7 @@ public class PrepareUtil {
         int index = 1;
 
         for (Field field : getFields(entity)) {
-            if (isReferenceField(field)) continue;
+            if (isOneToManyField(field)) continue;
 
             final Class type = field.getType();
             final Object value = getFieldValue(entity, field);
@@ -96,7 +96,7 @@ public class PrepareUtil {
                 putDouble(s, index, value);
             } else if (isBoolean(type)) {
                 putBoolean(s, index, value);
-            } else if (isDependenceField(field)) {
+            } else if (isManyToOneField(field) || isOneToOneField(field)) {
                 putForeignKey(s, entity, index, field);
             } else {
                 throw new RuntimeException(format("Unknown Entity Field %s", field.getName()));

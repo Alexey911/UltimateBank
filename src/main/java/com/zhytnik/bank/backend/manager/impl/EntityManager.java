@@ -1,7 +1,7 @@
 package com.zhytnik.bank.backend.manager.impl;
 
-import com.zhytnik.bank.backend.types.IEntity;
 import com.zhytnik.bank.backend.manager.IEntityManager;
+import com.zhytnik.bank.backend.types.IEntity;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
@@ -168,7 +168,9 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
 
     @Override
     public void clear() {
-        loadAll().forEach(this::remove);
+        final CallableStatement s = buildStatement(CLEAR_PROCEDURE_NAME, false, 0);
+        execute(s);
+        close(s);
     }
 
     @Override

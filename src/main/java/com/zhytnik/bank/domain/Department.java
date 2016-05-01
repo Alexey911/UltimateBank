@@ -1,8 +1,8 @@
 package com.zhytnik.bank.domain;
 
-import com.zhytnik.bank.backend.types.relation.ManyToOne;
 import com.zhytnik.bank.backend.types.Entity;
 import com.zhytnik.bank.backend.types.relation.OneToMany;
+import com.zhytnik.bank.backend.types.relation.OneToOne;
 
 import java.util.Set;
 
@@ -13,7 +13,7 @@ public class Department extends Entity {
     private Integer number;
     private String address;
 
-    @ManyToOne
+    @OneToOne
     private Found found;
 
     @OneToMany(type = Banker.class)

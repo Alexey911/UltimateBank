@@ -24,7 +24,10 @@ CREATE OR REPLACE PROCEDURE SAVE_CLIENT(c_id OUT   INT,
                                         c_banker   INT)
 AS
   BEGIN
-    c_id := CLIENT_ID_GENERATOR.nextval;
+    IF (c_id IS NULL)
+    THEN
+      c_id := CLIENT_ID_GENERATOR.nextval;
+    END IF;
     INSERT INTO CLIENT (id,
                         name,
                         surname,
@@ -139,5 +142,13 @@ IS
       clients(clients.count) := c;
     END LOOP;
     RETURN clients;
+  END;
+/
+
+
+CREATE OR REPLACE PROCEDURE CLEAR_CLIENT
+AS
+  BEGIN
+    DELETE CLIENT;
   END;
 /

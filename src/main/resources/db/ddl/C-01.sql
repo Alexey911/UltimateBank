@@ -17,7 +17,11 @@ CREATE OR REPLACE PROCEDURE SAVE_CURRENCY(c_id OUT INT,
                                           c_value  NUMBER)
 AS
   BEGIN
-    c_id := CURRENCY_ID_GENERATOR.nextval;
+    IF (c_id IS NULL)
+    THEN
+      c_id := CURRENCY_ID_GENERATOR.nextval;
+    END IF;
+
     INSERT INTO CURRENCY (id,
                           name,
                           value) VALUES (c_id,
@@ -100,5 +104,13 @@ IS
       currencies(currencies.count) := c;
     END LOOP;
     RETURN currencies;
+  END;
+/
+
+
+CREATE OR REPLACE PROCEDURE CLEAR_CURRENCY
+AS
+  BEGIN
+    DELETE CURRENCY;
   END;
 /

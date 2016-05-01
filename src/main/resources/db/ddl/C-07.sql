@@ -23,7 +23,10 @@ CREATE OR REPLACE PROCEDURE SAVE_BILL(c_id OUT    INT,
                                       c_bill_card INT)
 AS
   BEGIN
-    c_id := BILL_ID_GENERATOR.nextval;
+    IF (c_id IS NULL)
+    THEN
+      c_id := BILL_ID_GENERATOR.nextval;
+    END IF;
     INSERT INTO BILL (id,
                       balance,
                       isActive,
@@ -130,5 +133,13 @@ IS
       bills(bills.count) := b;
     END LOOP;
     RETURN bills;
+  END;
+/
+
+
+CREATE OR REPLACE PROCEDURE CLEAR_BILL
+AS
+  BEGIN
+    DELETE BILL;
   END;
 /

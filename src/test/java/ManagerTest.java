@@ -1,5 +1,7 @@
-import com.zhytnik.bank.backend.types.IEntity;
 import com.zhytnik.bank.backend.manager.IEntityManager;
+import com.zhytnik.bank.backend.manager.impl.ManagerContainer;
+import com.zhytnik.bank.backend.tool.EntityRelationUtil;
+import com.zhytnik.bank.backend.types.IEntity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,6 +9,7 @@ import org.junit.Test;
 import java.util.Set;
 
 import static com.google.common.collect.Iterables.getOnlyElement;
+import static com.zhytnik.bank.backend.manager.impl.ManagerContainer.drop;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class ManagerTest<T extends IEntity> {
@@ -19,18 +22,14 @@ public abstract class ManagerTest<T extends IEntity> {
     public void setUp() {
         manager = getEntityManager();
         manager.clear();
-        prepareDependencies();
-    }
-
-    protected void prepareDependencies(){
     }
 
     @After
     public void clear() {
-        manager.clear();
+        drop();
     }
 
-    @Test(timeout = 150L)
+    @Test(timeout = 1000L)
     public void shouldSave() {
         final T entity = instantiate();
         final int countBefore = manager.getCount();
@@ -41,7 +40,7 @@ public abstract class ManagerTest<T extends IEntity> {
         assertThat(persistEntity).isEqualToComparingFieldByField(entity);
     }
 
-    @Test(timeout = 150L)
+    @Test(timeout = 1000L)
     public void shouldLoad() {
         final T existEntity = instantiate();
         manager.save(existEntity);
@@ -50,7 +49,7 @@ public abstract class ManagerTest<T extends IEntity> {
         assertThat(loadedEntity).isEqualToComparingFieldByField(existEntity);
     }
 
-    @Test(timeout = 150L)
+    @Test(timeout = 1000L)
     public void shouldLoadAll() {
         final T existEntity = instantiate();
         manager.save(existEntity);
@@ -61,13 +60,13 @@ public abstract class ManagerTest<T extends IEntity> {
         assertThat(getOnlyElement(entities)).isEqualToComparingFieldByField(existEntity);
     }
 
-    @Test(timeout = 150L)
+    @Test(timeout = 1000L)
     public void shouldGetCount() {
         manager.save(instantiate());
         assertThat(manager.getCount()).isEqualTo(1);
     }
 
-    @Test(timeout = 150L)
+    @Test(timeout = 1000L)
     public void shouldClear() {
         manager.save(instantiate());
         assertThat(manager.getCount()).isEqualTo(1);
@@ -76,7 +75,7 @@ public abstract class ManagerTest<T extends IEntity> {
         assertThat(manager.getCount()).isEqualTo(0);
     }
 
-    @Test(timeout = 150L)
+    @Test(timeout = 1000L)
     public void shouldUpdate() {
         final T entity = instantiate();
         manager.save(entity);
@@ -92,6 +91,17 @@ public abstract class ManagerTest<T extends IEntity> {
     protected abstract void updateEntity(T entity);
 
     protected T instantiate() {
-        return EntityFiller.create(manager.getEntityClass());
+        final T entity = EntityFiller.create(manager.getEntityClass());
+        initial(entity);
+        return entity;
+    }
+
+    protected void initial(T entity) {
+    }
+
+    protected static <T extends IEntity> T mock(Class<T> clazz) {
+        final T entity = EntityFiller.create(clazz);
+        ManagerContainer.getEntityManager(clazz).save(entity);
+        return entity;
     }
 }

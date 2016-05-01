@@ -1,6 +1,7 @@
 import com.zhytnik.bank.backend.manager.IEntityManager;
 import com.zhytnik.bank.backend.manager.impl.EntityManager;
 import com.zhytnik.bank.domain.Department;
+import com.zhytnik.bank.domain.Found;
 
 public class DepartmentManagerTest extends ManagerTest<Department> {
 
