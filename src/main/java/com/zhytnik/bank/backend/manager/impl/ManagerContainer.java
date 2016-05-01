@@ -1,6 +1,6 @@
 package com.zhytnik.bank.backend.manager.impl;
 
-import com.zhytnik.bank.backend.domain.IEntity;
+import com.zhytnik.bank.backend.types.IEntity;
 import com.zhytnik.bank.backend.manager.IEntityManager;
 
 import java.util.HashMap;

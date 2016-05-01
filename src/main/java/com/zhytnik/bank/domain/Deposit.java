@@ -1,21 +1,21 @@
 package com.zhytnik.bank.domain;
 
-import com.zhytnik.bank.backend.domain.Depends;
-import com.zhytnik.bank.backend.domain.Entity;
+import com.zhytnik.bank.backend.types.relation.ManyToOne;
+import com.zhytnik.bank.backend.types.Entity;
 
 import java.util.Date;
 
 public class Deposit extends Entity {
 
-    @Depends
-    private Client client;
-
-    @Depends
-    private Currency currency;
-
     private Double sum;
     private Double percent;
     private Date expiryDate;
+
+    @ManyToOne
+    private Client client;
+
+    @ManyToOne
+    private Currency currency;
 
     public Client getClient() {
         return client;

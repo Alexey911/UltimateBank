@@ -1,8 +1,8 @@
 package com.zhytnik.bank.domain;
 
-import com.zhytnik.bank.backend.domain.Depends;
-import com.zhytnik.bank.backend.domain.Entity;
-import com.zhytnik.bank.backend.domain.Reference;
+import com.zhytnik.bank.backend.types.relation.ManyToOne;
+import com.zhytnik.bank.backend.types.Entity;
+import com.zhytnik.bank.backend.types.relation.OneToMany;
 
 import java.util.Set;
 
@@ -16,16 +16,16 @@ public class Client extends Entity {
     private String password;
     private Boolean enable;
 
-    @Depends
+    @ManyToOne
     private Banker banker;
 
-    @Reference(type = Bill.class)
+    @OneToMany(type = Bill.class)
     private Set<Bill> bills = newHashSet();
 
-    @Reference(type = Credit.class)
+    @OneToMany(type = Credit.class)
     private Set<Credit> credits = newHashSet();
 
-    @Reference(type = Deposit.class)
+    @OneToMany(type = Deposit.class)
     private Set<Deposit> deposits = newHashSet();
 
     public String getName() {

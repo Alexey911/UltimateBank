@@ -1,8 +1,8 @@
 package com.zhytnik.bank.backend.tool;
 
-import com.zhytnik.bank.backend.domain.Depends;
-import com.zhytnik.bank.backend.domain.IEntity;
-import com.zhytnik.bank.backend.domain.Reference;
+import com.zhytnik.bank.backend.types.relation.ManyToOne;
+import com.zhytnik.bank.backend.types.IEntity;
+import com.zhytnik.bank.backend.types.relation.OneToMany;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -137,8 +137,8 @@ public class ReflectionUtil {
 
     public static Class<? extends IEntity> getFieldReferenceType(Field field) {
         for (Annotation a : field.getAnnotations()) {
-            if (a instanceof Reference) {
-                Reference reference = (Reference) a;
+            if (a instanceof OneToMany) {
+                OneToMany reference = (OneToMany) a;
                 return reference.type();
             }
         }
@@ -157,11 +157,11 @@ public class ReflectionUtil {
     }
 
     public static boolean isReferenceField(Field field) {
-        return hasAnnotation(field, Reference.class);
+        return hasAnnotation(field, OneToMany.class);
     }
 
     public static boolean isDependenceField(Field field) {
-        return hasAnnotation(field, Depends.class);
+        return hasAnnotation(field, ManyToOne.class);
     }
 
     public static boolean isCollectionField(Field field) {

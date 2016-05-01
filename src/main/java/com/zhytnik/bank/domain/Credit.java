@@ -1,20 +1,20 @@
 package com.zhytnik.bank.domain;
 
-import com.zhytnik.bank.backend.domain.Depends;
-import com.zhytnik.bank.backend.domain.Entity;
+import com.zhytnik.bank.backend.types.relation.ManyToOne;
+import com.zhytnik.bank.backend.types.Entity;
 import com.zhytnik.bank.domain.card.CreditCard;
 
 import java.util.Date;
 
 public class Credit extends Entity {
 
-    @Depends
+    @ManyToOne
     private Client client;
 
-    @Depends
+    @ManyToOne
     private CreditCard creditCard;
 
-    @Depends
+    @ManyToOne
     private Currency currency;
 
     private Double amount;

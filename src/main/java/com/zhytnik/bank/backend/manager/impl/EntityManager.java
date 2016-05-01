@@ -1,6 +1,6 @@
 package com.zhytnik.bank.backend.manager.impl;
 
-import com.zhytnik.bank.backend.domain.IEntity;
+import com.zhytnik.bank.backend.types.IEntity;
 import com.zhytnik.bank.backend.manager.IEntityManager;
 import org.apache.log4j.Logger;
 
@@ -93,7 +93,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         for (IEntity child : relations) {
             final EntityManager<IEntity> m = getManager(child.getClass());
             if (child.isSaved()) {
-                m.update(entity);
+                m.update(child);
             } else {
                 m.save(child, false);
             }

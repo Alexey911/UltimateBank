@@ -1,6 +1,6 @@
 package com.zhytnik.bank.backend.tool.statement;
 
-import com.zhytnik.bank.backend.domain.IEntity;
+import com.zhytnik.bank.backend.types.IEntity;
 
 import java.lang.reflect.Field;
 import java.sql.CallableStatement;
@@ -59,7 +59,7 @@ public class PrepareUtil {
             } else if (isDate(type)) {
                 putDate(s, index, value);
             } else if (isDouble(type)) {
-                putDecimal(s, index, value);
+                putDouble(s, index, value);
             } else if (isBoolean(type)){
                 putBoolean(s, index, value);
             } else if (isDependenceField(field)) {
@@ -73,7 +73,8 @@ public class PrepareUtil {
 
     private static <T extends IEntity> void putForeignKey(CallableStatement s, T entity, int index, Field field) {
         final IEntity dependEntity = (IEntity) getFieldValue(entity, field);
-        putInteger(s, index, dependEntity.getId());
+        Integer id = (dependEntity != null) ? dependEntity.getId() : null;
+        putInteger(s, index, id);
     }
 
     private static <T extends IEntity> void prepareUpdateStatement(CallableStatement s, T entity) {
@@ -92,7 +93,7 @@ public class PrepareUtil {
             } else if (isDate(type)) {
                 putDate(s, index, value);
             } else if (isDouble(type)) {
-                putDecimal(s, index, value);
+                putDouble(s, index, value);
             } else if (isBoolean(type)) {
                 putBoolean(s, index, value);
             } else if (isDependenceField(field)) {

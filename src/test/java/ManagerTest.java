@@ -1,4 +1,4 @@
-import com.zhytnik.bank.backend.domain.IEntity;
+import com.zhytnik.bank.backend.types.IEntity;
 import com.zhytnik.bank.backend.manager.IEntityManager;
 import org.junit.After;
 import org.junit.Before;

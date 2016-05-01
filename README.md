@@ -3,6 +3,6 @@ The framework based on **CRUD PL/SQL** operations with additional operations ove
 With this framework you can don't think about PL/SQL and concentrate on your business logic.
 ### Core has following principles
  - order of fields must be equal to order of arguments in PL/SQL
- - fields name must be equal to names of table columns
- - for building entities hierarchy use @Depends, @Reference
+ - fields names and order must be equal to names and order of table columns
+ - for building entities hierarchy use **@ManyToOne**, **@OneToMany**
  - your entities must be comply with Java Bean rules

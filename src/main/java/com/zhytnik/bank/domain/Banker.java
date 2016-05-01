@@ -1,7 +1,7 @@
 package com.zhytnik.bank.domain;
 
-import com.zhytnik.bank.backend.domain.Depends;
-import com.zhytnik.bank.backend.domain.Entity;
+import com.zhytnik.bank.backend.types.relation.ManyToOne;
+import com.zhytnik.bank.backend.types.Entity;
 
 public class Banker extends Entity {
 
@@ -11,7 +11,7 @@ public class Banker extends Entity {
     private String password;
     private Integer privilege;
 
-    @Depends
+    @ManyToOne
     private Department department;
 
     public String getName() {

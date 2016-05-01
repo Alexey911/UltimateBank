@@ -1,4 +1,4 @@
-import com.zhytnik.bank.backend.domain.IEntity;
+import com.zhytnik.bank.backend.types.IEntity;
 
 import java.lang.reflect.Field;
 import java.util.Random;

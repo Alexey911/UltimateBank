@@ -1,16 +1,13 @@
 package com.zhytnik.bank.backend.tool.statement;
 
-import com.zhytnik.bank.backend.domain.IEntity;
+import com.zhytnik.bank.backend.types.IEntity;
 import com.zhytnik.bank.backend.exception.NotFoundException;
 import oracle.jdbc.OracleTypes;
 import oracle.sql.ARRAY;
 import oracle.sql.STRUCT;
 
 import java.math.BigDecimal;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,7 +36,7 @@ public class CallableStatementUtil {
         return s;
     }
 
-    public static void execute(CallableStatement s) throws NotFoundException{
+    public static void execute(CallableStatement s) throws NotFoundException {
         try {
             s.executeUpdate();
         } catch (SQLException e) {
@@ -111,14 +108,14 @@ public class CallableStatementUtil {
     public static Date loadDate(CallableStatement s, int index) {
         Date val;
         try {
-            val = s.getDate(index);
+            val = s.getTimestamp(index);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return val;
     }
 
-    public static Double loadDecimal(CallableStatement s, int index) {
+    public static Double loadDouble(CallableStatement s, int index) {
         Double val;
         try {
             val = s.getDouble(index);
@@ -131,7 +128,7 @@ public class CallableStatementUtil {
     public static Boolean loadBoolean(CallableStatement s, int index) {
         Boolean val;
         try {
-            val = s.getBoolean(index);
+            val = (s.getInt(index) > 0);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -196,22 +193,22 @@ public class CallableStatementUtil {
     public static void putDate(CallableStatement s, int index, Object dateVal) {
         try {
             if (dateVal == null) {
-                s.setNull(index, Types.DATE);
+                s.setNull(index, Types.TIMESTAMP);
             } else {
-                final java.sql.Date sqlDate = new java.sql.Date(((Date) dateVal).getTime());
-                s.setDate(index, sqlDate);
+                final Timestamp t = new Timestamp(((Date) dateVal).getTime());
+                s.setTimestamp(index, t);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void putDecimal(CallableStatement s, int index, Object decimalVal) {
+    public static void putDouble(CallableStatement s, int index, Object doubleVal) {
         try {
-            if (decimalVal == null) {
+            if (doubleVal == null) {
                 s.setNull(index, Types.DOUBLE);
             } else {
-                s.setDouble(index, (Double) decimalVal);
+                s.setDouble(index, (Double) doubleVal);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -221,9 +218,9 @@ public class CallableStatementUtil {
     public static void putBoolean(CallableStatement s, int index, Object booleanVal) {
         try {
             if (booleanVal == null) {
-                s.setNull(index, Types.BOOLEAN);
+                s.setInt(index, 0);
             } else {
-                s.setBoolean(index, (Boolean) booleanVal);
+                s.setInt(index, ((Boolean) booleanVal) ? 1 : 0);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

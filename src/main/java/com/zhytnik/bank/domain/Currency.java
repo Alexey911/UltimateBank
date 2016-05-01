@@ -1,6 +1,6 @@
 package com.zhytnik.bank.domain;
 
-import com.zhytnik.bank.backend.domain.Entity;
+import com.zhytnik.bank.backend.types.Entity;
 
 public class Currency extends Entity {
 

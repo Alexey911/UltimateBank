@@ -1,6 +1,6 @@
 package com.zhytnik.bank.backend.tool.statement;
 
-import com.zhytnik.bank.backend.domain.IEntity;
+import com.zhytnik.bank.backend.types.IEntity;
 import oracle.sql.STRUCT;
 
 import java.lang.reflect.Field;
@@ -32,7 +32,7 @@ public class AggregateUtil {
             } else if (isDate(type)) {
                 setFieldValue(entity, field, loadDate(s, index));
             } else if (isDouble(type)) {
-                setFieldValue(entity, field, loadDecimal(s, index));
+                setFieldValue(entity, field, loadDouble(s, index));
             } else if (isBoolean(type)) {
                 setFieldValue(entity, field, loadBoolean(s, index));
             } else if (isEntity(type)) {

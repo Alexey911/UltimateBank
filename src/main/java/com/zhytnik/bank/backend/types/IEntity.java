@@ -1,4 +1,4 @@
-package com.zhytnik.bank.backend.domain;
+package com.zhytnik.bank.backend.types;
 
 public interface IEntity {
 

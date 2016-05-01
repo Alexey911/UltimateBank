@@ -1,4 +1,4 @@
-package com.zhytnik.bank.backend.domain;
+package com.zhytnik.bank.backend.types;
 
 import static java.lang.String.format;
 

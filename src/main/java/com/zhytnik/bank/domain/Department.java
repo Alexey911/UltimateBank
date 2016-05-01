@@ -1,8 +1,8 @@
 package com.zhytnik.bank.domain;
 
-import com.zhytnik.bank.backend.domain.Depends;
-import com.zhytnik.bank.backend.domain.Entity;
-import com.zhytnik.bank.backend.domain.Reference;
+import com.zhytnik.bank.backend.types.relation.ManyToOne;
+import com.zhytnik.bank.backend.types.Entity;
+import com.zhytnik.bank.backend.types.relation.OneToMany;
 
 import java.util.Set;
 
@@ -13,10 +13,10 @@ public class Department extends Entity {
     private Integer number;
     private String address;
 
-    @Depends
+    @ManyToOne
     private Found found;
 
-    @Reference(type = Banker.class)
+    @OneToMany(type = Banker.class)
     private Set<Banker> bankers = newHashSet();
 
     public Integer getNumber() {

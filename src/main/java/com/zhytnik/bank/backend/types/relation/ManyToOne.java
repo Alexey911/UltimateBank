@@ -1,4 +1,4 @@
-package com.zhytnik.bank.backend.domain;
+package com.zhytnik.bank.backend.types.relation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -8,8 +8,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Retention(RUNTIME)
 @Target(FIELD)
-public @interface Reference {
-    Class<? extends IEntity> type();
-
-    boolean single() default false;
+public @interface ManyToOne {
 }

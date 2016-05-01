@@ -1,14 +1,14 @@
 package com.zhytnik.bank.domain;
 
-import com.zhytnik.bank.backend.domain.Depends;
-import com.zhytnik.bank.backend.domain.Entity;
+import com.zhytnik.bank.backend.types.relation.ManyToOne;
+import com.zhytnik.bank.backend.types.Entity;
 
 public class Found extends Entity {
 
     private String code;
     private Double balance;
 
-    @Depends
+    @ManyToOne
     private Currency currency;
 
     public String getCode() {

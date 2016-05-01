@@ -1,6 +1,6 @@
 package com.zhytnik.bank.backend.manager;
 
-import com.zhytnik.bank.backend.domain.IEntity;
+import com.zhytnik.bank.backend.types.IEntity;
 
 import java.util.Set;
 

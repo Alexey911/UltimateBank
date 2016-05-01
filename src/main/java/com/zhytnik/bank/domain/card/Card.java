@@ -1,6 +1,6 @@
 package com.zhytnik.bank.domain.card;
 
-import com.zhytnik.bank.backend.domain.Entity;
+import com.zhytnik.bank.backend.types.Entity;
 
 public abstract class Card extends Entity {
 

@@ -1,18 +1,18 @@
 package com.zhytnik.bank.domain;
 
-import com.zhytnik.bank.backend.domain.Depends;
-import com.zhytnik.bank.backend.domain.Entity;
+import com.zhytnik.bank.backend.types.relation.ManyToOne;
+import com.zhytnik.bank.backend.types.Entity;
 import com.zhytnik.bank.domain.card.BillCard;
 
 public class Bill extends Entity {
 
-    @Depends
+    @ManyToOne
     private Client client;
 
-    @Depends
+    @ManyToOne
     private BillCard card;
 
-    @Depends
+    @ManyToOne
     private Currency currency;
 
     private Double balance;
