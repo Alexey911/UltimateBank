@@ -1,5 +1,6 @@
 package com.zhytnik.bank.domain;
 
+import com.zhytnik.bank.backend.domain.Depends;
 import com.zhytnik.bank.backend.domain.Entity;
 import com.zhytnik.bank.backend.domain.Reference;
 
@@ -12,8 +13,11 @@ public class Department extends Entity {
     private Integer number;
     private String address;
 
-    @Reference(type = Client.class)
-    private Set<Client> clients = newHashSet();
+    @Depends
+    private Found found;
+
+    @Reference(type = Banker.class)
+    private Set<Banker> bankers = newHashSet();
 
     public Integer getNumber() {
         return number;
@@ -31,11 +35,19 @@ public class Department extends Entity {
         this.address = address;
     }
 
-    public Set<Client> getClients() {
-        return clients;
+    public Found getFound() {
+        return found;
     }
 
-    public void setClients(Set<Client> clients) {
-        this.clients = clients;
+    public void setFound(Found found) {
+        this.found = found;
+    }
+
+    public Set<Banker> getBankers() {
+        return bankers;
+    }
+
+    public void setBankers(Set<Banker> bankers) {
+        this.bankers = bankers;
     }
 }

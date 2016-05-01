@@ -61,7 +61,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
     private void fillReferences(T entity) {
         for (Field field : getReferenceFields(clazz)) {
             final EntityManager<IEntity> manager = getManager(getFieldReferenceType(field));
-            final Set<IEntity> references = manager.loadByFieldValue(getEntityName(entity) + ".id", entity.getId());
+            final Set<IEntity> references = manager.findByFieldValue(getEntityName(entity) + ".id", entity.getId());
             fillCollection(field, entity, references);
         }
     }
@@ -159,7 +159,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
     }
 
     @Override
-    public Set<T> loadByFieldValue(String field, Object value) {
+    public Set<T> findByFieldValue(String field, Object value) {
         return filterByField(loadAll(), field, value);
     }
 

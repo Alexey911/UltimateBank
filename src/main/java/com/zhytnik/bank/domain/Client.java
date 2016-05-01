@@ -2,6 +2,11 @@ package com.zhytnik.bank.domain;
 
 import com.zhytnik.bank.backend.domain.Depends;
 import com.zhytnik.bank.backend.domain.Entity;
+import com.zhytnik.bank.backend.domain.Reference;
+
+import java.util.Set;
+
+import static com.google.common.collect.Sets.newHashSet;
 
 public class Client extends Entity {
 
@@ -9,9 +14,19 @@ public class Client extends Entity {
     private String surname;
     private String address;
     private String password;
+    private Boolean enable;
 
     @Depends
-    private Department department;
+    private Banker banker;
+
+    @Reference(type = Bill.class)
+    private Set<Bill> bills = newHashSet();
+
+    @Reference(type = Credit.class)
+    private Set<Credit> credits = newHashSet();
+
+    @Reference(type = Deposit.class)
+    private Set<Deposit> deposits = newHashSet();
 
     public String getName() {
         return name;
@@ -45,11 +60,43 @@ public class Client extends Entity {
         this.password = password;
     }
 
-    public Department getDepartment() {
-        return department;
+    public Banker getBanker() {
+        return banker;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    public void setBanker(Banker banker) {
+        this.banker = banker;
+    }
+
+    public Boolean getEnable() {
+        return enable;
+    }
+
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
+    }
+
+    public Set<Bill> getBills() {
+        return bills;
+    }
+
+    public void setBills(Set<Bill> bills) {
+        this.bills = bills;
+    }
+
+    public Set<Credit> getCredits() {
+        return credits;
+    }
+
+    public void setCredits(Set<Credit> credits) {
+        this.credits = credits;
+    }
+
+    public Set<Deposit> getDeposits() {
+        return deposits;
+    }
+
+    public void setDeposits(Set<Deposit> deposits) {
+        this.deposits = deposits;
     }
 }

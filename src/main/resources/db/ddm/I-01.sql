@@ -1,13 +1,7 @@
-INSERT INTO CLIENT (id,
-                    name,
-                    surname,
-                    address,
-                    password,
-                    department)
+INSERT INTO CURRENCY (ID,
+                      NAME,
+                      VALUE)
 VALUES (1,
-        'name',
-        'surname',
-        'address',
-        'password',
-        1)
+        'BLR',
+        19300)
 /

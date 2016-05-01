@@ -33,6 +33,8 @@ public class AggregateUtil {
                 setFieldValue(entity, field, loadDate(s, index));
             } else if (isDouble(type)) {
                 setFieldValue(entity, field, loadDecimal(s, index));
+            } else if (isBoolean(type)) {
+                setFieldValue(entity, field, loadBoolean(s, index));
             } else if (isEntity(type)) {
                 final IEntity entityField = (IEntity) getFieldValue(entity, field);
                 entityField.setId(getInteger(loadBigDecimal(s, index)));
@@ -61,6 +63,8 @@ public class AggregateUtil {
                 } else if (isDate(type)) {
                     setFieldValue(entity, field, value);
                 } else if (isDouble(type)) {
+                    setFieldValue(entity, field, getDouble(value));
+                } else if (isBoolean(type)) {
                     setFieldValue(entity, field, value);
                 } else if (isDependenceField(field)) {
                     final IEntity entityField = (IEntity) getFieldValue(entity, field);
@@ -74,6 +78,12 @@ public class AggregateUtil {
             throw new RuntimeException(e);
         }
         return entity;
+    }
+
+    private static Double getDouble(Object obj) {
+        if (obj == null) return 0d;
+        final BigDecimal decimal = (BigDecimal) obj;
+        return decimal.doubleValue();
     }
 
     private static Integer getInteger(Object obj) {

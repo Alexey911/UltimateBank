@@ -22,7 +22,7 @@ public interface IEntityManager<T extends IEntity> {
 
     Set<T> loadAll();
 
-    Class<T> getEntityClass();
+    Set<T> findByFieldValue(String field, Object value);
 
-    Set<T> loadByFieldValue(String field, Object value);
+    Class<T> getEntityClass();
 }

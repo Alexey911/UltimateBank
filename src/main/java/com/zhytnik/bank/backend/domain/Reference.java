@@ -10,4 +10,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(FIELD)
 public @interface Reference {
     Class<? extends IEntity> type();
+
+    boolean single() default false;
 }

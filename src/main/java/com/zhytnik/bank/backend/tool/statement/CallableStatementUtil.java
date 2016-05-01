@@ -128,6 +128,16 @@ public class CallableStatementUtil {
         return val;
     }
 
+    public static Boolean loadBoolean(CallableStatement s, int index) {
+        Boolean val;
+        try {
+            val = s.getBoolean(index);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return val;
+    }
+
     public static void registerParameter(CallableStatement s, int index, Class param) {
         try {
             if (isString(param)) {
@@ -138,6 +148,8 @@ public class CallableStatementUtil {
                 s.registerOutParameter(index, OracleTypes.DATE);
             } else if (isDouble(param)) {
                 s.registerOutParameter(index, OracleTypes.DOUBLE);
+            } else if (isBoolean(param)) {
+                s.registerOutParameter(index, OracleTypes.BOOLEAN);
             } else if (isEntity(param)) {
                 s.registerOutParameter(index, OracleTypes.INTEGER);
             } else {
@@ -200,6 +212,18 @@ public class CallableStatementUtil {
                 s.setNull(index, Types.DOUBLE);
             } else {
                 s.setDouble(index, (Double) decimalVal);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void putBoolean(CallableStatement s, int index, Object booleanVal) {
+        try {
+            if (booleanVal == null) {
+                s.setNull(index, Types.BOOLEAN);
+            } else {
+                s.setBoolean(index, (Boolean) booleanVal);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

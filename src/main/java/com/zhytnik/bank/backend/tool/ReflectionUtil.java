@@ -174,6 +174,10 @@ public class ReflectionUtil {
         return clazz.equals(Double.class);
     }
 
+    public static boolean isBoolean(Class clazz) {
+        return clazz.equals(Boolean.class);
+    }
+
     public static boolean isDate(Class clazz) {
         return clazz.equals(Date.class);
     }

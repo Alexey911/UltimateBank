@@ -49,16 +49,19 @@ public class PrepareUtil {
         for (Field field : getFields(entity)) {
             if (isIdField(field) || isReferenceField(field)) continue;
 
-            final Class typeClass = field.getType();
+            final Class type = field.getType();
+            final Object value = getFieldValue(entity, field);
 
-            if (isString(typeClass)) {
-                putString(s, index, getFieldValue(entity, field));
-            } else if (isInteger(typeClass)) {
-                putInteger(s, index, getFieldValue(entity, field));
-            } else if (isDate(typeClass)) {
-                putDate(s, index, getFieldValue(entity, field));
-            } else if (isDouble(typeClass)) {
-                putDecimal(s, index, getFieldValue(entity, field));
+            if (isString(type)) {
+                putString(s, index, value);
+            } else if (isInteger(type)) {
+                putInteger(s, index, value);
+            } else if (isDate(type)) {
+                putDate(s, index, value);
+            } else if (isDouble(type)) {
+                putDecimal(s, index, value);
+            } else if (isBoolean(type)){
+                putBoolean(s, index, value);
             } else if (isDependenceField(field)) {
                 putForeignKey(s, entity, index, field);
             } else {
@@ -80,15 +83,18 @@ public class PrepareUtil {
             if (isReferenceField(field)) continue;
 
             final Class type = field.getType();
+            final Object value = getFieldValue(entity, field);
 
             if (isString(type)) {
-                putString(s, index, getFieldValue(entity, field));
+                putString(s, index, value);
             } else if (isInteger(type)) {
-                putInteger(s, index, getFieldValue(entity, field));
+                putInteger(s, index, value);
             } else if (isDate(type)) {
-                putDate(s, index, getFieldValue(entity, field));
+                putDate(s, index, value);
             } else if (isDouble(type)) {
-                putDecimal(s, index, getFieldValue(entity, field));
+                putDecimal(s, index, value);
+            } else if (isBoolean(type)) {
+                putBoolean(s, index, value);
             } else if (isDependenceField(field)) {
                 putForeignKey(s, entity, index, field);
             } else {
