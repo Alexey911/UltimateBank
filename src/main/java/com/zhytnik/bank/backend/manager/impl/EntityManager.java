@@ -88,7 +88,12 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         reverse(relations);
 
         for (IEntity child : relations) {
-            getManager(child.getClass()).save(child);
+            final EntityManager<IEntity> m = getManager(child.getClass());
+            if (child.isSaved()) {
+                m.update(entity);
+            } else {
+                m.save(child);
+            }
         }
     }
 

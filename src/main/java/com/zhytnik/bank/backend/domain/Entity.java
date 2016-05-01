@@ -20,6 +20,11 @@ public class Entity implements IEntity {
     }
 
     @Override
+    public boolean isSaved() {
+        return id != null;
+    }
+
+    @Override
     public String toString() {
         return format("Entity of %s[id=%d]", getClass(), getId());
     }

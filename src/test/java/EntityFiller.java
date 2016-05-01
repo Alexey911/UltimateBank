@@ -21,7 +21,7 @@ class EntityFiller {
         final Object object = instantiate(clazz);
 
         for (Field field : getFields(clazz)) {
-            if (isCollectionField(field)) continue;
+            if (isIdField(field) || isCollectionField(field)) continue;
             Object value = getValueForField(field);
             setFieldValue(object, field, value);
         }
@@ -48,7 +48,7 @@ class EntityFiller {
     private static Object getValueForField(Field field) {
         final Class<?> type = field.getType();
 
-        if (isInteger(type)) {
+        if (!isIdField(field) && isInteger(type)) {
             return random.nextInt();
         } else if (isDouble(type)) {
             return random.nextDouble();
