@@ -5,21 +5,21 @@ NOMAXVALUE
 /
 
 CREATE TABLE CLIENT (
-  id         INT,
-  name       VARCHAR2(100),
-  surname    VARCHAR2(100),
-  address    VARCHAR2(100),
-  password   VARCHAR2(100),
-  department INT
+  id       INT,
+  name     VARCHAR2(100),
+  surname  VARCHAR2(100),
+  address  VARCHAR2(100),
+  password VARCHAR2(100),
+  banker   INT
 )
 /
 
-CREATE OR REPLACE PROCEDURE SAVE_CLIENT(c_id OUT     INT,
-                                        c_name       VARCHAR2,
-                                        c_surname    VARCHAR2,
-                                        c_address    VARCHAR2,
-                                        c_password   VARCHAR2,
-                                        c_department INT)
+CREATE OR REPLACE PROCEDURE SAVE_CLIENT(c_id OUT   INT,
+                                        c_name     VARCHAR2,
+                                        c_surname  VARCHAR2,
+                                        c_address  VARCHAR2,
+                                        c_password VARCHAR2,
+                                        c_banker   INT)
 AS
   BEGIN
     c_id := CLIENT_ID_GENERATOR.nextval;
@@ -28,22 +28,22 @@ AS
                         surname,
                         address,
                         password,
-                        department) VALUES (c_id,
-                                            c_name,
-                                            c_surname,
-                                            c_address,
-                                            c_password,
-                                            c_department);
+                        banker) VALUES (c_id,
+                                        c_name,
+                                        c_surname,
+                                        c_address,
+                                        c_password,
+                                        c_banker);
   END;
 /
 
 
-CREATE OR REPLACE PROCEDURE LOAD_CLIENT(c_id             INT,
-                                        c_name       OUT VARCHAR2,
-                                        c_surname    OUT VARCHAR2,
-                                        c_address    OUT VARCHAR2,
-                                        c_password   OUT VARCHAR2,
-                                        c_department OUT INT)
+CREATE OR REPLACE PROCEDURE LOAD_CLIENT(c_id           INT,
+                                        c_name     OUT VARCHAR2,
+                                        c_surname  OUT VARCHAR2,
+                                        c_address  OUT VARCHAR2,
+                                        c_password OUT VARCHAR2,
+                                        c_banker   OUT INT)
 AS
   BEGIN
     SELECT
@@ -51,33 +51,33 @@ AS
       surname,
       address,
       password,
-      department
+      banker
     INTO
       c_name,
       c_surname,
       c_address,
       c_password,
-      c_department
+      c_banker
     FROM CLIENT
     WHERE id = c_id;
   END;
 /
 
-CREATE OR REPLACE PROCEDURE UPDATE_CLIENT(c_id         INT,
-                                          c_name       VARCHAR2,
-                                          c_surname    VARCHAR2,
-                                          c_address    VARCHAR2,
-                                          c_password   VARCHAR2,
-                                          c_department INT)
+CREATE OR REPLACE PROCEDURE UPDATE_CLIENT(c_id       INT,
+                                          c_name     VARCHAR2,
+                                          c_surname  VARCHAR2,
+                                          c_address  VARCHAR2,
+                                          c_password VARCHAR2,
+                                          c_banker   INT)
 AS
   BEGIN
     UPDATE CLIENT
     SET
-      name       = c_name,
-      surname    = c_surname,
-      address    = c_address,
-      password   = c_password,
-      department = c_department
+      name     = c_name,
+      surname  = c_surname,
+      address  = c_address,
+      password = c_password,
+      banker   = c_banker
     WHERE id = c_id;
   END;
 /
@@ -105,12 +105,12 @@ AS
 /
 
 
-CREATE OR REPLACE TYPE CLIENT_TYPE AS OBJECT (id         INT,
-                                              name       VARCHAR2(100),
-                                              surname    VARCHAR2(100),
-                                              address    VARCHAR2(100),
-                                              password   VARCHAR2(100),
-                                              department INT)
+CREATE OR REPLACE TYPE CLIENT_TYPE AS OBJECT (id       INT,
+                                              name     VARCHAR2(100),
+                                              surname  VARCHAR2(100),
+                                              address  VARCHAR2(100),
+                                              password VARCHAR2(100),
+                                              banker   INT)
 /
 CREATE OR REPLACE TYPE CLIENT_ARRAY AS TABLE OF CLIENT_TYPE
 /
@@ -125,7 +125,7 @@ IS
     FOR r IN (SELECT *
               FROM CLIENT) LOOP
       clients.extend;
-      c := CLIENT_TYPE(r.id, r.name, r.surname, r.address, r.password, r.department);
+      c := CLIENT_TYPE(r.id, r.name, r.surname, r.address, r.password, r.banker);
       clients(clients.count) := c;
     END LOOP;
     RETURN clients;

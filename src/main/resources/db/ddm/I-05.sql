@@ -3,7 +3,7 @@ INSERT INTO CLIENT (id,
                     surname,
                     address,
                     password,
-                    department)
+                    banker)
 VALUES (1,
         'name',
         'surname',
