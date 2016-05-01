@@ -22,7 +22,7 @@
           p:initialSize="5"/>
 
     <bean name="scriptManager" class="com.zhytnik.bank.backend.manager.impl.ScriptManager"
-          p:ddcPath="db/ddc/"
+          p:ddcPath="db/ddd/"
           p:ddlPath="db/ddl/"
           p:ddmPath="db/ddm/"
           p:dropCreate="${db.dropCreate}"/>
