@@ -15,15 +15,19 @@ class EntityFiller {
     }
 
     public static <T extends IEntity> T create(Class<T> clazz) {
-        return (T) createAndFill(clazz);
+        return (T) createAndFill(clazz, true);
     }
 
-    private static Object createAndFill(Class clazz) {
+    private static Object createAndFill(Class clazz, boolean initiateOneToOne) {
         final Object object = instantiate(clazz);
 
         for (Field field : getFields(clazz)) {
             if (isIdField(field) || isCollectionField(field)) continue;
-            Object value = getValueForField(field);
+            if (isOneToOneField(field)) {
+                if (!initiateOneToOne) continue;
+                initiateOneToOne = !initiateOneToOne;
+            }
+            Object value = getValueForField(field, initiateOneToOne);
             setFieldValue(object, field, value);
         }
         return object;
@@ -46,7 +50,7 @@ class EntityFiller {
         }
     }
 
-    private static Object getValueForField(Field field) {
+    private static Object getValueForField(Field field, boolean initiateOneToOne) {
         final Class<?> type = field.getType();
 
         if (!isIdField(field) && isInteger(type)) {
@@ -56,10 +60,10 @@ class EntityFiller {
         } else if (isString(type)) {
             return UUID.randomUUID().toString();
         } else if (isDate(type)) {
-            return new Date(random.nextLong());
+            return new Date(random.nextInt());
         } else if (isBoolean(type)) {
             return random.nextBoolean();
         }
-        return createAndFill(type);
+        return createAndFill(type, initiateOneToOne);
     }
 }

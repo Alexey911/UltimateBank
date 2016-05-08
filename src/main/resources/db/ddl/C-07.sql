@@ -7,7 +7,7 @@ NOMAXVALUE
 
 CREATE TABLE BILL (
   id       INT,
-  balance  INT,
+  balance  NUMBER,
   isActive INT,
   currency INT,
   client   INT,
@@ -16,7 +16,7 @@ CREATE TABLE BILL (
 /
 
 CREATE OR REPLACE PROCEDURE SAVE_BILL(c_id OUT    INT,
-                                      c_balance   INT,
+                                      c_balance   NUMBER,
                                       c_is_active INT,
                                       c_currency  INT,
                                       c_client    INT,
@@ -43,7 +43,7 @@ AS
 
 
 CREATE OR REPLACE PROCEDURE LOAD_BILL(c_id            INT,
-                                      c_balance   OUT INT,
+                                      c_balance   OUT NUMBER,
                                       c_is_active OUT INT,
                                       c_currency  OUT INT,
                                       c_client    OUT INT,
@@ -68,7 +68,7 @@ AS
 /
 
 CREATE OR REPLACE PROCEDURE UPDATE_BILL(c_id        INT,
-                                        c_balance   INT,
+                                        c_balance   NUMBER,
                                         c_is_active INT,
                                         c_currency  INT,
                                         c_client    INT,
@@ -110,7 +110,7 @@ AS
 
 
 CREATE OR REPLACE TYPE BILL_TYPE AS OBJECT (id          INT,
-                                            c_balance   INT,
+                                            c_balance   NUMBER,
                                             c_is_active INT,
                                             c_currency  INT,
                                             c_client    INT,

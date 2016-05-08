@@ -29,7 +29,7 @@ public abstract class ManagerTest<T extends IEntity> {
         drop();
     }
 
-    @Test(timeout = 1000L)
+    @Test()
     public void shouldSave() {
         final T entity = instantiate();
         final int countBefore = manager.getCount();

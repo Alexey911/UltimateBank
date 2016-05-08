@@ -1,7 +1,7 @@
 package com.zhytnik.bank.backend.tool;
 
-import com.zhytnik.bank.backend.types.relation.ManyToOne;
 import com.zhytnik.bank.backend.types.IEntity;
+import com.zhytnik.bank.backend.types.relation.ManyToOne;
 import com.zhytnik.bank.backend.types.relation.OneToMany;
 import com.zhytnik.bank.backend.types.relation.OneToOne;
 
@@ -43,10 +43,14 @@ public class ReflectionUtil {
     }
 
     public static <T extends IEntity> T instantiate(Class<T> clazz, Integer id) {
-        return (T) notSecuredInstantiate(clazz, id);
+        return (T) notSecuredInstantiate(clazz, id, true);
     }
 
     /*ENTITY ACCESSORS*/
+
+    public static boolean isNullField(Object target, Field field) {
+        return getFieldValue(target, field) == null;
+    }
 
     public static void setFieldValue(Object target, Field field, Object value) {
         setFieldValue(target, field.getName(), value);
@@ -222,25 +226,30 @@ public class ReflectionUtil {
         return method;
     }
 
-    private static Object notSecuredInstantiate(Class<?> clazz) {
-        return notSecuredInstantiate(clazz, null);
+    private static Object notSecuredInstantiate(Class<?> clazz, boolean initiateOneToOne) {
+        return notSecuredInstantiate(clazz, null, initiateOneToOne);
     }
 
-    private static Object notSecuredInstantiate(Class<?> clazz, Integer id) {
+    private static Object notSecuredInstantiate(Class<?> clazz, Integer id,
+                                                boolean initiateOneToOne) {
         try {
             final IEntity entity = (IEntity) clazz.newInstance();
             entity.setId(id);
-            initialInnerEntities(entity);
+            initialInnerEntities(entity, initiateOneToOne);
             return entity;
         } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static void initialInnerEntities(IEntity entity) {
+    private static void initialInnerEntities(IEntity entity, boolean initiateOneToOne) {
         for (Field field : getFields(entity)) {
             if (isEntity(field.getType())) {
-                final Object initialVal = notSecuredInstantiate(field.getType());
+                if (isOneToOneField(field)) {
+                    if (!initiateOneToOne) continue;
+                    initiateOneToOne = !initiateOneToOne;
+                }
+                final Object initialVal = notSecuredInstantiate(field.getType(), initiateOneToOne);
                 setFieldValue(entity, field.getName(), initialVal);
             }
         }

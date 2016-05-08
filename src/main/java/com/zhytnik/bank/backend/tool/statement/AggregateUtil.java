@@ -10,6 +10,8 @@ import java.sql.SQLException;
 
 import static com.zhytnik.bank.backend.tool.ReflectionUtil.*;
 import static com.zhytnik.bank.backend.tool.statement.CallableStatementUtil.*;
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static java.lang.String.format;
 
 public class AggregateUtil {
@@ -37,6 +39,8 @@ public class AggregateUtil {
                 setFieldValue(entity, field, loadBoolean(s, index));
             } else if (isEntity(type)) {
                 final IEntity entityField = (IEntity) getFieldValue(entity, field);
+                //TODO:
+                if(entityField != null)
                 entityField.setId(getInteger(loadBigDecimal(s, index)));
             } else {
                 throw new RuntimeException(format("There is no rule for field %s", field.getName()));
@@ -65,7 +69,7 @@ public class AggregateUtil {
                 } else if (isDouble(type)) {
                     setFieldValue(entity, field, getDouble(value));
                 } else if (isBoolean(type)) {
-                    setFieldValue(entity, field, value);
+                    setFieldValue(entity, field, getBoolean(value));
                 } else if (isManyToOneField(field) || isOneToOneField(field)) {
                     final IEntity entityField = (IEntity) getFieldValue(entity, field);
                     entityField.setId(getInteger(value));
@@ -78,6 +82,12 @@ public class AggregateUtil {
             throw new RuntimeException(e);
         }
         return entity;
+    }
+
+    private static Boolean getBoolean(Object obj) {
+        if (obj == null) return null;
+        final Double value = getDouble(obj);
+        return (value > 0) ? TRUE : FALSE;
     }
 
     private static Double getDouble(Object obj) {

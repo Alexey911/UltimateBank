@@ -39,14 +39,14 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
     }
 
     public T load(Integer id) {
-        logger.debug(format("Loading %s[id=%d]", clazz.getSimpleName(), id));
-
         final T entity = instantiate(clazz, id);
         load(entity, true);
         return entity;
     }
 
     protected void load(T entity, boolean fullLoad) {
+        logger.debug(format("Loading %s[id=%d]", clazz.getSimpleName(), entity.getId()));
+
         final CallableStatement s = buildStatement(LOAD_PROCEDURE_NAME, false, getFieldsCount());
         prepare(s, LOAD, entity);
         execute(s);
@@ -68,11 +68,12 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
 
     @Override
     public Integer save(T entity) {
-        logger.debug(format("Saving %s", clazz.getSimpleName()));
         return save(entity, true);
     }
 
     public Integer save(T entity, boolean fullSave) {
+        logger.debug(format("Saving %s", clazz.getSimpleName()));
+
         if (fullSave) saveDependencies(entity);
 
         final CallableStatement s = buildStatement(SAVE_PROCEDURE_NAME, false, getFieldsCount());
@@ -120,7 +121,9 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
 
     private void fillDependencies(T entity) {
         for (IEntity child : getChildRelationGraph(entity)) {
-            getManager(child.getClass()).load(child, false);
+            if(child.isSaved()) {
+                getManager(child.getClass()).load(child, false);
+            }
         }
     }
 
@@ -168,6 +171,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
 
     @Override
     public void clear() {
+        logger.debug(format("Clearing %s type", clazz.getSimpleName()));
         final CallableStatement s = buildStatement(CLEAR_PROCEDURE_NAME, false, 0);
         execute(s);
         close(s);

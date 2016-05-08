@@ -8,7 +8,6 @@ NOMAXVALUE
 CREATE TABLE BILLCARD (
   id             INT,
   code           VARCHAR2(100),
-  password       VARCHAR2(100),
   validity       VARCHAR2(100),
   cvc            INT,
   validationCode INT,
@@ -18,7 +17,6 @@ CREATE TABLE BILLCARD (
 
 CREATE OR REPLACE PROCEDURE SAVE_BILLCARD(c_id OUT          INT,
                                           c_code            VARCHAR2,
-                                          c_password        VARCHAR2,
                                           c_validity        VARCHAR2,
                                           c_cvc             INT,
                                           c_validation_code INT,
@@ -31,13 +29,11 @@ AS
     END IF;
     INSERT INTO BILLCARD (id,
                           code,
-                          password,
                           validity,
                           cvc,
                           validationCode,
                           bill) VALUES (c_id,
                                         c_code,
-                                        c_password,
                                         c_validity,
                                         c_cvc,
                                         c_validation_code,
@@ -47,7 +43,6 @@ AS
 
 CREATE OR REPLACE PROCEDURE LOAD_BILLCARD(c_id                  INT,
                                           c_code            OUT VARCHAR2,
-                                          c_password        OUT VARCHAR2,
                                           c_validity        OUT VARCHAR2,
                                           c_cvc             OUT INT,
                                           c_validation_code OUT INT,
@@ -56,14 +51,12 @@ AS
   BEGIN
     SELECT
       code,
-      password,
       validity,
       cvc,
       validationCode,
       bill
     INTO
       c_code,
-      c_password,
       c_validity,
       c_cvc,
       c_validation_code,
@@ -75,7 +68,6 @@ AS
 
 CREATE OR REPLACE PROCEDURE UPDATE_BILLCARD(c_id              INT,
                                             c_code            VARCHAR2,
-                                            c_password        VARCHAR2,
                                             c_validity        VARCHAR2,
                                             c_cvc             INT,
                                             c_validation_code INT,
@@ -85,7 +77,6 @@ AS
     UPDATE BILLCARD
     SET
       code           = c_code,
-      password       = c_password,
       validity       = c_validity,
       cvc            = c_cvc,
       validationCode = c_validation_code,
@@ -119,7 +110,6 @@ AS
 
 CREATE OR REPLACE TYPE BILLCARD_TYPE AS OBJECT (id             INT,
                                                 code           VARCHAR2(100),
-                                                password       VARCHAR2(100),
                                                 validity       VARCHAR2(100),
                                                 cvc            INT,
                                                 validationCode INT,
@@ -138,7 +128,7 @@ IS
     FOR r IN (SELECT *
               FROM BILLCARD) LOOP
       bill_cards.extend;
-      c := BILLCARD_TYPE(r.id, r.code, r.password, r.validity, r.cvc, r.validationCode, r.bill);
+      c := BILLCARD_TYPE(r.id, r.code, r.validity, r.cvc, r.validationCode, r.bill);
       bill_cards(bill_cards.count) := c;
     END LOOP;
     RETURN bill_cards;

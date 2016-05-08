@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+    <h:head/>
+    <h:body>
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="100" header="Top" resizable="true">
+                <h:outputText value="Layout content for North"/>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="100" header="Bottom" resizable="true">
+                <h:outputText value="Layout content for South"/>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" size="200" header="Entities" resizable="true">
+                <p:button href="currency.xhtml" value="Currency"/>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="east" size="200" header="Right" resizable="true">
+                <h:outputText value="Layout content for Right"/>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
+
+                <h:form id="currencies">
+                    <p:dataTable id="currencyTable"
+                                 var="currency" value="#{currencies.entities}"
+                                 paginator="true" rows="10"
+                                 selection="#{currencies.selected}"
+                                 selectionMode="single"
+                                 onRowSelectUpdate="currency"
+                                 rowKey="#{currency.id}"
+                                 filteredValue="#{currencies.filtered}"
+                                 dblClickSelect="false">
+
+                        <f:facet name="header">
+                            Currencies
+                        </f:facet>
+                        <p:column sortBy="#{currency.name}" filterBy="#{currency.name}"
+                                  filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="Name"/>
+                            </f:facet>
+                            <h:outputText value="#{currency.name}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{currency.value}" filterBy="#{currency.value}"
+                                  filterMatchMode="gte">
+                            <f:facet name="header">
+                                <h:outputText value="Cost"/>
+                            </f:facet>
+                            <h:outputText value="#{currency.value}"/>
+                        </p:column>
+
+                        <p:ajax event="rowSelect" listener="#{currencies.select}" update="currency"/>
+                    </p:dataTable>
+                </h:form>
+
+                <h:form id="currency">
+                    <p:growl id="growl" showDetail="true"/>
+
+                    <p:panelGrid columns="2">
+                        <f:facet name="header">Currency</f:facet>
+                        <h:outputLabel for="name" value="Name"/>
+                        <p:inputText value="#{currencies.name}" label="name" id="name"/>
+                        <h:outputLabel for="cost" value="Cost"/>
+                        <p:inputText value="#{currencies.value}" label="cost" id="cost"/>
+                        <f:facet name="footer">
+                            <p:commandButton value="Reset" actionListener="#{currencies.reset}"
+                                             update="currency"/>
+                            <p:commandButton value="Change" actionListener="#{currencies.update}"
+                                             update="currency currencies"/>
+                            <p:commandButton value="Remove" actionListener="#{currencies.remove}"
+                                             update="currency currencies"/>
+                            <p:commandButton value="Save" actionListener="#{currencies.save}"
+                                             update="growl currency currencies"/>
+                        </f:facet>
+                    </p:panelGrid>
+                </h:form>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+</f:view>
+</html>

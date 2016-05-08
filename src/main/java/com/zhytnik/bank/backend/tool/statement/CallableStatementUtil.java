@@ -146,7 +146,7 @@ public class CallableStatementUtil {
             } else if (isDouble(param)) {
                 s.registerOutParameter(index, OracleTypes.DOUBLE);
             } else if (isBoolean(param)) {
-                s.registerOutParameter(index, OracleTypes.BOOLEAN);
+                s.registerOutParameter(index, OracleTypes.INTEGER);
             } else if (isEntity(param)) {
                 s.registerOutParameter(index, OracleTypes.INTEGER);
             } else {

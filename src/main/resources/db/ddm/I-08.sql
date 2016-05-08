@@ -1,14 +1,12 @@
 INSERT INTO BILLCARD (ID,
                       CODE,
-                      PASSWORD,
                       VALIDITY,
                       CVC,
                       VALIDATIONCODE,
                       BILL)
 VALUES (
-  1,
+  0,
   'My card',
-  'pass',
   '123',
   1234,
   1,

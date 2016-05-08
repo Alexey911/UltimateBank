@@ -11,6 +11,6 @@ public class CreditCardManagerTest extends ManagerTest<CreditCard> {
 
     @Override
     protected void updateEntity(CreditCard c) {
-        c.setPassword(7778);
+        c.setValidationCode(7778);
     }
 }
