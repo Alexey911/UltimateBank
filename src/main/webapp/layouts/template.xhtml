@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head/>
+<h:body>
+    <p:layout fullPage="true">
+        <p:layoutUnit position="north" size="100" header="Top" resizable="true">
+            <h:outputText value="Layout content for North"/>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="south" size="100" header="Bottom" resizable="true">
+            <h:outputText value="Layout content for South"/>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="west" size="200" header="Entities" resizable="true">
+            <p:button href="currency.xhtml" value="Currency"/>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="east" size="200" header="Right" resizable="true">
+            <h:outputText value="Layout content for Right"/>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="center">
+            <ui:insert name="content">
+                <p>Content</p>
+            </ui:insert>
+        </p:layoutUnit>
+    </p:layout>
+</h:body>
+</html>
