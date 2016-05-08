@@ -129,7 +129,8 @@ public class ReflectionUtil {
     public static <T extends IEntity> Set<T> filterByField(Set<T> entities, String field, Object value) {
         final Set<T> filtered = newHashSet();
         for (T entity : entities) {
-            if (getComplexFieldValue(entity, field).equals(value)) {
+            final Object fieldValue = getComplexFieldValue(entity, field);
+            if (fieldValue != null && fieldValue.equals(value)) {
                 filtered.add(entity);
             }
         }

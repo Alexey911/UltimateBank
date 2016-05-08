@@ -7,7 +7,7 @@ import javax.faces.bean.ViewScoped;
 
 @Component(value = "currencies")
 @ViewScoped
-public class CurrencyController extends AbstractController<Currency> {
+public class CurrencyController extends EntityController<Currency> {
 
     private String name;
     private Double value;
@@ -25,17 +25,14 @@ public class CurrencyController extends AbstractController<Currency> {
     }
 
     @Override
-    protected Currency getPrepareForSave() {
-        final Currency c = new Currency();
-        c.setName(name);
-        c.setValue(value);
-        return c;
+    public Currency instantiate() {
+        return new Currency();
     }
 
     @Override
-    protected void prepareForUpdate(Currency entity) {
-        entity.setName(name);
-        entity.setValue(value);
+    protected void fill(Currency c) {
+        c.setName(name);
+        c.setValue(value);
     }
 
     public String getName() {

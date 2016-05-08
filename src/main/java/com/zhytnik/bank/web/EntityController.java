@@ -10,7 +10,7 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-public abstract class AbstractController<T extends IEntity> implements Serializable {
+public abstract class EntityController<T extends IEntity> implements Serializable {
 
     protected IEntityManager<T> manager;
 
@@ -32,31 +32,38 @@ public abstract class AbstractController<T extends IEntity> implements Serializa
     }
 
     private void loadAll() {
+        entities.clear();
         entities.addAll(manager.loadAll());
     }
 
     public abstract void reset();
 
+    public abstract T instantiate();
+
     public void save() {
-        final T entity = getPrepareForSave();
+        final T entity = instantiate();
+        fill(entity);
         manager.save(entity);
         entities.add(entity);
         reset();
     }
 
-    protected abstract T getPrepareForSave();
+    public void refresh() {
+        reset();
+        loadAll();
+    }
+
+    protected abstract void fill(T entity);
 
     public abstract void select();
 
     public void update() {
         if (selected == null) return;
 
-        prepareForUpdate(selected);
+        fill(selected);
         manager.update(selected);
         reset();
     }
-
-    protected abstract void prepareForUpdate(T entity);
 
     public void remove() {
         if (selected == null) return;
