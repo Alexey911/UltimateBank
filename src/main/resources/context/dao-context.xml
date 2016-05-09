@@ -16,4 +16,7 @@
 
     <bean name="departmentManager" class="com.zhytnik.bank.backend.manager.impl.EntityManager"
           c:clazz="com.zhytnik.bank.domain.Department"/>
+
+    <bean name="bankerManager" class="com.zhytnik.bank.backend.manager.impl.EntityManager"
+          c:clazz="com.zhytnik.bank.domain.Banker"/>
 </beans>

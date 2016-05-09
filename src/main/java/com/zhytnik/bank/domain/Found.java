@@ -34,4 +34,9 @@ public class Found extends Entity {
     public void setCurrency(Currency currency) {
         this.currency = currency;
     }
+
+    @Override
+    public String toString() {
+        return code;
+    }
 }

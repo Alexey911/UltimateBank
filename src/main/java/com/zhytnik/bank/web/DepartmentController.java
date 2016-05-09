@@ -1,6 +1,7 @@
 package com.zhytnik.bank.web;
 
 import com.zhytnik.bank.backend.manager.IEntityManager;
+import com.zhytnik.bank.domain.Banker;
 import com.zhytnik.bank.domain.Department;
 import com.zhytnik.bank.domain.Found;
 
@@ -19,11 +20,13 @@ public class DepartmentController extends EntityController<Department> {
     private IEntityManager<Found> foundManager;
 
     private List<Found> founds;
+    private List<Banker> bankers;
 
     @Override
     public void setUp() {
         super.setUp();
         founds = newArrayList();
+        bankers = newArrayList();
         loadFounds();
     }
 
@@ -37,6 +40,7 @@ public class DepartmentController extends EntityController<Department> {
         number = 0;
         address = "";
         found = null;
+        bankers = newArrayList();
     }
 
     @Override
@@ -51,6 +55,7 @@ public class DepartmentController extends EntityController<Department> {
         number = selected.getNumber();
         address = selected.getAddress();
         found = selected.getFound();
+        bankers = newArrayList(service.initialize(selected).getBankers());
     }
 
     @Override
@@ -93,5 +98,13 @@ public class DepartmentController extends EntityController<Department> {
 
     public void setFoundManager(IEntityManager<Found> foundManager) {
         this.foundManager = foundManager;
+    }
+
+    public List<Banker> getBankers() {
+        return bankers;
+    }
+
+    public void setBankers(List<Banker> bankers) {
+        this.bankers = bankers;
     }
 }

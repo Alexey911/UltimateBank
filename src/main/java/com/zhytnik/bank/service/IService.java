@@ -8,6 +8,8 @@ public interface IService<T extends IEntity> {
 
     T instantiate();
 
+    T initialize(T entity);
+
     void save(T entity);
 
     void remove(T entity);

@@ -34,7 +34,7 @@
                         <f:facet name="header">
                             <h:outputText value="Found"/>
                         </f:facet>
-                        <h:outputText value="#{department.found.code}(#{department.found.currency.name}")/>
+                        <h:outputText value="#{department.found.code}(#{department.found.currency.name})"/>
                     </p:column>
 
                     <p:column sortBy="#{department.address}" filterBy="#{department.address}"
@@ -45,7 +45,40 @@
                         <h:outputText value="#{department.address}"/>
                     </p:column>
 
-                    <p:ajax event="rowSelect" listener="#{departments.select}" update="department"/>
+                    <p:ajax event="rowSelect" listener="#{departments.select}" update="department bankers"/>
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="bankers">
+                <p:dataTable id="bankerTable"
+                             var="banker" value="#{departments.bankers}"
+                             paginator="true" rows="10"
+                             rowKey="#{banker.id}"
+                             dblClickSelect="false">
+
+                    <f:facet name="header">
+                        Department bankers
+                    </f:facet>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Name"/>
+                        </f:facet>
+                        <h:outputText value="#{banker.name}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Surname"/>
+                        </f:facet>
+                        <h:outputText value="#{banker.surname}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Privilege"/>
+                        </f:facet>
+                        <h:outputText value="#{banker.privilege}"/>
+                    </p:column>
                 </p:dataTable>
             </h:form>
 
@@ -62,7 +95,7 @@
                     <p:inputText value="#{departments.address}" label="address" id="address"/>
 
                     <h:outputLabel for="found" value="Found"/>
-                    <p:selectOneListbox id="found" value="#{departments.found}" converter="foundConverter"
+                    <p:selectOneListbox id="found" value="#{departments.found}" converter="#{foundConverter}"
                                         var="t" filter="true" filterMatchMode="contains" style="width:260px">
                         <f:selectItems value="#{departments.founds}" var="found" itemLabel="#{found.code}"
                                        itemValue="#{found}"/>

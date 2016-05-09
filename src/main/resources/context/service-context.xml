@@ -19,4 +19,11 @@
 
     <bean name="foundConverter" class="com.zhytnik.bank.web.converter.FoundConverter"
           p:service-ref="foundService"/>
+
+    <bean name="bankerService" class="com.zhytnik.bank.service.impl.BankerService"
+          p:manager-ref="bankerManager"/>
+
+    <bean name="departmentConverter" class="com.zhytnik.bank.web.converter.DepartmentConverter"
+          p:service-ref="departmentService"/>
+
 </beans>

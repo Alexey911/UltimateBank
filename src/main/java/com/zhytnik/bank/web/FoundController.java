@@ -2,7 +2,6 @@ package com.zhytnik.bank.web;
 
 import com.zhytnik.bank.domain.Currency;
 import com.zhytnik.bank.domain.Found;
-import org.springframework.stereotype.Component;
 
 import javax.faces.bean.ViewScoped;
 import java.util.List;
@@ -10,7 +9,6 @@ import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.zhytnik.bank.backend.manager.impl.ManagerContainer.getEntityManager;
 
-@Component(value = "founds")
 @ViewScoped
 public class FoundController extends EntityController<Found> {
 

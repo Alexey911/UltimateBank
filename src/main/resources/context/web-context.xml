@@ -9,7 +9,12 @@
     <import resource="service-context.xml"/>
 
     <bean id="founds" class="com.zhytnik.bank.web.FoundController" p:service-ref="foundService"/>
+
     <bean id="currencies" class="com.zhytnik.bank.web.CurrencyController" p:service-ref="currencyService"/>
+
     <bean id="departments" class="com.zhytnik.bank.web.DepartmentController"
           p:service-ref="departmentService" p:foundManager-ref="foundManager"/>
+
+    <bean id="bankers" class="com.zhytnik.bank.web.BankerController"
+          p:service-ref="bankerService" p:departmentManager-ref="departmentManager"/>
 </beans>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="/layouts/template.xhtml">
+        <ui:define name="content">
+            <h:form id="bankers">
+                <p:dataTable id="bankerTable"
+                             var="banker" value="#{bankers.entities}"
+                             paginator="true" rows="10"
+                             selection="#{bankers.selected}"
+                             selectionMode="single"
+                             onRowSelectUpdate="banker"
+                             rowKey="#{banker.id}"
+                             filteredValue="#{bankers.filtered}"
+                             dblClickSelect="false">
+
+                    <f:facet name="header">
+                        Bankers
+                    </f:facet>
+                    <p:column sortBy="#{banker.name}" filterBy="#{banker.name}"
+                              filterMatchMode="contains">
+                        <f:facet name="header">
+                            <h:outputText value="Name"/>
+                        </f:facet>
+                        <h:outputText value="#{banker.name}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{banker.surname}" filterBy="#{banker.surname}"
+                              filterMatchMode="contains">
+                        <f:facet name="header">
+                            <h:outputText value="Surname"/>
+                        </f:facet>
+                        <h:outputText value="#{banker.surname}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{banker.address}" filterBy="#{banker.address}"
+                              filterMatchMode="contains">
+                        <f:facet name="header">
+                            <h:outputText value="Address"/>
+                        </f:facet>
+                        <h:outputText value="#{banker.address}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{banker.privilege}" filterBy="#{banker.privilege}"
+                              filterMatchMode="gte">
+                        <f:facet name="header">
+                            <h:outputText value="Privilege"/>
+                        </f:facet>
+                        <h:outputText value="#{banker.privilege}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{banker.department.number}" filterBy="#{banker.department.number}"
+                              filterMatchMode="lte">
+                        <f:facet name="header">
+                            <h:outputText value="Department number"/>
+                        </f:facet>
+                        <h:outputText value="#{banker.department.number}"/>
+                    </p:column>
+
+                    <p:ajax event="rowSelect" listener="#{bankers.select}" update="banker"/>
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="banker">
+                <p:growl id="growl" showDetail="true"/>
+
+                <p:panelGrid columns="2">
+                    <f:facet name="header">Banker</f:facet>
+
+                    <h:outputLabel for="name" value="Name"/>
+                    <p:inputText value="#{bankers.name}" label="name" id="name"/>
+
+                    <h:outputLabel for="surname" value="Surname"/>
+                    <p:inputText value="#{bankers.surname}" label="surname" id="surname"/>
+
+                    <h:outputLabel for="address" value="Address"/>
+                    <p:inputText value="#{bankers.address}" label="address" id="address"/>
+
+                    <h:outputLabel for="password" value="Password"/>
+                    <p:inputText value="#{bankers.password}" label="password" id="password"/>
+
+                    <h:outputLabel for="privilege" value="Privilege"/>
+                    <p:inputText value="#{bankers.privilege}" label="privilege" id="privilege"/>
+
+                    <h:outputLabel for="department" value="Department"/>
+                    <p:selectOneListbox id="department" value="#{bankers.department}"
+                                        converter="#{departmentConverter}"
+                                        var="t" filter="true" filterMatchMode="contains" style="width:260px">
+                        <f:selectItems value="#{bankers.departments}" var="department" itemLabel="#{department.number}"
+                                       itemValue="#{department}"/>
+                        <p:column>
+                            <h:outputText value="#{t.number}"/>
+                        </p:column>
+
+                        <p:column>
+                            <h:outputText value="#{t.address}"/>
+                        </p:column>
+                    </p:selectOneListbox>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Reset" actionListener="#{bankers.reset}"
+                                         update="banker"/>
+                        <p:commandButton value="Change" actionListener="#{bankers.update}"
+                                         update="banker bankers"/>
+                        <p:commandButton value="Remove" actionListener="#{bankers.remove}"
+                                         update="banker bankers"/>
+                        <p:commandButton value="Save" actionListener="#{bankers.save}"
+                                         update="growl banker bankers"/>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

@@ -15,6 +15,10 @@ abstract class EntityService<T extends IEntity> implements IService<T> {
 
     public abstract T instantiate();
 
+    public T initialize(T entity){
+        return entity;
+    }
+
     @Override
     public void save(T entity) {
         manager.save(entity);
@@ -43,8 +47,8 @@ abstract class EntityService<T extends IEntity> implements IService<T> {
         this.manager = manager;
     }
 
-    protected T findByParameter(String param, String name) {
-        final Set<T> entities = manager.findByFieldValue(param, name);
+    protected T findByParameter(String param, Object value) {
+        final Set<T> entities = manager.findByFieldValue(param, value);
         if (!entities.isEmpty()) return getOnlyElement(entities);
         throw new NotFoundException();
     }
