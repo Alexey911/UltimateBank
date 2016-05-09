@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="/layouts/template.xhtml">
+        <ui:define name="content">
+            <h:form id="departments">
+                <p:dataTable id="departmentTable"
+                             var="department" value="#{departments.entities}"
+                             paginator="true" rows="10"
+                             selection="#{departments.selected}"
+                             selectionMode="single"
+                             onRowSelectUpdate="department"
+                             rowKey="#{department.id}"
+                             filteredValue="#{departments.filtered}"
+                             dblClickSelect="false">
+
+                    <f:facet name="header">
+                        Departments
+                    </f:facet>
+                    <p:column sortBy="#{department.number}" filterBy="#{department.number}"
+                              filterMatchMode="gte">
+                        <f:facet name="header">
+                            <h:outputText value="Number"/>
+                        </f:facet>
+                        <h:outputText value="#{department.number}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{department.found.code}" filterBy="#{department.found.code}"
+                              filterMatchMode="containts">
+                        <f:facet name="header">
+                            <h:outputText value="Found"/>
+                        </f:facet>
+                        <h:outputText value="#{department.found.code}(#{department.found.currency.name}")/>
+                    </p:column>
+
+                    <p:column sortBy="#{department.address}" filterBy="#{department.address}"
+                              filterMatchMode="contains">
+                        <f:facet name="header">
+                            <h:outputText value="Address"/>
+                        </f:facet>
+                        <h:outputText value="#{department.address}"/>
+                    </p:column>
+
+                    <p:ajax event="rowSelect" listener="#{departments.select}" update="department"/>
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="department">
+                <p:growl id="growl" showDetail="true"/>
+
+                <p:panelGrid columns="2">
+                    <f:facet name="header">Department</f:facet>
+
+                    <h:outputLabel for="number" value="Number"/>
+                    <p:inputText value="#{departments.number}" label="number" id="number"/>
+
+                    <h:outputLabel for="address" value="Address"/>
+                    <p:inputText value="#{departments.address}" label="address" id="address"/>
+
+                    <h:outputLabel for="found" value="Found"/>
+                    <p:selectOneListbox id="found" value="#{departments.found}" converter="foundConverter"
+                                        var="t" filter="true" filterMatchMode="contains" style="width:260px">
+                        <f:selectItems value="#{departments.founds}" var="found" itemLabel="#{found.code}"
+                                       itemValue="#{found}"/>
+                        <p:column>
+                            <h:outputText value="#{t.code}"/>
+                        </p:column>
+
+                        <p:column>
+                            <h:outputText value="#{t.balance}"/>
+                        </p:column>
+                    </p:selectOneListbox>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Reset" actionListener="#{departments.reset}"
+                                         update="department"/>
+                        <p:commandButton value="Change" actionListener="#{departments.update}"
+                                         update="department departments"/>
+                        <p:commandButton value="Remove" actionListener="#{departments.remove}"
+                                         update="department departments"/>
+                        <p:commandButton value="Save" actionListener="#{departments.save}"
+                                         update="growl department departments"/>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>
