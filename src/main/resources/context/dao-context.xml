@@ -2,8 +2,18 @@
 
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns="http://www.springframework.org/schema/beans"
+       xmlns:c="http://www.springframework.org/schema/c"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <bean name="connectionManager" class="com.zhytnik.bank.backend.manager.impl.ConnectionManager"/>
+
+    <bean name="currencyManager" class="com.zhytnik.bank.backend.manager.impl.EntityManager"
+          c:clazz="com.zhytnik.bank.domain.Currency"/>
+
+    <bean name="foundManager" class="com.zhytnik.bank.backend.manager.impl.EntityManager"
+          c:clazz="com.zhytnik.bank.domain.Found"/>
+
+    <bean name="departmentManager" class="com.zhytnik.bank.backend.manager.impl.EntityManager"
+          c:clazz="com.zhytnik.bank.domain.Department"/>
 </beans>

@@ -62,7 +62,7 @@
                     <p:inputText value="#{founds.balance}" label="balance" id="balance"/>
 
                     <h:outputLabel for="currency" value="Currency"/>
-                    <p:selectOneListbox id="currency" value="#{founds.currency}" converter="currencyConverter"
+                    <p:selectOneListbox id="currency" value="#{founds.currency}" converter="#{currencyConverter}"
                                         var="t" filter="true" filterMatchMode="contains">
                         <f:selectItems value="#{founds.currencies}" var="found" itemLabel="#{found.name}"
                                        itemValue="#{found}"/>

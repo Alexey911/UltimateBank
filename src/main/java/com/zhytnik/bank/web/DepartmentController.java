@@ -1,22 +1,22 @@
 package com.zhytnik.bank.web;
 
-import com.zhytnik.bank.backend.manager.impl.ManagerContainer;
+import com.zhytnik.bank.backend.manager.IEntityManager;
 import com.zhytnik.bank.domain.Department;
 import com.zhytnik.bank.domain.Found;
-import org.springframework.stereotype.Component;
 
 import javax.faces.bean.ViewScoped;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-@Component(value = "departments")
 @ViewScoped
 public class DepartmentController extends EntityController<Department> {
 
     private Integer number;
     private String address;
     private Found found;
+
+    private IEntityManager<Found> foundManager;
 
     private List<Found> founds;
 
@@ -29,7 +29,7 @@ public class DepartmentController extends EntityController<Department> {
 
     private void loadFounds() {
         founds.clear();
-        founds.addAll(ManagerContainer.getEntityManager(Found.class).loadAll());
+        founds.addAll(foundManager.loadAll());
     }
 
     @Override
@@ -37,11 +37,6 @@ public class DepartmentController extends EntityController<Department> {
         number = 0;
         address = "";
         found = null;
-    }
-
-    @Override
-    public Department instantiate() {
-        return new Department();
     }
 
     @Override
@@ -96,8 +91,7 @@ public class DepartmentController extends EntityController<Department> {
         this.founds = founds;
     }
 
-    @Override
-    public Class<Department> getEntityClass() {
-        return Department.class;
+    public void setFoundManager(IEntityManager<Found> foundManager) {
+        this.foundManager = foundManager;
     }
 }

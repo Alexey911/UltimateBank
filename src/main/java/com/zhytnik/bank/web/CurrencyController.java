@@ -1,11 +1,9 @@
 package com.zhytnik.bank.web;
 
 import com.zhytnik.bank.domain.Currency;
-import org.springframework.stereotype.Component;
 
 import javax.faces.bean.ViewScoped;
 
-@Component(value = "currencies")
 @ViewScoped
 public class CurrencyController extends EntityController<Currency> {
 
@@ -22,11 +20,6 @@ public class CurrencyController extends EntityController<Currency> {
     public void select() {
         name = selected.getName();
         value = selected.getValue();
-    }
-
-    @Override
-    public Currency instantiate() {
-        return new Currency();
     }
 
     @Override
@@ -49,10 +42,5 @@ public class CurrencyController extends EntityController<Currency> {
 
     public void setValue(Double value) {
         this.value = value;
-    }
-
-    @Override
-    public Class<Currency> getEntityClass() {
-        return Currency.class;
     }
 }

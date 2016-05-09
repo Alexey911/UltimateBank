@@ -41,11 +41,6 @@ public class FoundController extends EntityController<Found> {
     }
 
     @Override
-    public Found instantiate() {
-        return new Found();
-    }
-
-    @Override
     protected void fill(Found f) {
         f.setCode(code);
         f.setBalance(balance);
@@ -96,10 +91,5 @@ public class FoundController extends EntityController<Found> {
 
     public void setCurrencies(List<Currency> currencies) {
         this.currencies = currencies;
-    }
-
-    @Override
-    public Class<Found> getEntityClass() {
-        return Found.class;
     }
 }

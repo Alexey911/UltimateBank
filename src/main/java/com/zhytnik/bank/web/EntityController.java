@@ -1,8 +1,7 @@
 package com.zhytnik.bank.web;
 
-import com.zhytnik.bank.backend.manager.IEntityManager;
-import com.zhytnik.bank.backend.manager.impl.ManagerContainer;
 import com.zhytnik.bank.backend.types.IEntity;
+import com.zhytnik.bank.service.IService;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
@@ -12,19 +11,15 @@ import static com.google.common.collect.Lists.newArrayList;
 
 public abstract class EntityController<T extends IEntity> implements Serializable {
 
-    protected IEntityManager<T> manager;
+    protected IService<T> service;
 
     protected List<T> entities;
-
     protected List<T> filtered;
 
     protected T selected;
 
-    public abstract Class<T> getEntityClass();
-
     @PostConstruct
     public void setUp() {
-        manager = ManagerContainer.getEntityManager(getEntityClass());
         entities = newArrayList();
         filtered = newArrayList();
         reset();
@@ -33,17 +28,15 @@ public abstract class EntityController<T extends IEntity> implements Serializabl
 
     private void loadAll() {
         entities.clear();
-        entities.addAll(manager.loadAll());
+        entities.addAll(service.loadAll());
     }
 
     public abstract void reset();
 
-    public abstract T instantiate();
-
     public void save() {
-        final T entity = instantiate();
+        final T entity = service.instantiate();
         fill(entity);
-        manager.save(entity);
+        service.save(entity);
         entities.add(entity);
         reset();
     }
@@ -61,14 +54,14 @@ public abstract class EntityController<T extends IEntity> implements Serializabl
         if (selected == null) return;
 
         fill(selected);
-        manager.update(selected);
+        service.update(selected);
         reset();
     }
 
     public void remove() {
         if (selected == null) return;
 
-        manager.remove(selected);
+        service.remove(selected);
         entities.remove(selected);
         reset();
     }
@@ -95,5 +88,13 @@ public abstract class EntityController<T extends IEntity> implements Serializabl
 
     public void setFiltered(List<T> filtered) {
         this.filtered = filtered;
+    }
+
+    public void setService(IService<T> service) {
+        this.service = service;
+    }
+
+    public IService<T> getService() {
+        return service;
     }
 }
