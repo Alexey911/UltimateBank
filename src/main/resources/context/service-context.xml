@@ -5,19 +5,19 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean name="currencyService" class="com.zhytnik.bank.service.impl.CurrencyService"
+    <bean name="currencyService" class="com.zhytnik.bank.service.impl.EntityService"
           p:manager-ref="currencyManager"/>
 
-    <bean name="departmentService" class="com.zhytnik.bank.service.impl.DepartmentService"
+    <bean name="departmentService" class="com.zhytnik.bank.service.impl.EntityService"
           p:manager-ref="departmentManager"/>
 
-    <bean name="foundService" class="com.zhytnik.bank.service.impl.FoundService"
+    <bean name="foundService" class="com.zhytnik.bank.service.impl.EntityService"
           p:manager-ref="foundManager"/>
 
-    <bean name="bankerService" class="com.zhytnik.bank.service.impl.BankerService"
+    <bean name="bankerService" class="com.zhytnik.bank.service.impl.EntityService"
           p:manager-ref="bankerManager"/>
 
-    <bean name="clientService" class="com.zhytnik.bank.service.impl.ClientService"
+    <bean name="clientService" class="com.zhytnik.bank.service.impl.EntityService"
           p:manager-ref="clientManager"/>
 
     <!-- Converters -->

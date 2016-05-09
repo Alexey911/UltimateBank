@@ -1,6 +1,7 @@
 package com.zhytnik.bank.backend.manager.impl;
 
 import com.zhytnik.bank.backend.manager.IEntityManager;
+import com.zhytnik.bank.backend.tool.ReflectionUtil;
 import com.zhytnik.bank.backend.types.IEntity;
 import org.apache.log4j.Logger;
 
@@ -39,9 +40,14 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
     }
 
     public T load(Integer id) {
-        final T entity = instantiate(clazz, id);
+        final T entity = ReflectionUtil.instantiate(clazz, id);
         load(entity, true);
         return entity;
+    }
+
+    @Override
+    public T instantiate() {
+        return getInstance(clazz);
     }
 
     protected void load(T entity, boolean fullLoad) {
@@ -126,7 +132,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
 
     private void fillDependencies(T entity) {
         for (IEntity child : getChildRelationGraph(entity)) {
-            if(child.isSaved()) {
+            if (child.isSaved()) {
                 getManager(child.getClass()).load(child, false);
             }
         }

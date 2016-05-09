@@ -6,11 +6,13 @@ import com.zhytnik.bank.service.IEntityService;
 
 import java.util.Set;
 
-abstract class EntityService<T extends IEntity> implements IEntityService<T> {
+class EntityService<T extends IEntity> implements IEntityService<T> {
 
     protected IEntityManager<T> manager;
 
-    public abstract T instantiate();
+    public T instantiate(){
+        return manager.instantiate();
+    }
 
     @Override
     public T findById(Integer id) {

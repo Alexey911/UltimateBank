@@ -46,6 +46,14 @@ public class ReflectionUtil {
         return (T) notSecuredInstantiate(clazz, id, true);
     }
 
+    public static <T extends IEntity> T getInstance(Class<T> clazz) {
+        try {
+            return clazz.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /*ENTITY ACCESSORS*/
 
     public static boolean isNullField(Object target, Field field) {

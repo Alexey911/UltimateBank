@@ -10,6 +10,8 @@ public interface IEntityManager<T extends IEntity> {
 
     T load(Integer id);
 
+    T instantiate();
+
     void initialize(T entity);
 
     void update(T entity);
