@@ -27,10 +27,10 @@ public class DepartmentController extends EntityController<Department> {
         super.setUp();
         founds = newArrayList();
         bankers = newArrayList();
-        loadFounds();
+        refreshFounds();
     }
 
-    private void loadFounds() {
+    private void refreshFounds() {
         founds.clear();
         founds.addAll(foundManager.loadAll());
     }
@@ -62,7 +62,7 @@ public class DepartmentController extends EntityController<Department> {
     @Override
     public void refresh() {
         super.refresh();
-        loadFounds();
+        refreshFounds();
     }
 
     public Integer getNumber() {

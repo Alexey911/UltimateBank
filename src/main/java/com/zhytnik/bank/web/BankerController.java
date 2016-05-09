@@ -28,10 +28,10 @@ public class BankerController extends EntityController<Banker> {
     public void setUp() {
         super.setUp();
         departments = newArrayList();
-        loadDepartments();
+        refreshDepartments();
     }
 
-    private void loadDepartments() {
+    private void refreshDepartments() {
         departments.clear();
         departments.addAll(departmentManager.loadAll());
     }
@@ -69,7 +69,7 @@ public class BankerController extends EntityController<Banker> {
     @Override
     public void refresh() {
         super.refresh();
-        loadDepartments();
+        refreshDepartments();
     }
 
     public String getName() {

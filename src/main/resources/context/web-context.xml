@@ -20,4 +20,9 @@
 
     <bean id="clients" class="com.zhytnik.bank.web.ClientController"
           p:service-ref="clientService" p:bankerManager-ref="bankerManager"/>
+
+    <bean id="deposits" class="com.zhytnik.bank.web.DepositController"
+          p:service-ref="depositService"
+          p:clientService-ref="clientService"
+          p:currencyService-ref="currencyService"/>
 </beans>

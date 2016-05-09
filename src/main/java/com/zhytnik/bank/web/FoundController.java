@@ -22,10 +22,10 @@ public class FoundController extends EntityController<Found> {
     public void setUp() {
         currencies = newArrayList();
         super.setUp();
-        loadCurrencies();
+        refreshCurrencies();
     }
 
-    private void loadCurrencies() {
+    private void refreshCurrencies() {
         currencies.clear();
         currencies.addAll(getEntityManager(Currency.class).loadAll());
     }
@@ -35,7 +35,7 @@ public class FoundController extends EntityController<Found> {
         code = "";
         balance = 0.0d;
         currency = null;
-        loadCurrencies();
+        refreshCurrencies();
     }
 
     @Override
@@ -49,14 +49,14 @@ public class FoundController extends EntityController<Found> {
     public void select() {
         code = selected.getCode();
         balance = selected.getBalance();
-        loadCurrencies();
+        refreshCurrencies();
         currency = selected.getCurrency();
     }
 
     @Override
     public void refresh() {
         super.refresh();
-        loadCurrencies();
+        refreshCurrencies();
     }
 
     public String getCode() {

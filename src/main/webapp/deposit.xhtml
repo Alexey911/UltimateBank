@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="/layouts/template.xhtml">
+        <ui:define name="content">
+            <h:form id="deposits">
+                <p:dataTable id="depositTable"
+                             var="deposit" value="#{deposits.entities}"
+                             paginator="true" rows="10"
+                             selection="#{deposits.selected}"
+                             selectionMode="single"
+                             onRowSelectUpdate="deposit"
+                             rowKey="#{deposit.id}"
+                             filteredValue="#{deposits.filtered}"
+                             dblClickSelect="false">
+
+                    <f:facet name="header">
+                        Deposits
+                    </f:facet>
+                    <p:column sortBy="#{deposit.sum}" filterBy="#{deposit.sum}"
+                              filterMatchMode="gte">
+                        <f:facet name="header">
+                            <h:outputText value="Sum"/>
+                        </f:facet>
+                        <h:outputText value="#{deposit.sum}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Currency"/>
+                        </f:facet>
+                        <h:outputText value="#{deposit.currency.name}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{deposit.percent}" filterBy="#{deposit.percent}"
+                              filterMatchMode="gte">
+                        <f:facet name="header">
+                            <h:outputText value="Percent"/>
+                        </f:facet>
+                        <h:outputText value="#{deposit.percent}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Expiry date"/>
+                        </f:facet>
+                        <p:calendar value="#{deposit.expiryDate}" pattern="MM/dd/yyyy HH:mm:ss"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Client"/>
+                        </f:facet>
+                        <h:outputText value="#{deposits.clientInfo(deposit.client)}"/>
+                    </p:column>
+
+                    <p:ajax event="rowSelect" listener="#{deposits.select}" update="deposit"/>
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="deposit">
+                <p:growl id="growl" showDetail="true"/>
+
+                <p:panelGrid columns="2">
+                    <f:facet name="header">Deposit</f:facet>
+
+                    <h:outputLabel for="sum" value="Sum"/>
+                    <p:inputText value="#{deposits.sum}" label="sum" id="sum"/>
+
+                    <h:outputLabel for="percent" value="percent"/>
+                    <p:inputText value="#{deposits.percent}" label="percent" id="percent"/>
+
+                    <h:outputLabel for="expiryDate" value="Expiry date"/>
+                    <p:calendar id="expiryDate" value="#{deposits.expiryDate}" pattern="MM/dd/yyyy HH:mm:ss"/>
+
+                    <h:outputLabel for="currency" value="Currency"/>
+                    <p:selectOneListbox id="currency" value="#{deposits.currency}" converter="#{currencyConverter}"
+                                        var="t" filter="true" filterMatchMode="contains">
+                        <f:selectItems value="#{deposits.currencies}" var="currency" itemValue="#{currency}"/>
+                        <p:column>
+                            <h:outputText value="#{t.name}"/>
+                        </p:column>
+
+                        <p:column>
+                            <h:outputText value="#{t.value}"/>
+                        </p:column>
+                    </p:selectOneListbox>
+
+                    <h:outputLabel for="client" value="Client"/>
+                    <p:selectOneListbox id="client" value="#{deposits.client}" converter="#{clientConverter}"
+                                        var="t" filter="true" filterMatchMode="contains">
+                        <f:selectItems value="#{deposits.clients}" var="client" itemValue="#{client}"/>
+                        <p:column>
+                            <h:outputText value="#{t.name}"/>
+                        </p:column>
+
+                        <p:column>
+                            <h:outputText value="#{t.surname}"/>
+                        </p:column>
+                    </p:selectOneListbox>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Reset" actionListener="#{deposits.reset}"
+                                         update="deposit"/>
+                        <p:commandButton value="Change" actionListener="#{deposits.update}"
+                                         update="deposit deposits"/>
+                        <p:commandButton value="Remove" actionListener="#{deposits.remove}"
+                                         update="deposit deposits"/>
+                        <p:commandButton value="Save" actionListener="#{deposits.save}"
+                                         update="@all"/>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

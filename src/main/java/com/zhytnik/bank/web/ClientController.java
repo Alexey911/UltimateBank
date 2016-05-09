@@ -30,10 +30,10 @@ public class ClientController extends EntityController<Client> {
     public void setUp() {
         bankers = newArrayList();
         super.setUp();
-        loadBankers();
+        refreshBankers();
     }
 
-    private void loadBankers() {
+    private void refreshBankers() {
         bankers.clear();
         bankers.addAll(bankerManager.loadAll());
     }
@@ -79,7 +79,7 @@ public class ClientController extends EntityController<Client> {
     @Override
     public void refresh() {
         super.refresh();
-        loadBankers();
+        refreshBankers();
     }
 
     public String getName() {

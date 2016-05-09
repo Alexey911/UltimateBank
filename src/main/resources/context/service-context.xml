@@ -20,6 +20,9 @@
     <bean name="clientService" class="com.zhytnik.bank.service.impl.EntityService"
           p:manager-ref="clientManager"/>
 
+    <bean name="depositService" class="com.zhytnik.bank.service.impl.EntityService"
+          p:manager-ref="depositManager"/>
+
     <!-- Converters -->
 
     <bean name="currencyConverter" class="com.zhytnik.bank.web.util.EntityConverter"
@@ -33,4 +36,7 @@
 
     <bean name="bankerConverter" class="com.zhytnik.bank.web.util.EntityConverter"
           p:service-ref="bankerService"/>
+
+    <bean name="clientConverter" class="com.zhytnik.bank.web.util.EntityConverter"
+          p:service-ref="clientService"/>
 </beans>
