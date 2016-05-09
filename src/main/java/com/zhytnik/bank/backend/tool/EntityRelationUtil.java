@@ -32,7 +32,9 @@ public class EntityRelationUtil {
     private static void tryFindSingleEntity(List<IEntity> graph, Object target, Field field) {
         if (isNotEmptyEntityField(field, target)) {
             final Object child = getFieldValue(target, field);
-            graph.add((IEntity) child);
+            final IEntity entity = (IEntity) child;
+            if (!entity.isSaved()) return;
+            graph.add(entity);
             graph.addAll(getChildRelationGraph(child));
         }
     }

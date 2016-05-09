@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="/layouts/template.xhtml">
+        <ui:define name="content">
+            <h:form id="bills">
+                <p:dataTable id="billTable"
+                             var="bill" value="#{bills.entities}"
+                             paginator="true" rows="10"
+                             selection="#{bills.selected}"
+                             selectionMode="single"
+                             onRowSelectUpdate="bill"
+                             rowKey="#{bill.id}"
+                             filteredValue="#{bills.filtered}"
+                             dblClickSelect="false">
+
+                    <f:facet name="header">
+                        Bills
+                    </f:facet>
+                    <p:column sortBy="#{bill.balance}" filterBy="#{bill.balance}"
+                              filterMatchMode="gte">
+                        <f:facet name="header">
+                            <h:outputText value="Balance"/>
+                        </f:facet>
+                        <h:outputText value="#{bill.balance}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Currency"/>
+                        </f:facet>
+                        <h:outputText value="#{bill.currency.name}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Client"/>
+                        </f:facet>
+                        <h:outputText value="#{bills.clientInfo(bill.client)}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Card"/>
+                        </f:facet>
+                        <h:outputText value="#{bills.cardInfo(bill.card)}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Active"/>
+                        </f:facet>
+                        <h:selectBooleanCheckbox value="#{bill.isActive}"/>
+                    </p:column>
+
+                    <p:ajax event="rowSelect" listener="#{bills.select}" update="bill"/>
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="bill">
+                <p:growl id="growl" showDetail="true"/>
+
+                <p:panelGrid columns="2">
+                    <f:facet name="header">Bill</f:facet>
+
+                    <h:outputLabel for="balance" value="Balance"/>
+                    <p:inputText value="#{bills.balance}" label="balance" id="balance"/>
+
+                    <h:outputLabel for="isActive" value="Active"/>
+                    <p:selectBooleanCheckbox value="#{bills.isActive}" label="isActive" id="isActive"/>
+
+                    <h:outputLabel for="currency" value="Currency"/>
+                    <p:selectOneListbox id="currency" value="#{bills.currency}" converter="#{currencyConverter}"
+                                        var="t" filter="true" filterMatchMode="contains">
+                        <f:selectItems value="#{bills.currencies}" var="currency" itemValue="#{currency}"/>
+                        <p:column>
+                            <h:outputText value="#{t.name}"/>
+                        </p:column>
+
+                        <p:column>
+                            <h:outputText value="#{t.value}"/>
+                        </p:column>
+                    </p:selectOneListbox>
+
+                    <h:outputLabel for="client" value="Client"/>
+                    <p:selectOneListbox id="client" value="#{bills.client}" converter="#{clientConverter}"
+                                        var="t" filter="true" filterMatchMode="contains">
+                        <f:selectItems value="#{bills.clients}" var="client" itemValue="#{client}"/>
+                        <p:column>
+                            <h:outputText value="#{t.name}"/>
+                        </p:column>
+
+                        <p:column>
+                            <h:outputText value="#{t.surname}"/>
+                        </p:column>
+                    </p:selectOneListbox>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Reset" actionListener="#{bills.reset}"
+                                         update="bill"/>
+                        <p:commandButton value="Change" actionListener="#{bills.update}"
+                                         update="bill bills"/>
+                        <p:commandButton value="Remove" actionListener="#{bills.remove}"
+                                         update="bill bills"/>
+                        <p:commandButton value="Save" actionListener="#{bills.save}"
+                                         update="growl bill bills"/>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

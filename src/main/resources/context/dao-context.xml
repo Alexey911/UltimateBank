@@ -25,4 +25,10 @@
 
     <bean name="depositManager" class="com.zhytnik.bank.backend.manager.impl.EntityManager"
           c:clazz="com.zhytnik.bank.domain.Deposit"/>
+
+    <bean name="billManager" class="com.zhytnik.bank.backend.manager.impl.EntityManager"
+          c:clazz="com.zhytnik.bank.domain.Bill"/>
+
+    <bean name="billCardManager" class="com.zhytnik.bank.backend.manager.impl.EntityManager"
+          c:clazz="com.zhytnik.bank.domain.card.BillCard"/>
 </beans>

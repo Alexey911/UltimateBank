@@ -2,13 +2,13 @@ package com.zhytnik.bank.web;
 
 import com.zhytnik.bank.backend.manager.IEntityManager;
 import com.zhytnik.bank.domain.*;
+import com.zhytnik.bank.web.util.Formatter;
 
 import java.util.List;
 
 import static com.google.common.base.Strings.repeat;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.Boolean.TRUE;
-import static java.lang.String.format;
 
 public class ClientController extends EntityController<Client> {
 
@@ -70,7 +70,6 @@ public class ClientController extends EntityController<Client> {
         enable = selected.getEnable();
         banker = selected.getBanker();
 
-        service.initialize(selected);
         bills = newArrayList(selected.getBills());
         credits = newArrayList(selected.getCredits());
         deposits = newArrayList(selected.getDeposits());
@@ -158,12 +157,12 @@ public class ClientController extends EntityController<Client> {
         return bankers;
     }
 
-    public String bankerInfo(Banker b){
-        return format("%s %s. from %s department", b.getName(), b.getSurname().charAt(0), b.getDepartment().getNumber());
-    }
-
     public void setBankers(List<Banker> bankers) {
         this.bankers = bankers;
+    }
+
+    public String bankerInfo(Banker b) {
+        return Formatter.toString(b);
     }
 
     public void setBankerManager(IEntityManager<Banker> bankerManager) {

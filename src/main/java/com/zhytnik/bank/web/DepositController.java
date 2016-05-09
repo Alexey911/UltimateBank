@@ -4,13 +4,13 @@ import com.zhytnik.bank.domain.Client;
 import com.zhytnik.bank.domain.Currency;
 import com.zhytnik.bank.domain.Deposit;
 import com.zhytnik.bank.service.IEntityService;
+import com.zhytnik.bank.web.util.Formatter;
 
 import javax.faces.bean.ViewScoped;
 import java.util.Date;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static java.lang.String.format;
 
 @ViewScoped
 public class DepositController extends EntityController<Deposit> {
@@ -81,7 +81,7 @@ public class DepositController extends EntityController<Deposit> {
     }
 
     public String clientInfo(Client c) {
-        return format("%s %s", c.getName(), c.getSurname());
+        return Formatter.toString(c);
     }
 
     public void setClientService(IEntityService<Client> clientService) {

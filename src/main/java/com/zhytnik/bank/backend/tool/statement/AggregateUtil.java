@@ -38,14 +38,24 @@ public class AggregateUtil {
             } else if (isBoolean(type)) {
                 setFieldValue(entity, field, loadBoolean(s, index));
             } else if (isEntity(type)) {
-                final IEntity entityField = (IEntity) getFieldValue(entity, field);
-                //TODO:
-                if(entityField != null)
-                entityField.setId(getInteger(loadBigDecimal(s, index)));
+                setEntityField(s, index, entity, field);
             } else {
                 throw new RuntimeException(format("There is no rule for field %s", field.getName()));
             }
             index++;
+        }
+    }
+
+    private static void setEntityField(CallableStatement s, int index, Object target, Field field) {
+        final IEntity entity = (IEntity) getFieldValue(target, field);
+
+        if (entity == null) return;
+
+        final Integer id = getInteger(loadBigDecimal(s, index));
+        if (id != null) {
+            entity.setId(id);
+        } else {
+            setFieldValue(target, field, null);
         }
     }
 
@@ -71,8 +81,7 @@ public class AggregateUtil {
                 } else if (isBoolean(type)) {
                     setFieldValue(entity, field, getBoolean(value));
                 } else if (isManyToOneField(field) || isOneToOneField(field)) {
-                    final IEntity entityField = (IEntity) getFieldValue(entity, field);
-                    entityField.setId(getInteger(value));
+                    setEntityField(entity, field, value);
                 } else {
                     throw new RuntimeException();
                 }
@@ -82,6 +91,17 @@ public class AggregateUtil {
             throw new RuntimeException(e);
         }
         return entity;
+    }
+
+    private static void setEntityField(Object target, Field field, Object value) {
+        final IEntity entity = (IEntity) getFieldValue(target, field);
+        final Integer id = getInteger(value);
+
+        if (id != null) {
+            entity.setId(id);
+        } else {
+            setFieldValue(target, field, null);
+        }
     }
 
     private static Boolean getBoolean(Object obj) {
@@ -97,7 +117,7 @@ public class AggregateUtil {
     }
 
     private static Integer getInteger(Object obj) {
-        if (obj == null) return 0;
+        if (obj == null) return null;
         final BigDecimal decimal = (BigDecimal) obj;
         return decimal.intValue();
     }

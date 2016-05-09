@@ -25,4 +25,10 @@
           p:service-ref="depositService"
           p:clientService-ref="clientService"
           p:currencyService-ref="currencyService"/>
+
+    <bean id="bills" class="com.zhytnik.bank.web.BillController"
+          p:service-ref="billService"
+          p:clientService-ref="clientService"
+          p:billCardService-ref="billCardService"
+          p:currencyService-ref="currencyService"/>
 </beans>

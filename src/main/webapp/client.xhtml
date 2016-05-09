@@ -124,8 +124,6 @@
                     <h:outputLabel for="active" value="Active"/>
                     <p:selectBooleanCheckbox value="#{clients.enable}" label="active" id="active"/>
 
-                    #{client.banker.name} of #{client.banker.department.number} department"
-
                     <h:outputLabel for="banker" value="Banker"/>
                     <p:selectOneListbox id="banker" value="#{clients.banker}"
                                         converter="#{bankerConverter}"
@@ -138,7 +136,7 @@
 
                     <f:facet name="footer">
                         <p:commandButton value="Reset" actionListener="#{clients.reset}"
-                                         update="banker"/>
+                                         update="client"/>
                         <p:commandButton value="Change" actionListener="#{clients.update}"
                                          update="client clients"/>
                         <p:commandButton value="Remove" actionListener="#{clients.remove}"
