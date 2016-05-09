@@ -103,6 +103,38 @@
                 </p:dataTable>
             </h:form>
 
+            <h:form id="bills">
+                <p:dataTable id="billTable"
+                             var="bill" value="#{clients.bills}"
+                             paginator="true" rows="10"
+                             dblClickSelect="false">
+
+                    <f:facet name="header">
+                        Client bills
+                    </f:facet>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Balance"/>
+                        </f:facet>
+                        <h:outputText value="#{bill.balance}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Currency"/>
+                        </f:facet>
+                        <h:outputText value="#{bill.currency.name}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Active"/>
+                        </f:facet>
+                        <h:selectBooleanCheckbox value="#{bill.isActive}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+
             <h:form id="client">
                 <p:growl id="growl" showDetail="true"/>
 
