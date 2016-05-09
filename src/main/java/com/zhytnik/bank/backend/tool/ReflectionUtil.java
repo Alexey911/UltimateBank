@@ -160,7 +160,9 @@ public class ReflectionUtil {
     }
 
     public static void fillCollection(Field field, Object target, Collection<IEntity> values) {
-        getFieldAsCollection(target, field).addAll(values);
+        final Collection<IEntity> collection = getFieldAsCollection(target, field);
+        collection.clear();
+        collection.addAll(values);
     }
 
     /*CHECK FIELDS*/

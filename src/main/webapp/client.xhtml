@@ -60,7 +60,46 @@
                         <h:selectBooleanCheckbox value="#{client.enable}"/>
                     </p:column>
 
-                    <p:ajax event="rowSelect" listener="#{clients.select}" update="client"/>
+                    <p:ajax event="rowSelect" listener="#{clients.select}" update="client deposits"/>
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="deposits">
+                <p:dataTable id="depositTable"
+                             var="deposit" value="#{clients.deposits}"
+                             paginator="true" rows="10"
+                             dblClickSelect="false">
+
+                    <f:facet name="header">
+                        Client deposits
+                    </f:facet>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Sum"/>
+                        </f:facet>
+                        <h:outputText value="#{deposit.sum}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Currency"/>
+                        </f:facet>
+                        <h:outputText value="#{deposit.currency.name}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Percent"/>
+                        </f:facet>
+                        <h:outputText value="#{deposit.percent}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Expiry date"/>
+                        </f:facet>
+                        <p:calendar value="#{deposit.expiryDate}" pattern="MM/dd/yyyy HH:mm:ss"/>
+                    </p:column>
                 </p:dataTable>
             </h:form>
 
