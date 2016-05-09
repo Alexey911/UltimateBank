@@ -33,7 +33,6 @@ public class EntityRelationUtil {
         if (isNotEmptyEntityField(field, target)) {
             final Object child = getFieldValue(target, field);
             final IEntity entity = (IEntity) child;
-            if (!entity.isSaved()) return;
             graph.add(entity);
             graph.addAll(getChildRelationGraph(child));
         }

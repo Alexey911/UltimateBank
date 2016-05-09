@@ -6,29 +6,59 @@
 <h:head/>
 <h:body>
     <p:layout fullPage="true">
-        <p:layoutUnit position="north" size="100" header="Top" resizable="true">
-            <h:outputText value="Layout content for North"/>
+        <p:layoutUnit position="north" size="45" header="Ultimate Bank" resizable="true"
+                      style="text-align: center"/>
+
+        <p:layoutUnit position="south" size="68" resizable="true" style="text-align: center">
+            <h:outputText value="Ultimate Bank of M. Narkevich, A. Zhytnik, A. Bogdevich"/>
+            <br/>
+            <h:outputText value="All rigth reserved &#xA9; 2016"/>
         </p:layoutUnit>
 
-        <p:layoutUnit position="south" size="100" header="Bottom" resizable="true">
-            <h:outputText value="Layout content for South"/>
+        <p:layoutUnit position="west" size="140" header="Categories" resizable="true">
+            <p:link outcome="currency" value="Currency"/>
+            <p:commandLink update="@all" actionListener="#{currencies.refresh}">
+                <h:outputText value=" &#x21bb;"/>
+            </p:commandLink>
+            <br/>
+            <p:link outcome="found" value="Founds"/>
+            <p:commandLink update="@all" actionListener="#{founds.refresh}">
+                <h:outputText value=" &#x21bb;"/>
+            </p:commandLink>
+            <br/>
+            <p:link outcome="department" value="Departments"/>
+            <p:commandLink update="@all" actionListener="#{departments.refresh}">
+                <h:outputText value=" &#x21bb;"/>
+            </p:commandLink>
+            <br/>
+            <p:link outcome="banker" value="Bankers"/>
+            <p:commandLink update="@all" actionListener="#{bankers.refresh}">
+                <h:outputText value=" &#x21bb;"/>
+            </p:commandLink>
+            <br/>
+            <p:link outcome="client" value="Clients"/>
+            <p:commandLink update="@all" actionListener="#{clients.refresh}">
+                <h:outputText value=" &#x21bb;"/>
+            </p:commandLink>
+            <br/>
+            <p:link outcome="deposit" value="Deposits"/>
+            <p:commandLink update="@all" actionListener="#{deposits.refresh}">
+                <h:outputText value=" &#x21bb;"/>
+            </p:commandLink>
+            <br/>
+            <p:link outcome="bill" value="Bills"/>
+            <p:commandLink update="@all" actionListener="#{bills.refresh}">
+                <h:outputText value=" &#x21bb;"/>
+            </p:commandLink>
+            <br/>
+            <p:link outcome="billCard" value="Bill cards"/>
+            <p:commandLink update="@all" actionListener="#{billCards.refresh}">
+                <h:outputText value=" &#x21bb;"/>
+            </p:commandLink>
+            <br/>
         </p:layoutUnit>
 
-        <p:layoutUnit position="west" size="200" header="Entities" resizable="true">
-            <p:button href="currency.xhtml" value="Currency"/>
-            <p:button href="found.xhtml" value="Found"/>
-            <p:button href="department.xhtml" value="Department"/>
-            <p:button href="banker.xhtml" value="Banker"/>
-            <p:button href="client.xhtml" value="Client"/>
-            <p:button href="deposit.xhtml" value="Deposit"/>
-            <p:button href="bill.xhtml" value="Bill"/>
-        </p:layoutUnit>
-
-        <p:layoutUnit position="east" size="200" header="Right" resizable="true">
-            <h:outputText value="Layout content for Right"/>
-        </p:layoutUnit>
-
-        <p:layoutUnit position="center">
+        <p:layoutUnit position="center" resizable="true">
             <ui:insert name="content">
                 <p>Content</p>
             </ui:insert>

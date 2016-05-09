@@ -18,6 +18,7 @@ public class EntityConverter<T extends IEntity> implements Converter {
 
     @Override
     public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object o) {
+        if(o == null) return "";
         final T entity = (T) o;
         return Integer.toString(entity.getId());
     }

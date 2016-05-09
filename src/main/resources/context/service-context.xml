@@ -46,6 +46,9 @@
     <bean name="clientConverter" class="com.zhytnik.bank.web.util.EntityConverter"
           p:service-ref="clientService"/>
 
+    <bean name="billConverter" class="com.zhytnik.bank.web.util.EntityConverter"
+          p:service-ref="billService"/>
+
     <bean name="billCardConverter" class="com.zhytnik.bank.web.util.EntityConverter"
           p:service-ref="billCardService"/>
 </beans>

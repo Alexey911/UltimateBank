@@ -8,33 +8,33 @@
     <ui:composition template="/layouts/template.xhtml">
         <ui:define name="content">
             <h:form id="currencies">
+                <p:growl id="info" showDetail="true"/>
                 <p:dataTable id="currencyTable"
+                             style="width: 380px;"
                              var="currency" value="#{currencies.entities}"
                              paginator="true" rows="10"
                              selection="#{currencies.selected}"
                              selectionMode="single"
-                             onRowSelectUpdate="currency"
                              rowKey="#{currency.id}"
-                             filteredValue="#{currencies.filtered}"
                              dblClickSelect="false">
-
                     <f:facet name="header">
                         Currencies
                     </f:facet>
-                    <p:column sortBy="#{currency.name}" filterBy="#{currency.name}"
-                              filterMatchMode="contains">
+
+                    <p:column sortBy="#{currency.name}" style="width: 100px; text-align: center">
                         <f:facet name="header">
                             <h:outputText value="Name"/>
                         </f:facet>
                         <h:outputText value="#{currency.name}"/>
                     </p:column>
 
-                    <p:column sortBy="#{currency.value}" filterBy="#{currency.value}"
-                              filterMatchMode="gte">
+                    <p:column sortBy="#{currency.value}" style="text-align: center">
                         <f:facet name="header">
                             <h:outputText value="Cost"/>
                         </f:facet>
-                        <h:outputText value="#{currency.value}"/>
+                        <h:outputText value="#{currency.value}">
+                            <f:convertNumber pattern="#,###,##0.00"/>
+                        </h:outputText>
                     </p:column>
 
                     <p:ajax event="rowSelect" listener="#{currencies.select}" update="currency"/>
@@ -43,25 +43,27 @@
 
             <h:form id="currency">
                 <p:growl id="growl" showDetail="true"/>
+                <p:panelGrid columns="2" style="width: 380px;">
 
-                <p:panelGrid columns="2">
                     <f:facet name="header">Currency</f:facet>
 
                     <h:outputLabel for="name" value="Name"/>
-                    <p:inputText value="#{currencies.name}" label="name" id="name"/>
+                    <p:inputText value="#{currencies.name}" id="name" required="true" style="width: 80px"/>
 
                     <h:outputLabel for="cost" value="Cost"/>
-                    <p:inputText value="#{currencies.value}" label="cost" id="cost"/>
+                    <p:inputText value="#{currencies.value}" id="cost" required="true" style="width: 120px"/>
 
                     <f:facet name="footer">
-                        <p:commandButton value="Reset" actionListener="#{currencies.reset}"
-                                         update="currency"/>
-                        <p:commandButton value="Change" actionListener="#{currencies.update}"
-                                         update="currency currencies"/>
-                        <p:commandButton value="Remove" actionListener="#{currencies.remove}"
-                                         update="currency currencies"/>
-                        <p:commandButton value="Save" actionListener="#{currencies.save}"
-                                         update="@all"/>
+                        <div style="text-align: center">
+                            <p:commandButton value="Reset" actionListener="#{currencies.reset}"
+                                             update="currency"/>
+                            <p:commandButton value="Change" actionListener="#{currencies.update}"
+                                             update="currency currencies"/>
+                            <p:commandButton value="Remove" actionListener="#{currencies.remove}"
+                                             update="currency currencies"/>
+                            <p:commandButton value="Save" actionListener="#{currencies.save}"
+                                             update="growl currencies currency"/>
+                        </div>
                     </f:facet>
                 </p:panelGrid>
             </h:form>

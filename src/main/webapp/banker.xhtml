@@ -9,56 +9,51 @@
         <ui:define name="content">
             <h:form id="bankers">
                 <p:dataTable id="bankerTable"
+                             style="width: 700px;"
                              var="banker" value="#{bankers.entities}"
                              paginator="true" rows="10"
                              selection="#{bankers.selected}"
                              selectionMode="single"
                              onRowSelectUpdate="banker"
                              rowKey="#{banker.id}"
-                             filteredValue="#{bankers.filtered}"
                              dblClickSelect="false">
 
                     <f:facet name="header">
                         Bankers
                     </f:facet>
-                    <p:column sortBy="#{banker.name}" filterBy="#{banker.name}"
-                              filterMatchMode="contains">
+                    <p:column sortBy="#{banker.name}" style="text-align: center">
                         <f:facet name="header">
                             <h:outputText value="Name"/>
                         </f:facet>
                         <h:outputText value="#{banker.name}"/>
                     </p:column>
 
-                    <p:column sortBy="#{banker.surname}" filterBy="#{banker.surname}"
-                              filterMatchMode="contains">
+                    <p:column sortBy="#{banker.surname}" style="text-align: center">
                         <f:facet name="header">
                             <h:outputText value="Surname"/>
                         </f:facet>
                         <h:outputText value="#{banker.surname}"/>
                     </p:column>
 
-                    <p:column sortBy="#{banker.address}" filterBy="#{banker.address}"
-                              filterMatchMode="contains">
+                    <p:column sortBy="#{banker.address}" style="text-align: center; width: 150px">
                         <f:facet name="header">
                             <h:outputText value="Address"/>
                         </f:facet>
                         <h:outputText value="#{banker.address}"/>
                     </p:column>
 
-                    <p:column sortBy="#{banker.privilege}" filterBy="#{banker.privilege}"
-                              filterMatchMode="gte">
-                        <f:facet name="header">
-                            <h:outputText value="Privilege"/>
-                        </f:facet>
-                        <h:outputText value="#{banker.privilege}"/>
-                    </p:column>
-
-                    <p:column sortBy="#{banker.department.number}" filterBy="#{banker.department.number}"
-                              filterMatchMode="lte">
+                    <p:column sortBy="#{banker.department.number}" style="text-align: center; width: 150px">
                         <f:facet name="header">
                             <h:outputText value="Department number"/>
                         </f:facet>
                         <h:outputText value="#{banker.department.number}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{banker.privilege}" style="text-align: center; width: 90px">
+                        <f:facet name="header">
+                            <h:outputText value="Privilege"/>
+                        </f:facet>
+                        <h:outputText value="#{banker.privilege}"/>
                     </p:column>
 
                     <p:ajax event="rowSelect" listener="#{bankers.select}" update="banker"/>
@@ -72,43 +67,44 @@
                     <f:facet name="header">Banker</f:facet>
 
                     <h:outputLabel for="name" value="Name"/>
-                    <p:inputText value="#{bankers.name}" label="name" id="name"/>
+                    <p:inputText value="#{bankers.name}" id="name" style="width: 110px"
+                                 required="true" requiredMessage="Fill name"/>
 
                     <h:outputLabel for="surname" value="Surname"/>
-                    <p:inputText value="#{bankers.surname}" label="surname" id="surname"/>
+                    <p:inputText value="#{bankers.surname}" id="surname" style="width: 110px"
+                                 required="true" requiredMessage="Fill surname"/>
 
                     <h:outputLabel for="address" value="Address"/>
-                    <p:inputText value="#{bankers.address}" label="address" id="address"/>
+                    <p:inputText value="#{bankers.address}" id="address" style="width: 200px"
+                                 required="true" requiredMessage="Fill address"/>
 
-                    <h:outputLabel for="password" value="Password"/>
-                    <p:inputText value="#{bankers.password}" label="password" id="password"/>
+                    <h:outputLabel for="password" value="Password" required="true"/>
+                    <p:password id="password" value="#{bankers.password}" style="width: 100px"
+                                feedback="true"  required="true" requiredMessage="Fill password"/>
 
                     <h:outputLabel for="privilege" value="Privilege"/>
-                    <p:inputText value="#{bankers.privilege}" label="privilege" id="privilege"/>
+                    <p:inputText value="#{bankers.privilege}" id="privilege" style="width: 70px"
+                                 required="true" requiredMessage="Fill privilege"/>
 
                     <h:outputLabel for="department" value="Department"/>
-                    <p:selectOneListbox id="department" value="#{bankers.department}"
-                                        converter="#{departmentConverter}"
-                                        var="t" filter="true" filterMatchMode="contains" style="width:260px">
-                        <f:selectItems value="#{bankers.departments}" var="department" itemValue="#{department}"/>
-                        <p:column>
-                            <h:outputText value="#{t.number}"/>
-                        </p:column>
-
-                        <p:column>
-                            <h:outputText value="#{t.address}"/>
-                        </p:column>
-                    </p:selectOneListbox>
+                    <p:selectOneMenu id="department" value="#{bankers.department}" converter="#{departmentConverter}"
+                                     required="true" requiredMessage="Fill privilege">
+                        <f:selectItem itemValue="#{bankers.department}"
+                                      itemLabel="Choice department"/>
+                        <f:selectItems value="#{bankers.departments}" var="d" itemLabel="#{d.number} #{d.address}"/>
+                    </p:selectOneMenu>
 
                     <f:facet name="footer">
-                        <p:commandButton value="Reset" actionListener="#{bankers.reset}"
-                                         update="banker"/>
-                        <p:commandButton value="Change" actionListener="#{bankers.update}"
-                                         update="banker bankers"/>
-                        <p:commandButton value="Remove" actionListener="#{bankers.remove}"
-                                         update="banker bankers"/>
-                        <p:commandButton value="Save" actionListener="#{bankers.save}"
-                                         update="growl banker bankers"/>
+                        <div style="text-align: center">
+                            <p:commandButton value="Reset" actionListener="#{bankers.reset}"
+                                             update="banker"/>
+                            <p:commandButton value="Change" actionListener="#{bankers.update}"
+                                             update="banker bankers"/>
+                            <p:commandButton value="Remove" actionListener="#{bankers.remove}"
+                                             update="banker bankers"/>
+                            <p:commandButton value="Save" actionListener="#{bankers.save}"
+                                             update="growl banker bankers"/>
+                        </div>
                     </f:facet>
                 </p:panelGrid>
             </h:form>

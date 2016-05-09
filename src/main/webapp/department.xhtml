@@ -8,37 +8,35 @@
     <ui:composition template="/layouts/template.xhtml">
         <ui:define name="content">
             <h:form id="departments">
+                <p:growl id="info" showDetail="true"/>
                 <p:dataTable id="departmentTable"
+                             style="width: 600px;"
                              var="department" value="#{departments.entities}"
                              paginator="true" rows="10"
                              selection="#{departments.selected}"
                              selectionMode="single"
                              onRowSelectUpdate="department"
                              rowKey="#{department.id}"
-                             filteredValue="#{departments.filtered}"
                              dblClickSelect="false">
 
                     <f:facet name="header">
                         Departments
                     </f:facet>
-                    <p:column sortBy="#{department.number}" filterBy="#{department.number}"
-                              filterMatchMode="gte">
+                    <p:column sortBy="#{department.number}" style="text-align: center">
                         <f:facet name="header">
                             <h:outputText value="Number"/>
                         </f:facet>
                         <h:outputText value="#{department.number}"/>
                     </p:column>
 
-                    <p:column sortBy="#{department.found.code}" filterBy="#{department.found.code}"
-                              filterMatchMode="containts">
+                    <p:column sortBy="#{department.found.code}" style="text-align: center">
                         <f:facet name="header">
                             <h:outputText value="Found"/>
                         </f:facet>
-                        <h:outputText value="#{department.found.code}(#{department.found.currency.name})"/>
+                        <h:outputText value="#{department.found.code} in #{department.found.currency.name}"/>
                     </p:column>
 
-                    <p:column sortBy="#{department.address}" filterBy="#{department.address}"
-                              filterMatchMode="contains">
+                    <p:column sortBy="#{department.address}" style="text-align: center">
                         <f:facet name="header">
                             <h:outputText value="Address"/>
                         </f:facet>
@@ -51,6 +49,7 @@
 
             <h:form id="bankers">
                 <p:dataTable id="bankerTable"
+                             style="width: 600px;"
                              var="banker" value="#{departments.bankers}"
                              paginator="true" rows="10"
                              dblClickSelect="false">
@@ -58,21 +57,21 @@
                     <f:facet name="header">
                         Department bankers
                     </f:facet>
-                    <p:column>
+                    <p:column style="text-align: center">
                         <f:facet name="header">
                             <h:outputText value="Name"/>
                         </f:facet>
                         <h:outputText value="#{banker.name}"/>
                     </p:column>
 
-                    <p:column>
+                    <p:column style="text-align: center">
                         <f:facet name="header">
                             <h:outputText value="Surname"/>
                         </f:facet>
                         <h:outputText value="#{banker.surname}"/>
                     </p:column>
 
-                    <p:column>
+                    <p:column style="text-align: center; width: 60px">
                         <f:facet name="header">
                             <h:outputText value="Privilege"/>
                         </f:facet>
@@ -84,27 +83,25 @@
             <h:form id="department">
                 <p:growl id="growl" showDetail="true"/>
 
-                <p:panelGrid columns="2">
+                <p:panelGrid columns="2" style="width: 600px;">
                     <f:facet name="header">Department</f:facet>
 
                     <h:outputLabel for="number" value="Number"/>
-                    <p:inputText value="#{departments.number}" label="number" id="number"/>
+                    <p:inputText value="#{departments.number}" id="number" style="width: 100px;"
+                                 required="true" requiredMessage="Fill number"/>
 
                     <h:outputLabel for="address" value="Address"/>
-                    <p:inputText value="#{departments.address}" label="address" id="address"/>
+                    <p:inputText value="#{departments.address}" id="address" style="width: 300px;"
+                            required="true" requiredMessage="Fill Address"/>
 
                     <h:outputLabel for="found" value="Found"/>
-                    <p:selectOneListbox id="found" value="#{departments.found}" converter="#{foundConverter}"
-                                        var="t" filter="true" filterMatchMode="contains" style="width:260px">
-                        <f:selectItems value="#{departments.founds}" var="found" itemValue="#{found}"/>
-                        <p:column>
-                            <h:outputText value="#{t.code}"/>
-                        </p:column>
-
-                        <p:column>
-                            <h:outputText value="#{t.balance}"/>
-                        </p:column>
-                    </p:selectOneListbox>
+                    <p:selectOneMenu id="found" value="#{departments.found}" converter="#{foundConverter}"
+                                     required="true" requiredMessage="Fill found">
+                        <f:selectItem itemValue="#{departments.found}"
+                                      itemLabel="Choice found"/>
+                        <f:selectItems value="#{departments.founds}" var="found"
+                                       itemLabel="#{found.code} (#{found.currency.name})"/>
+                    </p:selectOneMenu>
 
                     <f:facet name="footer">
                         <p:commandButton value="Reset" actionListener="#{departments.reset}"

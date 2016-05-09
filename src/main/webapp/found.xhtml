@@ -8,37 +8,37 @@
     <ui:composition template="/layouts/template.xhtml">
         <ui:define name="content">
             <h:form id="founds">
+                <p:growl id="info" showDetail="true"/>
                 <p:dataTable id="foundTable"
+                             style="width: 500px;"
                              var="found" value="#{founds.entities}"
                              paginator="true" rows="10"
                              selection="#{founds.selected}"
                              selectionMode="single"
                              onRowSelectUpdate="found"
                              rowKey="#{found.id}"
-                             filteredValue="#{founds.filtered}"
                              dblClickSelect="false">
 
                     <f:facet name="header">
                         Founds
                     </f:facet>
-                    <p:column sortBy="#{found.code}" filterBy="#{found.code}"
-                              filterMatchMode="contains">
+                    <p:column sortBy="#{found.code}" style="text-align: center">
                         <f:facet name="header">
                             <h:outputText value="Code"/>
                         </f:facet>
                         <h:outputText value="#{found.code}"/>
                     </p:column>
 
-                    <p:column sortBy="#{found.balance}" filterBy="#{found.balance}"
-                              filterMatchMode="gte">
+                    <p:column sortBy="#{found.balance}" style="text-align: center">
                         <f:facet name="header">
                             <h:outputText value="Balance"/>
                         </f:facet>
-                        <h:outputText value="#{found.balance}"/>
+                        <h:outputText value="#{found.balance}">
+                            <f:convertNumber pattern="#,###,##0.00"/>
+                        </h:outputText>
                     </p:column>
 
-                    <p:column sortBy="#{found.currency.name}" filterBy="#{found.currency.name}"
-                              filterMatchMode="contains">
+                    <p:column sortBy="#{found.currency.name}" style="width: 70px; text-align: center">
                         <f:facet name="header">
                             <h:outputText value="Currency"/>
                         </f:facet>
@@ -52,37 +52,36 @@
             <h:form id="found">
                 <p:growl id="growl" showDetail="true"/>
 
-                <p:panelGrid columns="2">
+                <p:panelGrid columns="2" style="width: 500px;">
                     <f:facet name="header">Found</f:facet>
 
                     <h:outputLabel for="code" value="Code"/>
-                    <p:inputText value="#{founds.code}" label="code" id="code"/>
+                    <p:inputText value="#{founds.code}" id="code" style="width: 220px"
+                                 required="true" requiredMessage="Fill Code"/>
 
                     <h:outputLabel for="balance" value="Balance"/>
-                    <p:inputText value="#{founds.balance}" label="balance" id="balance"/>
+                    <p:inputText value="#{founds.balance}"  id="balance" style="width: 120px"
+                                 required="true" requiredMessage="Fill Balance"/>
 
                     <h:outputLabel for="currency" value="Currency"/>
-                    <p:selectOneListbox id="currency" value="#{founds.currency}" converter="#{currencyConverter}"
-                                        var="t" filter="true" filterMatchMode="contains">
-                        <f:selectItems value="#{founds.currencies}" var="currency" itemValue="#{currency}"/>
-                        <p:column>
-                            <h:outputText value="#{t.name}"/>
-                        </p:column>
-
-                        <p:column>
-                            <h:outputText value="#{t.value}"/>
-                        </p:column>
-                    </p:selectOneListbox>
+                    <p:selectOneMenu id="currency" value="#{founds.currency}" converter="#{currencyConverter}"
+                                     required="true" requiredMessage="Fill Currency">
+                        <f:selectItem itemValue="#{founds.currency}"
+                                      itemLabel="Choice currency"/>
+                        <f:selectItems value="#{founds.currencies}" var="currency" itemLabel="#{currency.name}"/>
+                    </p:selectOneMenu>
 
                     <f:facet name="footer">
-                        <p:commandButton value="Reset" actionListener="#{founds.reset}"
-                                         update="found"/>
-                        <p:commandButton value="Change" actionListener="#{founds.update}"
-                                         update="found founds"/>
-                        <p:commandButton value="Remove" actionListener="#{founds.remove}"
-                                         update="found founds"/>
-                        <p:commandButton value="Save" actionListener="#{founds.save}"
-                                         update="growl found founds"/>
+                        <div style="text-align: center">
+                            <p:commandButton value="Reset" actionListener="#{founds.reset}"
+                                             update="found"/>
+                            <p:commandButton value="Change" actionListener="#{founds.update}"
+                                             update="found founds"/>
+                            <p:commandButton value="Remove" actionListener="#{founds.remove}"
+                                             update="found founds"/>
+                            <p:commandButton value="Save" actionListener="#{founds.save}"
+                                             update="growl found founds"/>
+                        </div>
                     </f:facet>
                 </p:panelGrid>
             </h:form>
