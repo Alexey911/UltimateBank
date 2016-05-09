@@ -8,8 +8,4 @@ public class CurrencyService extends EntityService<Currency> {
     public Currency instantiate() {
         return new Currency();
     }
-
-    public Currency findByName(String name) {
-        return findByParameter("name", name);
-    }
 }

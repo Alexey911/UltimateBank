@@ -90,8 +90,7 @@
                     <p:selectOneListbox id="department" value="#{bankers.department}"
                                         converter="#{departmentConverter}"
                                         var="t" filter="true" filterMatchMode="contains" style="width:260px">
-                        <f:selectItems value="#{bankers.departments}" var="department" itemLabel="#{department.number}"
-                                       itemValue="#{department}"/>
+                        <f:selectItems value="#{bankers.departments}" var="department" itemValue="#{department}"/>
                         <p:column>
                             <h:outputText value="#{t.number}"/>
                         </p:column>

@@ -50,9 +50,4 @@ public class Department extends Entity {
     public void setBankers(Set<Banker> bankers) {
         this.bankers = bankers;
     }
-
-    @Override
-    public String toString() {
-        return Integer.toString(number);
-    }
 }

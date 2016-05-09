@@ -17,4 +17,7 @@
 
     <bean id="bankers" class="com.zhytnik.bank.web.BankerController"
           p:service-ref="bankerService" p:departmentManager-ref="departmentManager"/>
+
+    <bean id="clients" class="com.zhytnik.bank.web.ClientController"
+          p:service-ref="clientService" p:bankerManager-ref="bankerManager"/>
 </beans>

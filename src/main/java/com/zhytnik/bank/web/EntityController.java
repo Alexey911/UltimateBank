@@ -1,7 +1,7 @@
 package com.zhytnik.bank.web;
 
 import com.zhytnik.bank.backend.types.IEntity;
-import com.zhytnik.bank.service.IService;
+import com.zhytnik.bank.service.IEntityService;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
@@ -11,7 +11,7 @@ import static com.google.common.collect.Lists.newArrayList;
 
 public abstract class EntityController<T extends IEntity> implements Serializable {
 
-    protected IService<T> service;
+    protected IEntityService<T> service;
 
     protected List<T> entities;
     protected List<T> filtered;
@@ -79,6 +79,9 @@ public abstract class EntityController<T extends IEntity> implements Serializabl
     }
 
     public void setSelected(T selected) {
+        if (selected != null) {
+            service.initialize(selected);
+        }
         this.selected = selected;
     }
 
@@ -90,11 +93,11 @@ public abstract class EntityController<T extends IEntity> implements Serializabl
         this.filtered = filtered;
     }
 
-    public void setService(IService<T> service) {
-        this.service = service;
+    public IEntityService<T> getService() {
+        return service;
     }
 
-    public IService<T> getService() {
-        return service;
+    public void setService(IEntityService<T> service) {
+        this.service = service;
     }
 }

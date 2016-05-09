@@ -1,22 +1,25 @@
 package com.zhytnik.bank.service.impl;
 
-import com.zhytnik.bank.backend.exception.NotFoundException;
 import com.zhytnik.bank.backend.manager.IEntityManager;
 import com.zhytnik.bank.backend.types.IEntity;
-import com.zhytnik.bank.service.IService;
+import com.zhytnik.bank.service.IEntityService;
 
 import java.util.Set;
 
-import static com.google.common.collect.Iterables.getOnlyElement;
-
-abstract class EntityService<T extends IEntity> implements IService<T> {
+abstract class EntityService<T extends IEntity> implements IEntityService<T> {
 
     protected IEntityManager<T> manager;
 
     public abstract T instantiate();
 
-    public T initialize(T entity){
-        return entity;
+    @Override
+    public T findById(Integer id) {
+        return manager.load(id);
+    }
+
+    @Override
+    public void initialize(T entity) {
+        manager.initialize(entity);
     }
 
     @Override
@@ -45,11 +48,5 @@ abstract class EntityService<T extends IEntity> implements IService<T> {
 
     public void setManager(IEntityManager<T> manager) {
         this.manager = manager;
-    }
-
-    protected T findByParameter(String param, Object value) {
-        final Set<T> entities = manager.findByFieldValue(param, value);
-        if (!entities.isEmpty()) return getOnlyElement(entities);
-        throw new NotFoundException();
     }
 }

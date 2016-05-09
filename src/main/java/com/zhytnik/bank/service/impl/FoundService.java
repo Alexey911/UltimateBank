@@ -8,8 +8,4 @@ public class FoundService extends EntityService<Found> {
     public Found instantiate() {
         return new Found();
     }
-
-    public Found findByCode(String code) {
-        return findByParameter("code", code);
-    }
 }

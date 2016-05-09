@@ -67,6 +67,11 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
     }
 
     @Override
+    public void initialize(T entity) {
+        fillReferences(entity);
+    }
+
+    @Override
     public Integer save(T entity) {
         return save(entity, true);
     }

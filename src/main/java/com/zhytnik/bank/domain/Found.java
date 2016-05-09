@@ -1,7 +1,7 @@
 package com.zhytnik.bank.domain;
 
-import com.zhytnik.bank.backend.types.relation.ManyToOne;
 import com.zhytnik.bank.backend.types.Entity;
+import com.zhytnik.bank.backend.types.relation.ManyToOne;
 
 public class Found extends Entity {
 
@@ -33,10 +33,5 @@ public class Found extends Entity {
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
-    }
-
-    @Override
-    public String toString() {
-        return code;
     }
 }

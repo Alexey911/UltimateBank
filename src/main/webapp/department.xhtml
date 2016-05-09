@@ -97,8 +97,7 @@
                     <h:outputLabel for="found" value="Found"/>
                     <p:selectOneListbox id="found" value="#{departments.found}" converter="#{foundConverter}"
                                         var="t" filter="true" filterMatchMode="contains" style="width:260px">
-                        <f:selectItems value="#{departments.founds}" var="found" itemLabel="#{found.code}"
-                                       itemValue="#{found}"/>
+                        <f:selectItems value="#{departments.founds}" var="found" itemValue="#{found}"/>
                         <p:column>
                             <h:outputText value="#{t.code}"/>
                         </p:column>

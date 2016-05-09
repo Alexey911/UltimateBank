@@ -55,7 +55,8 @@ public class DepartmentController extends EntityController<Department> {
         number = selected.getNumber();
         address = selected.getAddress();
         found = selected.getFound();
-        bankers = newArrayList(service.initialize(selected).getBankers());
+        service.initialize(selected);
+        bankers = newArrayList(selected.getBankers());
     }
 
     @Override

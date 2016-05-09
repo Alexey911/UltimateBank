@@ -4,11 +4,13 @@ import com.zhytnik.bank.backend.types.IEntity;
 
 import java.util.Set;
 
-public interface IService<T extends IEntity> {
+public interface IEntityService<T extends IEntity> {
+
+    T findById(Integer id);
 
     T instantiate();
 
-    T initialize(T entity);
+    void initialize(T entity);
 
     void save(T entity);
 

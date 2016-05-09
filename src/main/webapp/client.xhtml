@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="/layouts/template.xhtml">
+        <ui:define name="content">
+            <h:form id="clients">
+                <p:dataTable id="clientTable"
+                             var="client" value="#{clients.entities}"
+                             paginator="true" rows="10"
+                             selection="#{clients.selected}"
+                             selectionMode="single"
+                             onRowSelectUpdate="client"
+                             rowKey="#{client.id}"
+                             filteredValue="#{clients.filtered}"
+                             dblClickSelect="false">
+
+                    <f:facet name="header">
+                        Clients
+                    </f:facet>
+                    <p:column sortBy="#{client.name}" filterBy="#{client.name}"
+                              filterMatchMode="contains">
+                        <f:facet name="header">
+                            <h:outputText value="Name"/>
+                        </f:facet>
+                        <h:outputText value="#{client.name}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{client.surname}" filterBy="#{client.surname}"
+                              filterMatchMode="contains">
+                        <f:facet name="header">
+                            <h:outputText value="Surname"/>
+                        </f:facet>
+                        <h:outputText value="#{client.surname}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{client.address}" filterBy="#{client.address}"
+                              filterMatchMode="contains">
+                        <f:facet name="header">
+                            <h:outputText value="Address"/>
+                        </f:facet>
+                        <h:outputText value="#{client.address}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{client.banker.name}" filterBy="#{client.banker.name}"
+                              filterMatchMode="containt">
+                        <f:facet name="header">
+                            <h:outputText value="Banker"/>
+                        </f:facet>
+                        <h:outputText value="#{client.banker.name} of #{client.banker.department.number} department"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Active"/>
+                        </f:facet>
+                        <h:selectBooleanCheckbox value="#{client.enable}"/>
+                    </p:column>
+
+                    <p:ajax event="rowSelect" listener="#{clients.select}" update="client"/>
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="client">
+                <p:growl id="growl" showDetail="true"/>
+
+                <p:panelGrid columns="2">
+                    <f:facet name="header">Client</f:facet>
+
+                    <h:outputLabel for="name" value="Name"/>
+                    <p:inputText value="#{clients.name}" label="name" id="name"/>
+
+                    <h:outputLabel for="surname" value="Surname"/>
+                    <p:inputText value="#{clients.surname}" label="surname" id="surname"/>
+
+                    <h:outputLabel for="address" value="Address"/>
+                    <p:inputText value="#{clients.address}" label="address" id="address"/>
+
+                    <h:outputLabel for="password" value="Password"/>
+                    <p:inputText value="#{clients.password}" label="password" id="password"/>
+
+                    <h:outputLabel for="active" value="Active"/>
+                    <p:selectBooleanCheckbox value="#{clients.enable}" label="active" id="active"/>
+
+                    #{client.banker.name} of #{client.banker.department.number} department"
+
+                    <h:outputLabel for="banker" value="Banker"/>
+                    <p:selectOneListbox id="banker" value="#{clients.banker}"
+                                        converter="#{bankerConverter}"
+                                        var="t" filter="true" filterMatchMode="contains" style="width:260px">
+                        <f:selectItems value="#{clients.bankers}" var="banker" itemValue="#{banker}"/>
+                        <p:column>
+                            <h:outputText value="#{clients.bankerInfo(t)}"/>
+                        </p:column>
+                    </p:selectOneListbox>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Reset" actionListener="#{clients.reset}"
+                                         update="banker"/>
+                        <p:commandButton value="Change" actionListener="#{clients.update}"
+                                         update="client clients"/>
+                        <p:commandButton value="Remove" actionListener="#{clients.remove}"
+                                         update="client clients"/>
+                        <p:commandButton value="Save" actionListener="#{clients.save}"
+                                         update="growl client clients"/>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

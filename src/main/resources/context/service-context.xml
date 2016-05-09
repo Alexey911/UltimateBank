@@ -8,22 +8,29 @@
     <bean name="currencyService" class="com.zhytnik.bank.service.impl.CurrencyService"
           p:manager-ref="currencyManager"/>
 
-    <bean name="currencyConverter" class="com.zhytnik.bank.web.converter.CurrencyConverter"
-          p:service-ref="currencyService"/>
-
     <bean name="departmentService" class="com.zhytnik.bank.service.impl.DepartmentService"
           p:manager-ref="departmentManager"/>
 
     <bean name="foundService" class="com.zhytnik.bank.service.impl.FoundService"
           p:manager-ref="foundManager"/>
 
-    <bean name="foundConverter" class="com.zhytnik.bank.web.converter.FoundConverter"
-          p:service-ref="foundService"/>
-
     <bean name="bankerService" class="com.zhytnik.bank.service.impl.BankerService"
           p:manager-ref="bankerManager"/>
 
-    <bean name="departmentConverter" class="com.zhytnik.bank.web.converter.DepartmentConverter"
+    <bean name="clientService" class="com.zhytnik.bank.service.impl.ClientService"
+          p:manager-ref="clientManager"/>
+
+    <!-- Converters -->
+
+    <bean name="currencyConverter" class="com.zhytnik.bank.web.util.EntityConverter"
+          p:service-ref="currencyService"/>
+
+    <bean name="foundConverter" class="com.zhytnik.bank.web.util.EntityConverter"
+          p:service-ref="foundService"/>
+
+    <bean name="departmentConverter" class="com.zhytnik.bank.web.util.EntityConverter"
           p:service-ref="departmentService"/>
 
+    <bean name="bankerConverter" class="com.zhytnik.bank.web.util.EntityConverter"
+          p:service-ref="bankerService"/>
 </beans>

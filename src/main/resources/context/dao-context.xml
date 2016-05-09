@@ -19,4 +19,7 @@
 
     <bean name="bankerManager" class="com.zhytnik.bank.backend.manager.impl.EntityManager"
           c:clazz="com.zhytnik.bank.domain.Banker"/>
+
+    <bean name="clientManager" class="com.zhytnik.bank.backend.manager.impl.EntityManager"
+          c:clazz="com.zhytnik.bank.domain.Client"/>
 </beans>
