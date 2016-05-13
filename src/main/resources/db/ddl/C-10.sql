@@ -41,12 +41,12 @@ AS
   END;
 /
 
-CREATE OR REPLACE PROCEDURE LOAD_BILLCARD(c_id                  INT,
-                                          c_code            OUT VARCHAR2,
-                                          c_validity        OUT VARCHAR2,
-                                          c_cvc             OUT INT,
-                                          c_validation_code OUT INT,
-                                          c_credit          OUT INT)
+CREATE OR REPLACE PROCEDURE LOAD_CREDITCARD(c_id                  INT,
+                                            c_code            OUT VARCHAR2,
+                                            c_validity        OUT VARCHAR2,
+                                            c_cvc             OUT INT,
+                                            c_validation_code OUT INT,
+                                            c_credit          OUT INT)
 AS
   BEGIN
     SELECT
@@ -66,12 +66,12 @@ AS
   END;
 /
 
-CREATE OR REPLACE PROCEDURE UPDATE_BILLCARD(c_id              INT,
-                                            c_code            VARCHAR2,
-                                            c_validity        VARCHAR2,
-                                            c_cvc             INT,
-                                            c_validation_code INT,
-                                            c_credit          INT)
+CREATE OR REPLACE PROCEDURE UPDATE_CREDITCARD(c_id              INT,
+                                              c_code            VARCHAR2,
+                                              c_validity        VARCHAR2,
+                                              c_cvc             INT,
+                                              c_validation_code INT,
+                                              c_credit          INT)
 AS
   BEGIN
     UPDATE CREDITCARD
@@ -85,7 +85,7 @@ AS
   END;
 /
 
-CREATE OR REPLACE FUNCTION COUNT_BILLCARD
+CREATE OR REPLACE FUNCTION COUNT_CREDITCARD
   RETURN INT
 IS
   c INT;
@@ -99,7 +99,7 @@ IS
 /
 
 
-CREATE OR REPLACE PROCEDURE REMOVE_BILLCARD(c_id INT)
+CREATE OR REPLACE PROCEDURE REMOVE_CREDITCARD(c_id INT)
 AS
   BEGIN
     DELETE CREDITCARD

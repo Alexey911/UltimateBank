@@ -28,10 +28,14 @@
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <!-- Production -->
-        <param-value>Production</param-value>
+        <param-value>Development</param-value>
     </context-param>
     <context-param>
         <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    <context-param>
+        <param-name>com.sun.faces.writeStateAtFormEnd</param-name>
         <param-value>false</param-value>
     </context-param>
 

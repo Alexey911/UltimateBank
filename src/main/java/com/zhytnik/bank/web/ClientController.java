@@ -4,12 +4,14 @@ import com.zhytnik.bank.backend.manager.IEntityManager;
 import com.zhytnik.bank.domain.*;
 import com.zhytnik.bank.web.util.Formatter;
 
+import javax.faces.bean.ViewScoped;
 import java.util.List;
 
 import static com.google.common.base.Strings.repeat;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.Boolean.TRUE;
 
+@ViewScoped
 public class ClientController extends EntityController<Client> {
 
     private String name;
