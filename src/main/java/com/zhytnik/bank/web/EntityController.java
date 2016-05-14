@@ -14,14 +14,12 @@ public abstract class EntityController<T extends IEntity> implements Serializabl
     protected IEntityService<T> service;
 
     protected List<T> entities;
-    protected List<T> filtered;
 
     protected T selected;
 
     @PostConstruct
     public void setUp() {
         entities = newArrayList();
-        filtered = newArrayList();
         reset();
         loadAll();
     }
@@ -83,14 +81,6 @@ public abstract class EntityController<T extends IEntity> implements Serializabl
             service.initialize(selected);
         }
         this.selected = selected;
-    }
-
-    public List<T> getFiltered() {
-        return filtered;
-    }
-
-    public void setFiltered(List<T> filtered) {
-        this.filtered = filtered;
     }
 
     public IEntityService<T> getService() {

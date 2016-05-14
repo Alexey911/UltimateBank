@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="/layouts/template.xhtml">
+        <ui:define name="content">
+
+            <h:form id="credits">
+                <p:growl id="info" showDetail="true"/>
+                <p:dataTable id="creditTable"
+                             var="credit" value="#{credits.entities}"
+                             paginator="true" rows="10"
+                             selection="#{credits.selected}"
+                             selectionMode="single"
+                             onRowSelectUpdate="credit"
+                             rowKey="#{credit.id}"
+                             dblClickSelect="false">
+
+                    <f:facet name="header">
+                        Credits
+                    </f:facet>
+                    <p:column sortBy="#{credit.amount}">
+                        <f:facet name="header">
+                            <h:outputText value="amount"/>
+                        </f:facet>
+                        <h:outputText value="#{credit.amount}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Valid for"/>
+                        </f:facet>
+                        <p:calendar value="#{credit.validFor}" pattern="MM/dd/yyyy HH:mm:ss" readonly="true"/>
+                    </p:column>
+
+                    <p:column sortBy="#{credit.margin}">
+                        <f:facet name="header">
+                            <h:outputText value="margin"/>
+                        </f:facet>
+                        <h:outputText value="#{credit.margin}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{credit.fee}">
+                        <f:facet name="header">
+                            <h:outputText value="fee"/>
+                        </f:facet>
+                        <h:outputText value="#{credit.fee}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{credit.penalty}">
+                        <f:facet name="header">
+                            <h:outputText value="Penalty"/>
+                        </f:facet>
+                        <h:outputText value="#{credit.penalty}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Active"/>
+                        </f:facet>
+                        <h:selectBooleanCheckbox value="#{credit.isActive}" readonly="true"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Currency"/>
+                        </f:facet>
+                        <h:outputText value="#{credit.currency.name}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Client"/>
+                        </f:facet>
+                        <h:outputText value="#{credits.clientInfo(credit.client)}"/>
+                    </p:column>
+
+                    <p:ajax event="rowSelect" listener="#{credits.select}" update="credit"/>
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="credit">
+                <p:growl id="growl" showDetail="true"/>
+
+                <p:panelGrid columns="2">
+                    <f:facet name="header">Credit</f:facet>
+
+                    <h:outputLabel for="amount" value="Amount"/>
+                    <p:inputText value="#{credits.amount}" id="amount"
+                                 required="true" requiredMessage="Fill Amount"/>
+
+                    <h:outputLabel for="validFor" value="Valid for"/>
+                    <p:calendar id="validFor" value="#{credits.validFor}" pattern="MM/dd/yyyy HH:mm:ss"
+                                required="true" requiredMessage="Fill valid for date"/>
+
+                    <h:outputLabel for="margin" value="Margin"/>
+                    <p:inputText value="#{credits.margin}" id="margin"
+                                 required="true" requiredMessage="Fill Margin"/>
+
+                    <h:outputLabel for="fee" value="Fee"/>
+                    <p:inputText value="#{credits.fee}" id="fee"
+                                 required="true" requiredMessage="Fill fee"/>
+
+                    <h:outputLabel for="isActive" value="Active"/>
+                    <h:selectBooleanCheckbox value="#{credits.isActive}" id="isActive"/>
+
+                    <h:outputLabel for="penalty" value="Penalty"/>
+                    <p:inputText value="#{credits.penalty}" id="penalty"
+                                 required="true" requiredMessage="Fill Penalty"/>
+
+                    <h:outputLabel for="currency" value="Currency"/>
+                    <p:selectOneMenu id="currency" value="#{credits.currency}" converter="#{currencyConverter}"
+                                     required="true" requiredMessage="Fill Currency">
+                        <f:selectItem itemValue="#{credits.currency}"
+                                      itemLabel="Choice currency"/>
+                        <f:selectItems value="#{credits.currencies}" var="currency" itemLabel="#{currency.name}"/>
+                    </p:selectOneMenu>
+
+                    <h:outputLabel for="client" value="Client"/>
+                    <p:selectOneMenu id="client" value="#{credits.client}" converter="#{clientConverter}"
+                                     required="true" requiredMessage="Fill client">
+                        <f:selectItem itemValue="#{credits.client}"
+                                      itemLabel="Choice client"/>
+                        <f:selectItems value="#{credits.clients}" var="c" itemLabel="#{credits.clientInfo(c)}"/>
+                    </p:selectOneMenu>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Reset" actionListener="#{credits.reset}"
+                                         update="credit"/>
+                        <p:commandButton value="Change" actionListener="#{credits.update}"
+                                         update="credit credits"/>
+                        <p:commandButton value="Remove" actionListener="#{credits.remove}"
+                                         update="credit credits"/>
+                        <p:commandButton value="Save" actionListener="#{credits.save}"
+                                         update="credit credits"/>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

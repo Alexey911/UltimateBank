@@ -29,11 +29,18 @@
     <bean id="bills" class="com.zhytnik.bank.web.BillController"
           p:service-ref="billService"
           p:clientService-ref="clientService"
-          p:billCardService-ref="billCardService"
           p:currencyService-ref="currencyService"/>
 
     <bean id="billCards" class="com.zhytnik.bank.web.BillCardController"
           p:service-ref="billCardService"
-          p:billService-ref="billService"
-          p:billCardService-ref="billCardService"/>
+          p:billService-ref="billService"/>
+
+    <bean id="credits" class="com.zhytnik.bank.web.CreditController"
+          p:service-ref="creditService"
+          p:clientService-ref="clientService"
+          p:currencyService-ref="currencyService"/>
+
+    <bean id="creditCards" class="com.zhytnik.bank.web.CreditCardController"
+          p:service-ref="creditCardService"
+          p:creditService-ref="creditService"/>
 </beans>

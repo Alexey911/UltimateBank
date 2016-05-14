@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="/layouts/template.xhtml">
+        <ui:define name="content">
+            <h:form id="creditCards">
+                <p:growl id="info" showDetail="true"/>
+                <p:dataTable id="creditCardTable"
+                             var="creditCard" value="#{creditCards.entities}"
+                             paginator="true" rows="10"
+                             selection="#{creditCards.selected}"
+                             selectionMode="single"
+                             onRowSelectUpdate="creditCard"
+                             rowKey="#{creditCard.id}"
+                             dblClickSelect="false">
+
+                    <f:facet name="header">
+                        Credit Cards
+                    </f:facet>
+                    <p:column sortBy="#{creditCard.code}">
+                        <f:facet name="header">
+                            <h:outputText value="Code"/>
+                        </f:facet>
+                        <h:outputText value="#{creditCard.code}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Validity"/>
+                        </f:facet>
+                        <p:calendar value="#{creditCard.validity}" pattern="MM/dd/yyyy HH:mm:ss" readonly="true"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="CVC"/>
+                        </f:facet>
+                        <h:outputText value="#{creditCard.cvc}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{creditCard.credit.amount}">
+                        <f:facet name="header">
+                            <h:outputText value="Credit"/>
+                        </f:facet>
+                        <h:outputText
+                                value="#{creditCard.credit.amount} (#{creditCard.credit.currency.name}) of #{creditCard.credit.client.surname}"/>
+                    </p:column>
+
+                    <p:ajax event="rowSelect" listener="#{creditCards.select}" update="creditCard"/>
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="creditCard">
+                <p:growl id="growl" showDetail="true"/>
+
+                <p:panelGrid columns="2">
+                    <f:facet name="header">Credit card</f:facet>
+
+                    <h:outputLabel for="code" value="Code"/>
+                    <p:inputText value="#{creditCards.code}" id="code"
+                                 required="true" requiredMessage="Fill Code"/>
+
+                    <h:outputLabel for="validity" value="Validity"/>
+                    <p:calendar value="#{creditCards.validity}" pattern="MM/dd/yyyy HH:mm:ss" id="validity"
+                                required="true" requiredMessage="Fill Validity"/>
+
+                    <h:outputLabel for="credit" value="Credit"/>
+                    <p:selectOneMenu id="credit" value="#{creditCards.credit}" converter="#{creditConverter}"
+                                     required="true" requiredMessage="Fill Credit">
+                        <f:selectItem itemValue="#{creditCards.credit}"
+                                      itemLabel="Choice Credit"/>
+                        <f:selectItems value="#{creditCards.credits}" var="c"
+                                       itemLabel="#{c.amount} (#{c.currency.name}) of #{c.client.surname}"/>
+                    </p:selectOneMenu>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Reset" actionListener="#{creditCards.reset}"
+                                         update="creditCard"/>
+                        <p:commandButton value="Change" actionListener="#{creditCards.update}"
+                                         update="creditCard creditCards"/>
+                        <p:commandButton value="Remove" actionListener="#{creditCards.remove}"
+                                         update="creditCard creditCards"/>
+                        <p:commandButton value="Save" actionListener="#{creditCards.save}"
+                                         update="growl creditCard creditCards"/>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

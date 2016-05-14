@@ -90,7 +90,7 @@
 
                     <h:outputLabel for="department" value="Department"/>
                     <p:selectOneMenu id="department" value="#{bankers.department}" converter="#{departmentConverter}"
-                                     required="true" requiredMessage="Fill privilege">
+                                     required="true" requiredMessage="Fill department">
                         <f:selectItem itemValue="#{bankers.department}"
                                       itemLabel="Choice department"/>
                         <f:selectItems value="#{bankers.departments}" var="d" itemLabel="#{d.number} #{d.address}"/>

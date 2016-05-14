@@ -40,7 +40,6 @@ public class DepartmentController extends EntityController<Department> {
         number = 0;
         address = "";
         found = null;
-        bankers = newArrayList();
     }
 
     @Override

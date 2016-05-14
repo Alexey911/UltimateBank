@@ -29,6 +29,12 @@
     <bean name="billCardService" class="com.zhytnik.bank.service.impl.BillCardService"
           p:manager-ref="billCardManager"/>
 
+    <bean name="creditService" class="com.zhytnik.bank.service.impl.EntityService"
+          p:manager-ref="creditManager"/>
+
+    <bean name="creditCardService" class="com.zhytnik.bank.service.impl.CreditCardService"
+          p:manager-ref="creditCardManager"/>
+
     <!-- Converters -->
 
     <bean name="currencyConverter" class="com.zhytnik.bank.web.util.EntityConverter"
@@ -51,4 +57,10 @@
 
     <bean name="billCardConverter" class="com.zhytnik.bank.web.util.EntityConverter"
           p:service-ref="billCardService"/>
+
+    <bean name="creditConverter" class="com.zhytnik.bank.web.util.EntityConverter"
+          p:service-ref="creditService"/>
+
+    <bean name="creditCardConverter" class="com.zhytnik.bank.web.util.EntityConverter"
+          p:service-ref="creditCardService"/>
 </beans>

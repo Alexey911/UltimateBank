@@ -31,4 +31,10 @@
 
     <bean name="billCardManager" class="com.zhytnik.bank.backend.manager.impl.EntityManager"
           c:clazz="com.zhytnik.bank.domain.card.BillCard"/>
+
+    <bean name="creditManager" class="com.zhytnik.bank.backend.manager.impl.EntityManager"
+          c:clazz="com.zhytnik.bank.domain.Credit"/>
+
+    <bean name="creditCardManager" class="com.zhytnik.bank.backend.manager.impl.EntityManager"
+          c:clazz="com.zhytnik.bank.domain.card.CreditCard"/>
 </beans>

@@ -48,9 +48,6 @@ public class ClientController extends EntityController<Client> {
         password = "";
         enable = TRUE;
         banker = null;
-        bills = newArrayList();
-        credits = newArrayList();
-        deposits = newArrayList();
     }
 
     @Override
@@ -81,6 +78,10 @@ public class ClientController extends EntityController<Client> {
     public void refresh() {
         super.refresh();
         refreshBankers();
+    }
+
+    public String bankerInfo(Banker b) {
+        return Formatter.toString(b);
     }
 
     public String getName() {
@@ -161,10 +162,6 @@ public class ClientController extends EntityController<Client> {
 
     public void setBankers(List<Banker> bankers) {
         this.bankers = bankers;
-    }
-
-    public String bankerInfo(Banker b) {
-        return Formatter.toString(b);
     }
 
     public void setBankerManager(IEntityManager<Banker> bankerManager) {

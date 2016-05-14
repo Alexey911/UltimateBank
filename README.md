@@ -12,4 +12,4 @@ With this framework you can don't think about PL/SQL and concentrate on your bus
  - **transparent** addition custom entities
  - **lightweight** core
  - **minimum** amount PL/SQL scripts
- - safe to SQL-injection
+ - **safe to SQL-injection**

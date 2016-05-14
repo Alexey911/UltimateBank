@@ -24,31 +24,22 @@ public class BillController extends EntityController<Bill> {
 
     private List<Client> clients;
     private List<Currency> currencies;
-    private List<BillCard> billCards;
 
     private IEntityService<Client> clientService;
     private IEntityService<Currency> currencyService;
-    private IEntityService<BillCard> billCardService;
 
     @Override
     public void setUp() {
         clients = newArrayList();
-        billCards = newArrayList();
         currencies = newArrayList();
         super.setUp();
         refreshClients();
-        refreshBillCards();
         refreshCurrencies();
     }
 
     private void refreshClients() {
         clients.clear();
         clients.addAll(clientService.loadAll());
-    }
-
-    private void refreshBillCards() {
-        billCards.clear();
-        billCards.addAll(billCardService.loadAll());
     }
 
     private void refreshCurrencies() {
@@ -87,14 +78,13 @@ public class BillController extends EntityController<Bill> {
     public void refresh() {
         super.refresh();
         refreshClients();
-        refreshBillCards();
     }
 
     public String clientInfo(Client client) {
         return Formatter.toString(client);
     }
 
-    public String cardInfo(BillCard billCard){
+    public String cardInfo(BillCard billCard) {
         return Formatter.toString(billCard);
     }
 
@@ -130,14 +120,6 @@ public class BillController extends EntityController<Bill> {
         this.client = client;
     }
 
-    public BillCard getCard() {
-        return card;
-    }
-
-    public void setCard(BillCard card) {
-        this.card = card;
-    }
-
     public List<Client> getClients() {
         return clients;
     }
@@ -146,24 +128,8 @@ public class BillController extends EntityController<Bill> {
         this.clients = clients;
     }
 
-    public List<BillCard> getBillCards() {
-        return billCards;
-    }
-
-    public void setBillCards(List<BillCard> billCards) {
-        this.billCards = billCards;
-    }
-
-    public IEntityService<Client> getClientService() {
-        return clientService;
-    }
-
     public void setClientService(IEntityService<Client> clientService) {
         this.clientService = clientService;
-    }
-
-    public IEntityService<BillCard> getBillCardService() {
-        return billCardService;
     }
 
     public List<Currency> getCurrencies() {
@@ -172,10 +138,6 @@ public class BillController extends EntityController<Bill> {
 
     public void setCurrencies(List<Currency> currencies) {
         this.currencies = currencies;
-    }
-
-    public void setBillCardService(IEntityService<BillCard> billCardService) {
-        this.billCardService = billCardService;
     }
 
     public void setCurrencyService(IEntityService<Currency> currencyService) {

@@ -1,9 +1,9 @@
 package com.zhytnik.bank.web;
 
-import com.zhytnik.bank.domain.Bill;
-import com.zhytnik.bank.domain.card.BillCard;
+import com.zhytnik.bank.domain.Credit;
+import com.zhytnik.bank.domain.card.CreditCard;
 import com.zhytnik.bank.service.IEntityService;
-import com.zhytnik.bank.service.impl.BillCardService;
+import com.zhytnik.bank.service.impl.CreditCardService;
 
 import javax.faces.bean.ViewScoped;
 import java.util.Date;
@@ -12,41 +12,41 @@ import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
 
 @ViewScoped
-public class BillCardController extends EntityController<BillCard> {
+public class CreditCardController extends EntityController<CreditCard> {
 
     private String code;
     private Date validity;
-    private Bill bill;
+    private Credit credit;
     private Integer cvc;
     private Integer validationCode;
 
-    private List<Bill> bills;
+    private List<Credit> credits;
 
-    private IEntityService<Bill> billService;
+    private IEntityService<Credit> creditService;
 
     @Override
     public void setUp() {
-        bills = newArrayList();
+        credits = newArrayList();
         super.setUp();
-        refreshBills();
+        refreshCredits();
     }
 
-    private void refreshBills() {
-        bills.clear();
-        bills.addAll(billService.loadAll());
+    private void refreshCredits() {
+        credits.clear();
+        credits.addAll(creditService.loadAll());
     }
 
     @Override
     public void reset() {
         code = "";
         validity = new Date();
-        bill = null;
+        credit = null;
         cvc = null;
         validationCode = null;
     }
 
     @Override
-    protected void fill(BillCard c) {
+    protected void fill(CreditCard c) {
         c.setCode(code);
         c.setValidity(validity);
 
@@ -55,7 +55,7 @@ public class BillCardController extends EntityController<BillCard> {
         c.setValidationCode(validationCode != null ?
                 c.getValidationCode() : getService().generateValidationCode());
 
-        c.setBill(bill);
+        c.setCredit(credit);
     }
 
     @Override
@@ -64,18 +64,18 @@ public class BillCardController extends EntityController<BillCard> {
         validity = selected.getValidity();
         cvc = selected.getCvc();
         validationCode = selected.getValidationCode();
-        bill = selected.getBill();
+        credit = selected.getCredit();
     }
 
     @Override
     public void refresh() {
         super.refresh();
-        refreshBills();
+        refreshCredits();
     }
 
     @Override
-    public BillCardService getService() {
-        return (BillCardService) service;
+    public CreditCardService getService() {
+        return (CreditCardService) service;
     }
 
     public String getCode() {
@@ -94,23 +94,23 @@ public class BillCardController extends EntityController<BillCard> {
         this.validity = validity;
     }
 
-    public Bill getBill() {
-        return bill;
+    public Credit getCredit() {
+        return credit;
     }
 
-    public void setBill(Bill bill) {
-        this.bill = bill;
+    public void setCredit(Credit credit) {
+        this.credit = credit;
     }
 
-    public void setBillService(IEntityService<Bill> billService) {
-        this.billService = billService;
+    public List<Credit> getCredits() {
+        return credits;
     }
 
-    public List<Bill> getBills() {
-        return bills;
+    public void setCredits(List<Credit> credits) {
+        this.credits = credits;
     }
 
-    public void setBills(List<Bill> bills) {
-        this.bills = bills;
+    public void setCreditService(IEntityService<Credit> creditService) {
+        this.creditService = creditService;
     }
 }
