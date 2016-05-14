@@ -1,7 +1,7 @@
 package com.zhytnik.bank.web;
 
-import com.zhytnik.bank.backend.manager.IEntityManager;
 import com.zhytnik.bank.domain.*;
+import com.zhytnik.bank.service.IEntityService;
 import com.zhytnik.bank.web.util.Formatter;
 
 import javax.faces.bean.ViewScoped;
@@ -26,7 +26,7 @@ public class ClientController extends EntityController<Client> {
     private List<Credit> credits;
     private List<Deposit> deposits;
 
-    private IEntityManager<Banker> bankerManager;
+    private IEntityService<Banker> bankerService;
 
     @Override
     public void setUp() {
@@ -37,7 +37,7 @@ public class ClientController extends EntityController<Client> {
 
     private void refreshBankers() {
         bankers.clear();
-        bankers.addAll(bankerManager.loadAll());
+        bankers.addAll(bankerService.loadAll());
     }
 
     @Override
@@ -164,7 +164,7 @@ public class ClientController extends EntityController<Client> {
         this.bankers = bankers;
     }
 
-    public void setBankerManager(IEntityManager<Banker> bankerManager) {
-        this.bankerManager = bankerManager;
+    public void setBankerService(IEntityService<Banker> bankerService) {
+        this.bankerService = bankerService;
     }
 }

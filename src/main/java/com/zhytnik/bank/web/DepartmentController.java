@@ -1,9 +1,9 @@
 package com.zhytnik.bank.web;
 
-import com.zhytnik.bank.backend.manager.IEntityManager;
 import com.zhytnik.bank.domain.Banker;
 import com.zhytnik.bank.domain.Department;
 import com.zhytnik.bank.domain.Found;
+import com.zhytnik.bank.service.IEntityService;
 
 import javax.faces.bean.ViewScoped;
 import java.util.List;
@@ -17,7 +17,7 @@ public class DepartmentController extends EntityController<Department> {
     private String address;
     private Found found;
 
-    private IEntityManager<Found> foundManager;
+    private IEntityService<Found> foundService;
 
     private List<Found> founds;
     private List<Banker> bankers;
@@ -32,7 +32,7 @@ public class DepartmentController extends EntityController<Department> {
 
     private void refreshFounds() {
         founds.clear();
-        founds.addAll(foundManager.loadAll());
+        founds.addAll(foundService.loadAll());
     }
 
     @Override
@@ -95,8 +95,8 @@ public class DepartmentController extends EntityController<Department> {
         this.founds = founds;
     }
 
-    public void setFoundManager(IEntityManager<Found> foundManager) {
-        this.foundManager = foundManager;
+    public void setFoundService(IEntityService<Found> foundService) {
+        this.foundService = foundService;
     }
 
     public List<Banker> getBankers() {

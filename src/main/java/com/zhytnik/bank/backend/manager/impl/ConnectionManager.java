@@ -1,26 +1,15 @@
 package com.zhytnik.bank.backend.manager.impl;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.sql.DataSource;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class ConnectionManager {
 
-    @Autowired
-    private BasicDataSource dataSource = getDefaultConnection();
-
-    public static BasicDataSource getDefaultConnection() {
-        BasicDataSource ds = new BasicDataSource();
-        ds.setDriverClassName("oracle.jdbc.OracleDriver");
-        ds.setUrl("jdbc:oracle:thin:@//localhost:1521/XE");
-        ds.setUsername("admin");
-        ds.setPassword("password");
-        ds.setDefaultAutoCommit(true);
-        return ds;
-    }
+    private BasicDataSource dataSource;
 
     public Connection getConnection() {
         try {
@@ -38,7 +27,19 @@ public class ConnectionManager {
         }
     }
 
+    public void close(CallableStatement s) {
+        try {
+            s.getConnection().close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public DataSource getDataSource() {
         return dataSource;
+    }
+
+    public void setDataSource(BasicDataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

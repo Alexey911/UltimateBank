@@ -7,11 +7,9 @@ import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.util.List;
 import java.util.Set;
 
-import static com.zhytnik.bank.backend.manager.impl.ManagerContainer.getManager;
 import static com.zhytnik.bank.backend.tool.EntityRelationUtil.getChildRelationGraph;
 import static com.zhytnik.bank.backend.tool.ReflectionUtil.*;
 import static com.zhytnik.bank.backend.tool.ScriptUtil.*;
@@ -24,19 +22,19 @@ import static java.util.Collections.reverse;
 
 public class EntityManager<T extends IEntity> implements IEntityManager<T> {
 
-    protected static Connection connection;
+    protected Class<T> clazz;
 
-    static {
-        connection = new ConnectionManager().getConnection();
-    }
+    protected ManagerFactory managerFactory;
 
-    private Class<T> clazz;
-    private Logger logger;
+    protected ConnectionManager connectionManager;
+
+    protected Logger logger = Logger.getLogger(this.getClass());
 
     public EntityManager(Class<T> clazz) {
         this.clazz = clazz;
-        logger = Logger.getLogger(this.getClass());
-        ManagerContainer.save(clazz, this);
+    }
+
+    public EntityManager() {
     }
 
     public T load(Integer id) {
@@ -58,15 +56,15 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         execute(s);
 
         fill(entity, s);
+        connectionManager.close(s);
+
         fillDependencies(entity);
         if (fullLoad) fillReferences(entity);
-
-        close(s);
     }
 
     protected void fillReferences(T entity) {
         for (Field field : getReferenceFields(clazz)) {
-            final EntityManager<IEntity> manager = getManager(getFieldReferenceType(field));
+            final IEntityManager<IEntity> manager = managerFactory.getEntityManager(getFieldReferenceType(field));
             final Set<IEntity> references = manager.findByFieldValue(getEntityName(entity) + ".id", entity.getId());
             fillCollection(field, entity, references);
         }
@@ -94,7 +92,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         final int id = loadInteger(s, 1);
         entity.setId(id);
 
-        close(s);
+        connectionManager.close(s);
         return id;
     }
 
@@ -103,7 +101,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         reverse(relations);
 
         for (IEntity child : relations) {
-            final EntityManager<IEntity> m = getManager(child.getClass());
+            final EntityManager<IEntity> m = managerFactory.getEntityManager(child.getClass());
             if (child.isSaved()) {
                 m.update(child);
             } else {
@@ -120,9 +118,9 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         execute(s);
 
         final Set<T> entities = extractEntities(s, clazz);
-        fillDependencies(entities);
+        connectionManager.close(s);
 
-        close(s);
+        fillDependencies(entities);
         return entities;
     }
 
@@ -133,7 +131,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
     private void fillDependencies(T entity) {
         for (IEntity child : getChildRelationGraph(entity)) {
             if (child.isSaved()) {
-                getManager(child.getClass()).load(child, false);
+                managerFactory.getEntityManager(child.getClass()).load(child, false);
             }
         }
     }
@@ -145,7 +143,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         prepare(s, UPDATE, entity);
         execute(s);
 
-        close(s);
+        connectionManager.close(s);
     }
 
     public int getCount() {
@@ -157,7 +155,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
 
         final int count = loadInteger(s, 1);
 
-        close(s);
+        connectionManager.close(s);
         return count;
     }
 
@@ -172,7 +170,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         putInteger(s, 1, id);
         execute(s);
 
-        close(s);
+        connectionManager.close(s);
     }
 
     @Override
@@ -185,7 +183,7 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
         logger.debug(format("Clearing %s type", clazz.getSimpleName()));
         final CallableStatement s = buildStatement(CLEAR_PROCEDURE_NAME, false, 0);
         execute(s);
-        close(s);
+        connectionManager.close(s);
     }
 
     @Override
@@ -198,6 +196,14 @@ public class EntityManager<T extends IEntity> implements IEntityManager<T> {
     }
 
     private CallableStatement buildStatement(String callName, boolean isFunction, int argsCount) {
-        return build(connection, clazz, callName, isFunction, argsCount);
+        return build(connectionManager.getConnection(), clazz, callName, isFunction, argsCount);
+    }
+
+    public void setConnectionManager(ConnectionManager connectionManager) {
+        this.connectionManager = connectionManager;
+    }
+
+    public void setManagerFactory(ManagerFactory managerFactory) {
+        this.managerFactory = managerFactory;
     }
 }

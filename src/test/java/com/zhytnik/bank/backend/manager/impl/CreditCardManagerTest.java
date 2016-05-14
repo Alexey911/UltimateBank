@@ -1,12 +1,12 @@
-import com.zhytnik.bank.backend.manager.IEntityManager;
-import com.zhytnik.bank.backend.manager.impl.EntityManager;
+package com.zhytnik.bank.backend.manager.impl;
+
 import com.zhytnik.bank.domain.card.CreditCard;
 
 public class CreditCardManagerTest extends ManagerTest<CreditCard> {
 
     @Override
-    protected IEntityManager<CreditCard> getEntityManager() {
-        return new EntityManager<>(CreditCard.class);
+    protected Class<CreditCard> getEntityClass() {
+        return CreditCard.class;
     }
 
     @Override

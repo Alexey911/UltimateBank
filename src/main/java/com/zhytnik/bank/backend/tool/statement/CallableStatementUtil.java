@@ -58,14 +58,6 @@ public class CallableStatementUtil {
         }
     }
 
-    public static void close(CallableStatement s) {
-        try {
-            s.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static <T extends IEntity> Set<T> extractEntities(CallableStatement s, Class<T> entityClass) {
         final Set<T> entities = new HashSet<>();
         try {

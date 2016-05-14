@@ -1,3 +1,5 @@
+package com.zhytnik.bank.backend.manager.impl;
+
 import com.zhytnik.bank.backend.types.IEntity;
 
 import java.lang.reflect.Field;

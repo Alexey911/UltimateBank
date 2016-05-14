@@ -2,12 +2,12 @@ package com.zhytnik.bank.web;
 
 import com.zhytnik.bank.domain.Currency;
 import com.zhytnik.bank.domain.Found;
+import com.zhytnik.bank.service.IEntityService;
 
 import javax.faces.bean.ViewScoped;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static com.zhytnik.bank.backend.manager.impl.ManagerContainer.getEntityManager;
 
 @ViewScoped
 public class FoundController extends EntityController<Found> {
@@ -18,6 +18,8 @@ public class FoundController extends EntityController<Found> {
 
     private List<Currency> currencies;
 
+    private IEntityService<Currency> currencyService;
+
     @Override
     public void setUp() {
         currencies = newArrayList();
@@ -27,7 +29,7 @@ public class FoundController extends EntityController<Found> {
 
     private void refreshCurrencies() {
         currencies.clear();
-        currencies.addAll(getEntityManager(Currency.class).loadAll());
+        currencies.addAll(currencyService.loadAll());
     }
 
     @Override
@@ -89,5 +91,9 @@ public class FoundController extends EntityController<Found> {
 
     public void setCurrencies(List<Currency> currencies) {
         this.currencies = currencies;
+    }
+
+    public void setCurrencyService(IEntityService<Currency> currencyService) {
+        this.currencyService = currencyService;
     }
 }

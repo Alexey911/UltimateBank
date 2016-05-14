@@ -6,20 +6,24 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <import resource="service-context.xml"/>
+    <bean id="currencies" class="com.zhytnik.bank.web.CurrencyController"
+          p:service-ref="currencyService"/>
 
-    <bean id="founds" class="com.zhytnik.bank.web.FoundController" p:service-ref="foundService"/>
-
-    <bean id="currencies" class="com.zhytnik.bank.web.CurrencyController" p:service-ref="currencyService"/>
+    <bean id="founds" class="com.zhytnik.bank.web.FoundController"
+          p:service-ref="foundService"
+          p:currencyService-ref="currencyService"/>
 
     <bean id="departments" class="com.zhytnik.bank.web.DepartmentController"
-          p:service-ref="departmentService" p:foundManager-ref="foundManager"/>
+          p:service-ref="departmentService"
+          p:foundService-ref="foundService"/>
 
     <bean id="bankers" class="com.zhytnik.bank.web.BankerController"
-          p:service-ref="bankerService" p:departmentManager-ref="departmentManager"/>
+          p:service-ref="bankerService"
+          p:departmentService-ref="departmentService"/>
 
     <bean id="clients" class="com.zhytnik.bank.web.ClientController"
-          p:service-ref="clientService" p:bankerManager-ref="bankerManager"/>
+          p:service-ref="clientService"
+          p:bankerService-ref="bankerService"/>
 
     <bean id="deposits" class="com.zhytnik.bank.web.DepositController"
           p:service-ref="depositService"

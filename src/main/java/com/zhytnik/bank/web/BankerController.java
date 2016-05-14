@@ -1,8 +1,8 @@
 package com.zhytnik.bank.web;
 
-import com.zhytnik.bank.backend.manager.IEntityManager;
 import com.zhytnik.bank.domain.Banker;
 import com.zhytnik.bank.domain.Department;
+import com.zhytnik.bank.service.IEntityService;
 
 import javax.faces.bean.ViewScoped;
 import java.util.List;
@@ -22,7 +22,7 @@ public class BankerController extends EntityController<Banker> {
 
     private List<Department> departments;
 
-    private IEntityManager<Department> departmentManager;
+    private IEntityService<Department> departmentService;
 
     @Override
     public void setUp() {
@@ -33,7 +33,7 @@ public class BankerController extends EntityController<Banker> {
 
     private void refreshDepartments() {
         departments.clear();
-        departments.addAll(departmentManager.loadAll());
+        departments.addAll(departmentService.loadAll());
     }
 
     @Override
@@ -128,7 +128,7 @@ public class BankerController extends EntityController<Banker> {
         this.departments = departments;
     }
 
-    public void setDepartmentManager(IEntityManager<Department> departmentManager) {
-        this.departmentManager = departmentManager;
+    public void setDepartmentService(IEntityService<Department> departmentService) {
+        this.departmentService = departmentService;
     }
 }
