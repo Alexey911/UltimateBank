@@ -10,6 +10,27 @@
     <artifactId>Bank</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <developers>
+        <developer>
+            <name>Alexey Zhytnik</name>
+            <roles>
+                <role>Java developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Narkevich Maksim</name>
+            <roles>
+                <role>Oracle developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Bogdevich Anton</name>
+            <roles>
+                <role>Architect</role>
+            </roles>
+        </developer>
+    </developers>
+
     <properties>
         <spring.version>4.1.6.RELEASE</spring.version>
         <maven.test.failure.ignore>true</maven.test.failure.ignore>
