@@ -26,7 +26,7 @@
     <bean name="billService" class="com.zhytnik.bank.service.impl.EntityService"
           p:manager-ref="billManager"/>
 
-    <bean name="billCardService" class="com.zhytnik.bank.service.impl.EntityService"
+    <bean name="billCardService" class="com.zhytnik.bank.service.impl.BillCardService"
           p:manager-ref="billCardManager"/>
 
     <!-- Converters -->

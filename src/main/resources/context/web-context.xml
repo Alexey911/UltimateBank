@@ -33,5 +33,7 @@
           p:currencyService-ref="currencyService"/>
 
     <bean id="billCards" class="com.zhytnik.bank.web.BillCardController"
-          p:service-ref="billCardService" p:billManager-ref="billManager"/>
+          p:service-ref="billCardService"
+          p:billService-ref="billService"
+          p:billCardService-ref="billCardService"/>
 </beans>

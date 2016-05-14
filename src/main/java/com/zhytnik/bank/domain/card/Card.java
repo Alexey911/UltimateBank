@@ -2,10 +2,12 @@ package com.zhytnik.bank.domain.card;
 
 import com.zhytnik.bank.backend.types.Entity;
 
+import java.util.Date;
+
 public abstract class Card extends Entity {
 
     private String code;
-    private String validity;
+    private Date validity;
     private Integer cvc;
     private Integer validationCode;
 
@@ -17,11 +19,11 @@ public abstract class Card extends Entity {
         this.code = code;
     }
 
-    public String getValidity() {
+    public Date getValidity() {
         return validity;
     }
 
-    public void setValidity(String validity) {
+    public void setValidity(Date validity) {
         this.validity = validity;
     }
 

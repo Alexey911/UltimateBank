@@ -8,7 +8,7 @@ NOMAXVALUE
 CREATE TABLE BILLCARD (
   id             INT,
   code           VARCHAR2(100),
-  validity       VARCHAR2(100),
+  validity       TIMESTAMP,
   cvc            INT,
   validationCode INT,
   bill           INT
@@ -17,7 +17,7 @@ CREATE TABLE BILLCARD (
 
 CREATE OR REPLACE PROCEDURE SAVE_BILLCARD(c_id OUT          INT,
                                           c_code            VARCHAR2,
-                                          c_validity        VARCHAR2,
+                                          c_validity        TIMESTAMP,
                                           c_cvc             INT,
                                           c_validation_code INT,
                                           c_bill            INT)
@@ -43,7 +43,7 @@ AS
 
 CREATE OR REPLACE PROCEDURE LOAD_BILLCARD(c_id                  INT,
                                           c_code            OUT VARCHAR2,
-                                          c_validity        OUT VARCHAR2,
+                                          c_validity        OUT TIMESTAMP,
                                           c_cvc             OUT INT,
                                           c_validation_code OUT INT,
                                           c_bill            OUT INT)
@@ -68,7 +68,7 @@ AS
 
 CREATE OR REPLACE PROCEDURE UPDATE_BILLCARD(c_id              INT,
                                             c_code            VARCHAR2,
-                                            c_validity        VARCHAR2,
+                                            c_validity        TIMESTAMP,
                                             c_cvc             INT,
                                             c_validation_code INT,
                                             c_bill            INT)
@@ -110,7 +110,7 @@ AS
 
 CREATE OR REPLACE TYPE BILLCARD_TYPE AS OBJECT (id             INT,
                                                 code           VARCHAR2(100),
-                                                validity       VARCHAR2(100),
+                                                validity       TIMESTAMP,
                                                 cvc            INT,
                                                 validationCode INT,
                                                 bill           INT)

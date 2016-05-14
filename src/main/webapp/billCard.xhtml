@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="/layouts/template.xhtml">
+        <ui:define name="content">
+            <h:form id="billCards">
+                <p:growl id="info" showDetail="true"/>
+                <p:dataTable id="billCardTable"
+                             var="billCard" value="#{billCards.entities}"
+                             paginator="true" rows="10"
+                             selection="#{billCards.selected}"
+                             selectionMode="single"
+                             onRowSelectUpdate="billCard"
+                             rowKey="#{billCard.id}"
+                             dblClickSelect="false">
+
+                    <f:facet name="header">
+                        Bill Cards
+                    </f:facet>
+                    <p:column sortBy="#{billCard.code}">
+                        <f:facet name="header">
+                            <h:outputText value="Code"/>
+                        </f:facet>
+                        <h:outputText value="#{billCard.code}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Validity"/>
+                        </f:facet>
+                        <p:calendar value="#{billCard.validity}" pattern="MM/dd/yyyy HH:mm:ss" readonly="true"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="CVC"/>
+                        </f:facet>
+                        <h:outputText value="#{billCard.cvc}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{billCard.bill.balance}">
+                        <f:facet name="header">
+                            <h:outputText value="Bill"/>
+                        </f:facet>
+                        <h:outputText
+                                value="#{billCard.bill.balance} (#{billCard.bill.currency.name}) of #{billCard.bill.client.surname}"/>
+                    </p:column>
+
+                    <p:ajax event="rowSelect" listener="#{billCards.select}" update="billCard"/>
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="billCard">
+                <p:growl id="growl" showDetail="true"/>
+
+                <p:panelGrid columns="2">
+                    <f:facet name="header">Bill card</f:facet>
+
+                    <h:outputLabel for="code" value="Code"/>
+                    <p:inputText value="#{billCards.code}" id="code"
+                                 required="true" requiredMessage="Fill Code"/>
+
+                    <h:outputLabel for="validity" value="Validity"/>
+                    <p:calendar value="#{billCards.validity}" pattern="MM/dd/yyyy HH:mm:ss" id="validity"
+                                required="true" requiredMessage="Fill Validity"/>
+
+                    <h:outputLabel for="bill" value="Bill"/>
+                    <p:selectOneMenu id="bill" value="#{billCards.bill}" converter="#{billConverter}"
+                                     required="true" requiredMessage="Fill Bill">
+                        <f:selectItem itemValue="#{billCards.bill}"
+                                      itemLabel="Choice Bill"/>
+                        <f:selectItems value="#{billCards.bills}" var="b"
+                                       itemLabel="#{b.balance} (#{b.currency.name}) of #{b.client.surname}"/>
+                    </p:selectOneMenu>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Reset" actionListener="#{billCards.reset}"
+                                         update="billCard"/>
+                        <p:commandButton value="Change" actionListener="#{billCards.update}"
+                                         update="billCard billCards"/>
+                        <p:commandButton value="Remove" actionListener="#{billCards.remove}"
+                                         update="billCard billCards"/>
+                        <p:commandButton value="Save" actionListener="#{billCards.save}"
+                                         update="growl billCard billCards"/>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

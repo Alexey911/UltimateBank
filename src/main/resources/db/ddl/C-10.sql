@@ -8,7 +8,7 @@ NOMAXVALUE
 CREATE TABLE CREDITCARD (
   id             INT,
   code           VARCHAR2(100),
-  validity       VARCHAR2(100),
+  validity       TIMESTAMP,
   cvc            INT,
   validationCode INT,
   credit         INT
@@ -17,7 +17,7 @@ CREATE TABLE CREDITCARD (
 
 CREATE OR REPLACE PROCEDURE SAVE_CREDITCARD(c_id OUT          INT,
                                             c_code            VARCHAR2,
-                                            c_validity        VARCHAR2,
+                                            c_validity        TIMESTAMP,
                                             c_cvc             INT,
                                             c_validation_code INT,
                                             c_credit          INT)
@@ -43,7 +43,7 @@ AS
 
 CREATE OR REPLACE PROCEDURE LOAD_CREDITCARD(c_id                  INT,
                                             c_code            OUT VARCHAR2,
-                                            c_validity        OUT VARCHAR2,
+                                            c_validity        OUT TIMESTAMP,
                                             c_cvc             OUT INT,
                                             c_validation_code OUT INT,
                                             c_credit          OUT INT)
@@ -68,7 +68,7 @@ AS
 
 CREATE OR REPLACE PROCEDURE UPDATE_CREDITCARD(c_id              INT,
                                               c_code            VARCHAR2,
-                                              c_validity        VARCHAR2,
+                                              c_validity        TIMESTAMP,
                                               c_cvc             INT,
                                               c_validation_code INT,
                                               c_credit          INT)
@@ -110,7 +110,7 @@ AS
 
 CREATE OR REPLACE TYPE CREDITCARD_TYPE AS OBJECT (id             INT,
                                                   code           VARCHAR2(100),
-                                                  validity       VARCHAR2(100),
+                                                  validity       TIMESTAMP,
                                                   cvc            INT,
                                                   validationCode INT,
                                                   credit         INT)
