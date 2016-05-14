@@ -56,7 +56,7 @@
                         <h:selectBooleanCheckbox value="#{client.enable}"/>
                     </p:column>
 
-                    <p:ajax event="rowSelect" listener="#{clients.select}" update="client deposits"/>
+                    <p:ajax event="rowSelect" listener="#{clients.select}" update="client deposits credits bills"/>
                 </p:dataTable>
             </h:form>
 
@@ -106,7 +106,7 @@
             </h:form>
 
             <h:form id="bills">
-                <p:growl id="info" showDetail="true"/>
+                <p:growl id="info3" showDetail="true"/>
                 <p:dataTable id="billTable"
                              var="bill" value="#{clients.bills}"
                              paginator="true" rows="10"
@@ -136,6 +136,74 @@
                             <h:outputText value="Active"/>
                         </f:facet>
                         <h:selectBooleanCheckbox value="#{bill.isActive}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="credits">
+                <p:growl id="info4" showDetail="true"/>
+                <p:dataTable id="creditTable"
+                             var="credit" value="#{clients.credits}"
+                             paginator="true" rows="10"
+                             dblClickSelect="false">
+
+                    <f:facet name="header">
+                        Client credits
+                    </f:facet>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="amount"/>
+                        </f:facet>
+                        <h:outputText value="#{credit.amount}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Valid for"/>
+                        </f:facet>
+                        <p:calendar value="#{credit.validFor}" pattern="MM/dd/yyyy HH:mm:ss" readonly="true"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="margin"/>
+                        </f:facet>
+                        <h:outputText value="#{credit.margin}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="fee"/>
+                        </f:facet>
+                        <h:outputText value="#{credit.fee}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Penalty"/>
+                        </f:facet>
+                        <h:outputText value="#{credit.penalty}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Active"/>
+                        </f:facet>
+                        <h:selectBooleanCheckbox value="#{credit.isActive}" readonly="true"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Currency"/>
+                        </f:facet>
+                        <h:outputText value="#{credit.currency.name}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Client"/>
+                        </f:facet>
+                        <h:outputText value="#{credits.clientInfo(credit.client)}"/>
                     </p:column>
                 </p:dataTable>
             </h:form>
