@@ -76,10 +76,10 @@ public class CreditController extends EntityController<Credit> {
     protected void fill(Credit c) {
         c.setAmount(amount);
         c.setValidFor(validFor);
-        c.setMargin(margin);
+        c.setMargin(margin != null ? margin : 0);
         c.setFee(fee);
         c.setIsActive(isActive);
-        c.setPenalty(penalty);
+        c.setPenalty(penalty != null ? penalty : 0);
         c.setCreditCard(creditCard);
         c.setCurrency(currency);
         c.setClient(client);
@@ -118,36 +118,12 @@ public class CreditController extends EntityController<Credit> {
         this.validFor = validFor;
     }
 
-    public Double getMargin() {
-        return margin;
-    }
-
-    public void setMargin(Double margin) {
-        this.margin = margin;
-    }
-
-    public Integer getFee() {
-        return fee;
-    }
-
-    public void setFee(Integer fee) {
-        this.fee = fee;
-    }
-
     public Boolean getIsActive() {
         return isActive;
     }
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
-    }
-
-    public Double getPenalty() {
-        return penalty;
-    }
-
-    public void setPenalty(Double penalty) {
-        this.penalty = penalty;
     }
 
     public Currency getCurrency() {
@@ -176,6 +152,14 @@ public class CreditController extends EntityController<Credit> {
 
     public List<Client> getClients() {
         return clients;
+    }
+
+    public void setFee(Integer fee) {
+        this.fee = fee;
+    }
+
+    public Integer getFee() {
+        return fee;
     }
 
     public void setClients(List<Client> clients) {

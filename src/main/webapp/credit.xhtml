@@ -96,20 +96,12 @@
                     <p:calendar id="validFor" value="#{credits.validFor}" pattern="MM/dd/yyyy HH:mm:ss"
                                 required="true" requiredMessage="Fill valid for date"/>
 
-                    <h:outputLabel for="margin" value="Margin"/>
-                    <p:inputText value="#{credits.margin}" id="margin"
-                                 required="true" requiredMessage="Fill Margin"/>
-
                     <h:outputLabel for="fee" value="Fee"/>
                     <p:inputText value="#{credits.fee}" id="fee"
                                  required="true" requiredMessage="Fill fee"/>
 
                     <h:outputLabel for="isActive" value="Active"/>
                     <h:selectBooleanCheckbox value="#{credits.isActive}" id="isActive"/>
-
-                    <h:outputLabel for="penalty" value="Penalty"/>
-                    <p:inputText value="#{credits.penalty}" id="penalty"
-                                 required="true" requiredMessage="Fill Penalty"/>
 
                     <h:outputLabel for="currency" value="Currency"/>
                     <p:selectOneMenu id="currency" value="#{credits.currency}" converter="#{currencyConverter}"

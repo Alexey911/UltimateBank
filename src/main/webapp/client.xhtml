@@ -227,8 +227,9 @@
                                  required="true" requiredMessage="Fill Address"/>
 
                     <h:outputLabel for="password" value="Password"/>
-                    <p:inputText value="#{clients.password}" id="password"
-                                 required="true" requiredMessage="Fill Password"/>
+                    <p:password id="password" value="#{clients.password}"
+                                redisplay="true"
+                                feedback="true"  required="true" requiredMessage="Fill password"/>
 
                     <h:outputLabel for="active" value="Active"/>
                     <p:selectBooleanCheckbox value="#{clients.enable}" id="active"/>

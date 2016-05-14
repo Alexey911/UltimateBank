@@ -76,17 +76,12 @@
                     <p:calendar id="expiryDate" value="#{deposits.expiryDate}" pattern="MM/dd/yyyy HH:mm:ss"/>
 
                     <h:outputLabel for="currency" value="Currency"/>
-                    <p:selectOneListbox id="currency" value="#{deposits.currency}" converter="#{currencyConverter}"
-                                        var="t">
-                        <f:selectItems value="#{deposits.currencies}" var="currency" itemValue="#{currency}"/>
-                        <p:column>
-                            <h:outputText value="#{t.name}"/>
-                        </p:column>
-
-                        <p:column>
-                            <h:outputText value="#{t.value}"/>
-                        </p:column>
-                    </p:selectOneListbox>
+                    <p:selectOneMenu id="currency" value="#{deposits.currency}" converter="#{currencyConverter}"
+                                     required="true" requiredMessage="Fill Currency">
+                        <f:selectItem itemValue="#{deposits.currency}"
+                                      itemLabel="Choice currency"/>
+                        <f:selectItems value="#{deposits.currencies}" var="currency" itemLabel="#{currency.name}"/>
+                    </p:selectOneMenu>
 
                     <h:outputLabel for="client" value="Client"/>
                     <p:selectOneListbox id="client" value="#{deposits.client}" converter="#{clientConverter}"
