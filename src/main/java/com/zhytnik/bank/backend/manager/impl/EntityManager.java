@@ -24,7 +24,7 @@ import static java.util.Collections.reverse;
 
 public class EntityManager<T extends IEntity> implements IEntityManager<T> {
 
-    private static Connection connection;
+    protected static Connection connection;
 
     static {
         connection = new ConnectionManager().getConnection();

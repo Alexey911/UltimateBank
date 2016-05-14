@@ -67,6 +67,33 @@
                     </f:facet>
                 </p:panelGrid>
             </h:form>
+
+            <h:form id="converter">
+                <h:outputText value="Currency convertation" style="margin-left: 55px"/>
+                <p:panelGrid columns="2">
+                    <h:outputLabel for="from" value="From"/>
+                    <p:selectOneMenu id="from" value="#{currencies.from}" converter="#{currencyConverter}">
+                        <f:selectItem itemValue="#{currencies.from}"
+                                      itemLabel="Choice currency from"/>
+                        <f:selectItems value="#{currencies.entities}" var="currency" itemLabel="#{currency.name}"/>
+                    </p:selectOneMenu>
+
+                    <h:outputLabel for="to" value="To"/>
+                    <p:selectOneMenu id="to" value="#{currencies.to}" converter="#{currencyConverter}">
+                        <f:selectItem itemValue="#{currencies.to}"
+                                      itemLabel="Choice currency to"/>
+                        <f:selectItems value="#{currencies.entities}" var="currency" itemLabel="#{currency.name}"/>
+                    </p:selectOneMenu>
+
+                    <h:outputLabel for="sum" value="Sum"/>
+                    <p:inputText value="#{currencies.sum}" id="sum" style="width: 125px"/>
+
+                    <p:commandButton value="Convert" actionListener="#{currencies.convert}"
+                                     update="result"/>
+
+                    <h:outputText id="result" value="#{currencies.result} #{currencies.to.name}"/>
+                </p:panelGrid>
+            </h:form>
         </ui:define>
     </ui:composition>
 </h:body>

@@ -114,3 +114,23 @@ AS
     DELETE CURRENCY;
   END;
 /
+
+CREATE OR REPLACE FUNCTION CONVERT_CURRENCY(c_from INT, c_to INT, c_value INT)
+  RETURN NUMBER
+IS
+  value_from NUMBER;
+  value_to   NUMBER;
+  BEGIN
+    SELECT CURRENCY.VALUE
+    INTO value_from
+    FROM CURRENCY
+    WHERE id = c_from;
+
+    SELECT CURRENCY.VALUE
+    INTO value_to
+    FROM CURRENCY
+    WHERE id = c_to;
+
+    RETURN (value_from / value_to) * c_value;
+  END;
+/

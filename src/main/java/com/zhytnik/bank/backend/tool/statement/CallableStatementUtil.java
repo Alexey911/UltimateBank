@@ -1,7 +1,7 @@
 package com.zhytnik.bank.backend.tool.statement;
 
-import com.zhytnik.bank.backend.types.IEntity;
 import com.zhytnik.bank.backend.exception.NotFoundException;
+import com.zhytnik.bank.backend.types.IEntity;
 import oracle.jdbc.OracleTypes;
 import oracle.sql.ARRAY;
 import oracle.sql.STRUCT;
@@ -27,6 +27,16 @@ public class CallableStatementUtil {
         final String script = function ? getFunctionCall(callName + entity, argsCount) :
                 getProcedureCall(callName + entity, argsCount);
 
+        CallableStatement s;
+        try {
+            s = connection.prepareCall(script);
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+        return s;
+    }
+
+    public static CallableStatement build(Connection connection, String script) {
         CallableStatement s;
         try {
             s = connection.prepareCall(script);

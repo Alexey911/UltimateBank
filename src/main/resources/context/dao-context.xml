@@ -8,8 +8,7 @@
 
     <bean name="connectionManager" class="com.zhytnik.bank.backend.manager.impl.ConnectionManager"/>
 
-    <bean name="currencyManager" class="com.zhytnik.bank.backend.manager.impl.EntityManager"
-          c:clazz="com.zhytnik.bank.domain.Currency"/>
+    <bean name="currencyManager" class="com.zhytnik.bank.backend.manager.impl.CurrencyManager"/>
 
     <bean name="foundManager" class="com.zhytnik.bank.backend.manager.impl.EntityManager"
           c:clazz="com.zhytnik.bank.domain.Found"/>

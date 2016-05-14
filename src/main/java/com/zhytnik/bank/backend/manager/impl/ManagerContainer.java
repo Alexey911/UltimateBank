@@ -45,8 +45,17 @@ public class ManagerContainer {
     static EntityManager<IEntity> getManager(Class<? extends IEntity> clazz) {
         EntityManager manager = managers.get(clazz);
         if (manager == null) {
+            save(clazz, createManager(clazz));
+        }
+        return manager;
+    }
+
+    private static EntityManager createManager(Class<? extends IEntity> clazz) {
+        EntityManager manager;
+        if (clazz.equals(Currency.class)) {
+            manager = new CurrencyManager();
+        } else {
             manager = new EntityManager<>(clazz);
-            save(clazz, manager);
         }
         return manager;
     }
