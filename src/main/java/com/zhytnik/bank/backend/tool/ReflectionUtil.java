@@ -281,7 +281,9 @@ public class ReflectionUtil {
 
     private static Object getComplexFieldValue(Object target, String field) {
         for (String aField : field.split("\\.")) {
-            target = getFieldValue(target, aField);
+            if(target != null) {
+                target = getFieldValue(target, aField);
+            }
         }
         return target;
     }

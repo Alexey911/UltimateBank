@@ -15,14 +15,12 @@
                              selectionMode="single"
                              onRowSelectUpdate="deposit"
                              rowKey="#{deposit.id}"
-                             filteredValue="#{deposits.filtered}"
                              dblClickSelect="false">
 
                     <f:facet name="header">
                         Deposits
                     </f:facet>
-                    <p:column sortBy="#{deposit.sum}" filterBy="#{deposit.sum}"
-                              filterMatchMode="gte">
+                    <p:column sortBy="#{deposit.sum}">
                         <f:facet name="header">
                             <h:outputText value="Sum"/>
                         </f:facet>
@@ -36,8 +34,7 @@
                         <h:outputText value="#{deposit.currency.name}"/>
                     </p:column>
 
-                    <p:column sortBy="#{deposit.percent}" filterBy="#{deposit.percent}"
-                              filterMatchMode="gte">
+                    <p:column sortBy="#{deposit.percent}">
                         <f:facet name="header">
                             <h:outputText value="Percent"/>
                         </f:facet>
@@ -79,7 +76,7 @@
 
                     <h:outputLabel for="currency" value="Currency"/>
                     <p:selectOneListbox id="currency" value="#{deposits.currency}" converter="#{currencyConverter}"
-                                        var="t" filter="true" filterMatchMode="contains">
+                                        var="t">
                         <f:selectItems value="#{deposits.currencies}" var="currency" itemValue="#{currency}"/>
                         <p:column>
                             <h:outputText value="#{t.name}"/>

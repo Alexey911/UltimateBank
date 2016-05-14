@@ -15,38 +15,33 @@
                              selectionMode="single"
                              onRowSelectUpdate="client"
                              rowKey="#{client.id}"
-                             filteredValue="#{clients.filtered}"
                              dblClickSelect="false">
 
                     <f:facet name="header">
                         Clients
                     </f:facet>
-                    <p:column sortBy="#{client.name}" filterBy="#{client.name}"
-                              filterMatchMode="contains">
+                    <p:column sortBy="#{client.name}">
                         <f:facet name="header">
                             <h:outputText value="Name"/>
                         </f:facet>
                         <h:outputText value="#{client.name}"/>
                     </p:column>
 
-                    <p:column sortBy="#{client.surname}" filterBy="#{client.surname}"
-                              filterMatchMode="contains">
+                    <p:column sortBy="#{client.surname}">
                         <f:facet name="header">
                             <h:outputText value="Surname"/>
                         </f:facet>
                         <h:outputText value="#{client.surname}"/>
                     </p:column>
 
-                    <p:column sortBy="#{client.address}" filterBy="#{client.address}"
-                              filterMatchMode="contains">
+                    <p:column sortBy="#{client.address}">
                         <f:facet name="header">
                             <h:outputText value="Address"/>
                         </f:facet>
                         <h:outputText value="#{client.address}"/>
                     </p:column>
 
-                    <p:column sortBy="#{client.banker.name}" filterBy="#{client.banker.name}"
-                              filterMatchMode="containt">
+                    <p:column sortBy="#{client.banker.name}">
                         <f:facet name="header">
                             <h:outputText value="Banker"/>
                         </f:facet>
@@ -77,7 +72,10 @@
                         <f:facet name="header">
                             <h:outputText value="Sum"/>
                         </f:facet>
-                        <h:outputText value="#{deposit.sum}"/>
+
+                        <h:outputText value="#{deposit.sum}">
+                            <f:convertNumber pattern="#,###,##0.00"/>
+                        </h:outputText>
                     </p:column>
 
                     <p:column>
@@ -91,14 +89,16 @@
                         <f:facet name="header">
                             <h:outputText value="Percent"/>
                         </f:facet>
-                        <h:outputText value="#{deposit.percent}"/>
+                        <h:outputText value="#{deposit.percent}">
+                            <f:convertNumber pattern="##0.00"/>
+                        </h:outputText>
                     </p:column>
 
                     <p:column>
                         <f:facet name="header">
                             <h:outputText value="Expiry date"/>
                         </f:facet>
-                        <p:calendar value="#{deposit.expiryDate}" pattern="MM/dd/yyyy HH:mm:ss"/>
+                        <p:calendar readonly="true" value="#{deposit.expiryDate}" pattern="MM/dd/yyyy HH:mm:ss"/>
                     </p:column>
                 </p:dataTable>
             </h:form>
@@ -116,7 +116,9 @@
                         <f:facet name="header">
                             <h:outputText value="Balance"/>
                         </f:facet>
-                        <h:outputText value="#{bill.balance}"/>
+                        <h:outputText value="#{bill.balance}">
+                            <f:convertNumber pattern="#,###,##0.00"/>
+                        </h:outputText>
                     </p:column>
 
                     <p:column>
@@ -142,28 +144,34 @@
                     <f:facet name="header">Client</f:facet>
 
                     <h:outputLabel for="name" value="Name"/>
-                    <p:inputText value="#{clients.name}" label="name" id="name"/>
+                    <p:inputText value="#{clients.name}"
+                                 id="name" required="true" requiredMessage="Fill Name"/>
 
                     <h:outputLabel for="surname" value="Surname"/>
-                    <p:inputText value="#{clients.surname}" label="surname" id="surname"/>
+                    <p:inputText value="#{clients.surname}" id="surname"
+                                 required="true" requiredMessage="Fill Surname"/>
 
                     <h:outputLabel for="address" value="Address"/>
-                    <p:inputText value="#{clients.address}" label="address" id="address"/>
+                    <p:inputText value="#{clients.address}" id="address"
+                                 required="true" requiredMessage="Fill Address"/>
 
                     <h:outputLabel for="password" value="Password"/>
-                    <p:inputText value="#{clients.password}" label="password" id="password"/>
+                    <p:inputText value="#{clients.password}" id="password"
+                                 required="true" requiredMessage="Fill Password"/>
 
                     <h:outputLabel for="active" value="Active"/>
-                    <p:selectBooleanCheckbox value="#{clients.enable}" label="active" id="active"/>
+                    <p:selectBooleanCheckbox value="#{clients.enable}" id="active"/>
 
                     <h:outputLabel for="banker" value="Banker"/>
                     <p:selectOneListbox id="banker" value="#{clients.banker}"
                                         converter="#{bankerConverter}"
-                                        var="t" filter="true" filterMatchMode="contains" style="width:260px">
-                        <f:selectItems value="#{clients.bankers}" var="banker" itemValue="#{banker}"/>
-                        <p:column>
-                            <h:outputText value="#{clients.bankerInfo(t)}"/>
-                        </p:column>
+                                        required="true"
+                                        requiredMessage="Fill Banker"
+                                        style="width:260px">
+                        <f:selectItem itemValue="#{clients.banker}"
+                                      itemLabel="Choice banker"/>
+                        <f:selectItems value="#{clients.bankers}" var="b"
+                                       itemLabel="#{clients.bankerInfo(b)}"/>
                     </p:selectOneListbox>
 
                     <f:facet name="footer">
