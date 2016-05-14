@@ -8,6 +8,7 @@
     <ui:composition template="/layouts/template.xhtml">
         <ui:define name="content">
             <h:form id="bankers">
+                <p:growl id="info" showDetail="true"/>
                 <p:dataTable id="bankerTable"
                              style="width: 700px;"
                              var="banker" value="#{bankers.entities}"

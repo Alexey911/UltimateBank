@@ -8,6 +8,7 @@
     <ui:composition template="/layouts/template.xhtml">
         <ui:define name="content">
             <h:form id="bills">
+                <p:growl id="info" showDetail="true"/>
                 <p:dataTable id="billTable"
                              var="bill" value="#{bills.entities}"
                              paginator="true" rows="10"
@@ -15,18 +16,18 @@
                              selectionMode="single"
                              onRowSelectUpdate="bill"
                              rowKey="#{bill.id}"
-                             filteredValue="#{bills.filtered}"
                              dblClickSelect="false">
 
                     <f:facet name="header">
                         Bills
                     </f:facet>
-                    <p:column sortBy="#{bill.balance}" filterBy="#{bill.balance}"
-                              filterMatchMode="gte">
+                    <p:column sortBy="#{bill.balance}">
                         <f:facet name="header">
                             <h:outputText value="Balance"/>
                         </f:facet>
-                        <h:outputText value="#{bill.balance}"/>
+                        <h:outputText value="#{bill.balance}">
+                            <f:convertNumber pattern="#,###,##0.00"/>
+                        </h:outputText>
                     </p:column>
 
                     <p:column>
@@ -54,7 +55,7 @@
                         <f:facet name="header">
                             <h:outputText value="Active"/>
                         </f:facet>
-                        <h:selectBooleanCheckbox value="#{bill.isActive}"/>
+                        <h:selectBooleanCheckbox value="#{bill.isActive}" readonly="true"/>
                     </p:column>
 
                     <p:ajax event="rowSelect" listener="#{bills.select}" update="bill"/>
@@ -68,36 +69,27 @@
                     <f:facet name="header">Bill</f:facet>
 
                     <h:outputLabel for="balance" value="Balance"/>
-                    <p:inputText value="#{bills.balance}" label="balance" id="balance"/>
+                    <p:inputText value="#{bills.balance}" id="balance"
+                                 required="true" requiredMessage="Fill Balance"/>
 
                     <h:outputLabel for="isActive" value="Active"/>
-                    <p:selectBooleanCheckbox value="#{bills.isActive}" label="isActive" id="isActive"/>
+                    <p:selectBooleanCheckbox value="#{bills.isActive}" id="isActive"/>
 
                     <h:outputLabel for="currency" value="Currency"/>
-                    <p:selectOneListbox id="currency" value="#{bills.currency}" converter="#{currencyConverter}"
-                                        var="t" filter="true" filterMatchMode="contains">
-                        <f:selectItems value="#{bills.currencies}" var="currency" itemValue="#{currency}"/>
-                        <p:column>
-                            <h:outputText value="#{t.name}"/>
-                        </p:column>
-
-                        <p:column>
-                            <h:outputText value="#{t.value}"/>
-                        </p:column>
-                    </p:selectOneListbox>
+                    <p:selectOneMenu id="currency" value="#{bills.currency}" converter="#{currencyConverter}"
+                                        required="true" requiredMessage="Fill Currency">
+                        <f:selectItem itemValue="#{bills.currency}"
+                                      itemLabel="Choice currency"/>
+                        <f:selectItems value="#{bills.currencies}" var="c" itemLabel="#{c.name}"/>
+                    </p:selectOneMenu>
 
                     <h:outputLabel for="client" value="Client"/>
-                    <p:selectOneListbox id="client" value="#{bills.client}" converter="#{clientConverter}"
-                                        var="t" filter="true" filterMatchMode="contains">
-                        <f:selectItems value="#{bills.clients}" var="client" itemValue="#{client}"/>
-                        <p:column>
-                            <h:outputText value="#{t.name}"/>
-                        </p:column>
-
-                        <p:column>
-                            <h:outputText value="#{t.surname}"/>
-                        </p:column>
-                    </p:selectOneListbox>
+                    <p:selectOneMenu id="client" value="#{bills.client}" converter="#{clientConverter}"
+                                     required="true" requiredMessage="Fill Client">
+                        <f:selectItem itemValue="#{bills.client}"
+                                      itemLabel="Choice client"/>
+                        <f:selectItems value="#{bills.clients}" var="c" itemLabel="#{c.name} #{c.surname}"/>
+                    </p:selectOneMenu>
 
                     <f:facet name="footer">
                         <p:commandButton value="Reset" actionListener="#{bills.reset}"

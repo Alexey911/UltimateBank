@@ -8,6 +8,7 @@
     <ui:composition template="/layouts/template.xhtml">
         <ui:define name="content">
             <h:form id="clients">
+                <p:growl id="info" showDetail="true"/>
                 <p:dataTable id="clientTable"
                              var="client" value="#{clients.entities}"
                              paginator="true" rows="10"
@@ -163,7 +164,7 @@
                     <p:selectBooleanCheckbox value="#{clients.enable}" id="active"/>
 
                     <h:outputLabel for="banker" value="Banker"/>
-                    <p:selectOneListbox id="banker" value="#{clients.banker}"
+                    <p:selectOneMenu id="banker" value="#{clients.banker}"
                                         converter="#{bankerConverter}"
                                         required="true"
                                         requiredMessage="Fill Banker"
@@ -172,7 +173,7 @@
                                       itemLabel="Choice banker"/>
                         <f:selectItems value="#{clients.bankers}" var="b"
                                        itemLabel="#{clients.bankerInfo(b)}"/>
-                    </p:selectOneListbox>
+                    </p:selectOneMenu>
 
                     <f:facet name="footer">
                         <p:commandButton value="Reset" actionListener="#{clients.reset}"
